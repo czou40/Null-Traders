@@ -8,13 +8,19 @@ public class WelcomeScreen extends Screen {
     private StackPane root;
     private Button welcomeButton;
 
-    public WelcomeScreen() {
-        welcomeButton = new Button("This is a test button");
+    public WelcomeScreen(Stage primaryStage) {
+        super(primaryStage);
+        welcomeButton = new Button("Welcome!");
         welcomeButton.setOnAction(e -> {
-            startGame();
+            //change scene
+            CharacterConfigScreen c = new CharacterConfigScreen(primaryStage);
+            try {
+                primaryStage.setScene(new CharacterConfigScreen(primaryStage).getScene());
+            } catch (SceneNotInitialized sceneNotInitialized) {
+                sceneNotInitialized.printStackTrace();
+            }
         });
         root = new StackPane(welcomeButton);
-
         setScene(root, 800, 600);
     }
 

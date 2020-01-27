@@ -1,4 +1,4 @@
-public class SceneNotInitialized extends Exception {
+public class SceneNotInitialized extends RuntimeException {
     public SceneNotInitialized(String message) {
         super(message);
     }

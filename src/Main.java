@@ -11,9 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        WelcomeScreen welcomeScreen = new WelcomeScreen();
-        CharacterConfigScreen configScreen = new CharacterConfigScreen();
-        CharacterSheetScreen sheetScreen = new CharacterSheetScreen();
+        WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage);
 
         /*
         Button start = new Button("Start Game");
@@ -27,8 +25,6 @@ public class Main extends Application {
         StackPane uiLoader = new StackPane();
         uiLoader.getChildren().add(start);
         */
-
-
 
 
         primaryStage.setTitle("Welcome to Null Traders!");
