@@ -1,23 +1,23 @@
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public abstract class Screen {
-    private Scene scene;
+    private Stage primaryStage;
 
-    public Screen() {
-        //scene should be set in subclass
+    public Screen(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 
-    public final Scene getScene() throws SceneNotInitialized {
-        if (scene == null) {
-            throw new SceneNotInitialized("Must create scene before accessing it.");
-        } else {
-            return scene;
-        }
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
-    public final void setScene(Parent root, int width, int height) {
-        scene = new Scene(root, width, height);
+    public void display() {
+        primaryStage.setScene(constructScene());
+        primaryStage.show();
     }
+
+    public abstract Scene constructScene();
 }
