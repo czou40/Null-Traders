@@ -18,6 +18,9 @@ public class Game {
     public Difficulty getDifficulty() {
         return difficulty;
     }
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
     public Player getPlayer() {
         return player;

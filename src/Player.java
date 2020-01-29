@@ -1,23 +1,26 @@
-import java.util.Random;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
 
 public class Player {
     private Game game;
 
-    private String name;
-    private Integer pilot;
-    private Integer fighter;
-    private Integer merchant;
-    private Integer engineer;
-    private Integer credits;
+    private StringProperty name;
+    private IntegerProperty pilot;
+    private IntegerProperty fighter;
+    private IntegerProperty merchant;
+    private IntegerProperty engineer;
+    private IntegerProperty credits;
 
     public Player(Game game, String name, Integer pilot, Integer fighter, Integer merchant, Integer engineer, Integer credits) {
         this.game = game;
-        this.name = name;
-        this.pilot = pilot;
-        this.fighter = fighter;
-        this.merchant = merchant;
-        this.engineer = engineer;
-        this.credits = credits;
+        this.name = new SimpleStringProperty(name);
+        this.pilot = new SimpleIntegerProperty(pilot);
+        this.fighter = new SimpleIntegerProperty(fighter);
+        this.merchant = new SimpleIntegerProperty(merchant);
+        this.engineer = new SimpleIntegerProperty(engineer);
+        this.credits = new SimpleIntegerProperty(credits);
     }
 
     public Player(Game game, String name) {
@@ -40,51 +43,79 @@ public class Player {
         this.game = game;
     }
 
-    public String getName() {
+    public StringProperty nameProperty() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name.getValue();
     }
 
-    public Integer getPilot() {
+    public void setName(String name) {
+        this.name = new SimpleStringProperty(name);
+    }
+
+    public IntegerProperty pilotProperty() {
         return pilot;
     }
 
-    public void setPilot(Integer pilot) {
-        this.pilot = pilot;
+    public Integer getPilot() {
+        return pilot.getValue();
     }
 
-    public Integer getFighter() {
+    public void setPilot(Integer pilot) {
+        this.pilot = new SimpleIntegerProperty(pilot);
+    }
+
+    public IntegerProperty fighterProperty() {
         return fighter;
     }
 
-    public void setFighter(Integer fighter) {
-        this.fighter = fighter;
+    public Integer getFighter() {
+        return fighter.getValue();
     }
 
-    public Integer getMerchant() {
+    public void setFighter(Integer fighter) {
+        this.fighter = new SimpleIntegerProperty(fighter);
+    }
+
+    public IntegerProperty merchantProperty() {
         return merchant;
     }
 
-    public void setMerchant(Integer merchant) {
-        this.merchant = merchant;
+    public Integer getMerchant() {
+        return merchant.getValue();
     }
 
-    public Integer getEngineer() {
+    public void setMerchant(Integer merchant) {
+        this.merchant = new SimpleIntegerProperty(merchant);
+    }
+
+    public IntegerProperty engineerProperty() {
         return engineer;
     }
 
-    public void setEngineer(Integer engineer) {
-        this.engineer = engineer;
+    public Integer getEngineer() {
+        return engineer.getValue();
     }
 
-    public Integer getCredits() {
+    public void setEngineer(Integer engineer) {
+        this.engineer = new SimpleIntegerProperty(engineer);
+    }
+
+    public IntegerProperty creditsProperty() {
         return credits;
     }
 
+    public Integer getCredits() {
+        return credits.getValue();
+    }
+
     public void setCredits(Integer credits) {
-        this.credits = credits;
+        this.credits = new SimpleIntegerProperty(credits);
+    }
+
+    public Integer sumOfPoints() {
+        return getPilot() + getFighter() + getMerchant() + getEngineer();
     }
 }
