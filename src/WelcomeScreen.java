@@ -10,8 +10,8 @@ public class WelcomeScreen extends Screen {
 
     public WelcomeScreen(Stage primaryStage) {
         super(primaryStage);
-        welcomeButton = new Button("Welcome!");
-        welcomeButton.setOnAction(e -> {
+        welcomeButton = new Button("This is a test button");
+        welcomeButton.setOnAction(e->{
             //change scene
             CharacterConfigScreen c = new CharacterConfigScreen(primaryStage);
             try {
@@ -21,10 +21,14 @@ public class WelcomeScreen extends Screen {
             }
         });
         root = new StackPane(welcomeButton);
-        setScene(root, 800, 600);
     }
+
 
     public void startGame() {
         welcomeButton.setText("Game started");
+    }
+
+    public Scene constructScene() {
+        return new Scene(root, 800, 600);
     }
 }

@@ -9,27 +9,25 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-
-        WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage);
+    public void start(Stage primaryStage) throws Exception {
 
         /*
-        Button start = new Button("Start Game");
+           Button start = new Button("Start Game");
 
-        start.setOnAction(e -> {
+           start.setOnAction(e -> {
             WelcomeScreen screen = new WelcomeScreen();
             primaryStage.close();
             screen.show();
-        });
-        //Parent root = FXMLLoader.load(getClass().getResource("static.fxml"));
-        StackPane uiLoader = new StackPane();
-        uiLoader.getChildren().add(start);
-        */
-
+           });
+           //Parent root = FXMLLoader.load(getClass().getResource("static.fxml"));
+           StackPane uiLoader = new StackPane();
+           uiLoader.getChildren().add(start);
+         */
 
         primaryStage.setTitle("Welcome to Null Traders!");
-        primaryStage.setScene(welcomeScreen.getScene());
-        primaryStage.show();
+
+        WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage);
+        welcomeScreen.display();
     }
 
 
