@@ -25,7 +25,6 @@ public class Main extends Application {
          */
 
         primaryStage.setTitle("Welcome to Null Traders!");
-
         WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage);
         welcomeScreen.display();
     }

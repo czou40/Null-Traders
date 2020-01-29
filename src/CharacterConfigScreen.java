@@ -1,4 +1,7 @@
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class CharacterConfigScreen extends Screen {
@@ -8,6 +11,7 @@ public class CharacterConfigScreen extends Screen {
 
     @Override
     public Scene constructScene() {
-        return null;
+        Label test = new Label("This is the character config screen!");
+        return new Scene(new StackPane(test),800,600);
     }
 }
