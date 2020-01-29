@@ -24,12 +24,10 @@ public class Main extends Application {
         uiLoader.getChildren().add(start);
         */
 
-
-
-
         primaryStage.setTitle("Welcome to Null Traders!");
-        primaryStage.setScene((new WelcomeScreen()).getScene());
-        primaryStage.show();
+
+        WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage);
+        welcomeScreen.display();
     }
 
 
