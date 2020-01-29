@@ -4,27 +4,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 public enum Difficulty {
     CADET(200, 30), CAPTAIN(150, 20), ADMIRAL(100, 15);
 
-    private IntegerProperty credits;
-    private IntegerProperty startingSkillPoints;
+    private Integer credits;
+    private Integer startingSkillPoints;
 
     Difficulty(int credits, int startingSkillPoints) {
-        this.credits = new SimpleIntegerProperty(credits);
-        this.startingSkillPoints = new SimpleIntegerProperty(startingSkillPoints);
+        this.credits = credits;
+        this.startingSkillPoints = startingSkillPoints;
     }
 
-    public IntegerProperty creditsProperty() {
+    public Integer getCredits() {
         return credits;
     }
 
-    public int getCredits() {
-        return credits.getValue();
-    }
-
-    public IntegerProperty startingSkillPointsProperty() {
+    public Integer getStartingSkillPoints() {
         return startingSkillPoints;
-    }
-
-    public int getStartingSkillPoints() {
-        return startingSkillPoints.getValue();
     }
 }

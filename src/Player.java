@@ -4,7 +4,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.property.IntegerProperty;
 
 public class Player {
-    private Game game;
+    private Game game;  //player is dependent on the game
 
     private StringProperty name;
     private IntegerProperty pilot;
@@ -29,10 +29,6 @@ public class Player {
 
     public Player(Game game) {
         this(game, "", 0, 0, 0, 0, game.getDifficulty().getCredits());
-    }
-
-    public Player() {
-        this(new Game());
     }
 
     public Game getGame() {
