@@ -4,7 +4,7 @@ import javafx.animation.Timeline;
 import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
 
-public class MyPointBar extends ProgressBar {
+public class MyProgressBar extends ProgressBar {
     private int point;
     private int maxPoint;
     private final static int[] COLOR_MAX_POINT = {38, 125, 255};
@@ -12,7 +12,7 @@ public class MyPointBar extends ProgressBar {
     private final static String PROGRESS_BAR_COLOR = "-fx-accent:rgb(%d,%d,%d);";
 
 
-    public MyPointBar(int point, int maxPoint) {
+    public MyProgressBar(int point, int maxPoint) {
         super(0);
         this.point = point;
         this.maxPoint = maxPoint;

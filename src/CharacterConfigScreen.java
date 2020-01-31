@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CharacterConfigScreen extends Screen {
-    private static final boolean DEBUG = false; //only set true if testing
+    private static final boolean DEBUG = true; //only set true if testing
 
     private Game game;
     private Player player;
@@ -195,7 +195,7 @@ public class CharacterConfigScreen extends Screen {
 
     public void moveToCharacterSheetScreen() {
 
-        CharacterSheetScreen nextScreen = new CharacterSheetScreen(primaryStage);
+        CharacterSheetScreen nextScreen = new CharacterSheetScreen(getPrimaryStage(), game);
         nextScreen.display();
 
         /*
