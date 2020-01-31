@@ -26,7 +26,7 @@ public class WelcomeScreen extends Screen {
         MyGridPane myGridPane = new MyGridPane(rowConstraints,columnConstraints);
         myGridPane.addColumn(0,null,welcomeTitle,groupTitle,welcomeButton);
         Scene welcomeScene = new Scene(myGridPane, 800, 600);
-        welcomeScene.getStylesheets().add("styles/welcome-screen.css");
+        welcomeScene.getStylesheets().addAll("styles/general.css","styles/welcome-screen.css");
         return welcomeScene;
     }
 }

@@ -1,0 +1,58 @@
+.label {
+    -fx-font-size:3em; -fx-font-family:impact;-fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba( 0, 0, 0, 1.0 ), 10, 0.5, 0, 0);
+}
+
+#h1 {
+    -fx-font-size:3em; -fx-font-family:impact;-fx-text-fill: #ffffff;
+    }
+
+#h2 {
+    -fx-font-size:2em; -fx-font-family:impact;-fx-text-fill: #ffffff;
+}
+
+#h3 {
+    -fx-font-size:1.5em; -fx-font-family:impact;-fx-text-fill: #ffffff;
+}
+
+.image-view {
+     -fx-effect: dropshadow(gaussian, rgba( 255, 255, 255, 0.5), 20, 0.3, 0, 0);
+ }
+
+.button {
+    -fx-text-fill: #434343;
+    -fx-background-color: #dfdfdf;
+    -fx-font-size: 125%;
+    -fx-effect: dropshadow(gaussian, rgba( 255, 255, 255, 0.5), 10, 0, 0, 0);
+}
+
+.button:hover {
+    -fx-text-fill: #434343;
+    -fx-background-color: #dfdfdf;
+    -fx-font-size: 150%;
+    -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
+}
+
+.text-area {
+    -fx-padding: 10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-background-color: #dfdfdf;
+}
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.tooltip {
+    -fx-font-size: 125%;
+}
+

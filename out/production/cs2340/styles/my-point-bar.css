@@ -1,0 +1,15 @@
+
+.progress-bar {
+    -fx-background-color: #dfdfdf;
+
+    -fx-effect: dropshadow(gaussian, rgba( 255, 255, 255, 0.5), 10, 0, 0, 0);
+}
+
+.progress-bar .track{
+    -fx-background-color: rgba(0,0,0,0.0);
+}
+
+.progress-bar .bar {
+    -fx-background-radius: 0, 0, 0, 0;
+    -fx-background-insets: 0px;
+}
