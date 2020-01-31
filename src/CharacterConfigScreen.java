@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 public class CharacterConfigScreen extends Screen {
     private static final boolean DEBUG = true; //only set true if testing
 
-    private Game game;
     private Player player;
     private Stage primaryStage;
 
@@ -50,12 +49,11 @@ public class CharacterConfigScreen extends Screen {
 
     private final Slider[] sliders;
 
-    public CharacterConfigScreen(Stage primaryStage) {
-        super(primaryStage);
-        game = new Game();
+    public CharacterConfigScreen(Stage primaryStage, Game game) {
+        super(primaryStage, game);
         player = game.getPlayer();
 
-        title = new Label("This is the character config screen!");
+        title = new Label("Name your character!");
         nameField = new TextField();
         nameField.setPromptText("Enter a name");
 
@@ -95,8 +93,8 @@ public class CharacterConfigScreen extends Screen {
         }
 
         submitButton = new Button("Submit Character");
-        submitButton.setOnAction(e -> {
-           submitCharacter();
+        submitButton.setOnAction(e->{
+            submitCharacter();
         });
 
         errorMessage = new Label("");
@@ -108,8 +106,8 @@ public class CharacterConfigScreen extends Screen {
         VBox difficultyToggleWrapper = new VBox(cadetToggle, captainToggle, admiralToggle);
         HBox pointsAvailableWrapper = new HBox(pointsAvailableLabel, pointsAvailableNumber);
         FlowPane root = new FlowPane(
-                title, nameField, difficultyToggleWrapper, pointsAvailableWrapper, slidersWrapper, submitButton, errorMessage);
-        return new Scene(root,800,600);
+            title, nameField, difficultyToggleWrapper, pointsAvailableWrapper, slidersWrapper, submitButton, errorMessage);
+        return new Scene(root, 800, 600);
     }
 
 
@@ -119,14 +117,14 @@ public class CharacterConfigScreen extends Screen {
 
         //set default toggle and update difficulty based on model
         difficultyToggleGroup.selectToggle(cadetToggle);
-        difficultyToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        difficultyToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue)->{
             changeDifficulty(newValue);
         });
 
         //property binding
-        game.difficultyProperty().addListener((observable, oldValue, newValue) -> {
+        game.difficultyProperty().addListener((observable, oldValue, newValue)->{
             System.out.println("Difficulty Changed");
-           pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
+            pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
 
             for (Slider s : sliders) {
                 //bind max value of slider to starting points
@@ -140,8 +138,6 @@ public class CharacterConfigScreen extends Screen {
         player.fighterProperty().bind(fighterSlider.valueProperty());
         player.merchantProperty().bind(merchantSlider.valueProperty());
         player.engineerProperty().bind(engineerSlider.valueProperty());
-
-
     }
 
     public void changeDifficulty(Toggle selected) {
@@ -168,7 +164,7 @@ public class CharacterConfigScreen extends Screen {
     }
 
     public boolean validateName() {
-        if((nameField.getText() == null) || (nameField.getText().equals(""))) {
+        if ((nameField.getText() == null) || (nameField.getText().equals(""))) {
             errorMessage.setText("Name cannot be empty.");
             return false;
         }
@@ -194,13 +190,12 @@ public class CharacterConfigScreen extends Screen {
     }
 
     public void moveToCharacterSheetScreen() {
-
         CharacterSheetScreen nextScreen = new CharacterSheetScreen(getPrimaryStage(), game);
         nextScreen.display();
 
         /*
-        if we use FXML
-        primaryStage.setScene(FXMLLoader.load(some syntaxy stuff), width, height))
+           if we use FXML
+           primaryStage.setScene(FXMLLoader.load(some syntaxy stuff), width, height))
          */
 
     }

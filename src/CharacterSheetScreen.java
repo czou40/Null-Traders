@@ -8,8 +8,7 @@ public class CharacterSheetScreen extends Screen {
     private Game game;
 
     public CharacterSheetScreen(Stage primaryStage, Game game) {
-        super(primaryStage);
-        this.game = game;
+        super(primaryStage, game);
     }
 
     @Override
@@ -29,10 +28,10 @@ public class CharacterSheetScreen extends Screen {
 
         double[] rowConstraints = {10, 65, 15, 0};
         double[] columnConstraints = {100};
-        MyGridPane root = new MyGridPane(rowConstraints,columnConstraints);
-        root.addColumn(0,nameLabel,characterImageView,pilotPointBar);
+        MyGridPane root = new MyGridPane(rowConstraints, columnConstraints);
+        root.addColumn(0, nameLabel, characterImageView, pilotPointBar);
         Scene characterSheetScene = new Scene(root, 800, 600);
-        characterSheetScene.getStylesheets().addAll("styles/general.css","styles/character-sheet-screen.css");
+        characterSheetScene.getStylesheets().addAll("styles/general.css", "styles/character-sheet-screen.css");
         return characterSheetScene;
     }
 }
