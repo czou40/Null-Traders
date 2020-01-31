@@ -7,14 +7,14 @@ import javafx.stage.Stage;
 
 public class WelcomeScreen extends Screen {
 
-    public WelcomeScreen(Stage primaryStage) {
-        super(primaryStage);
+    public WelcomeScreen(Stage primaryStage, Game game) {
+        super(primaryStage, game);
     }
 
     public Scene constructScene() {
         Button welcomeButton = new Button("This is a test button");
         welcomeButton.setOnAction(e->{
-            new CharacterConfigScreen(getPrimaryStage()).display();
+            new CharacterConfigScreen(getPrimaryStage(), game).display();
         });
         Label welcomeTitle = new Label("Null-Traders");
         welcomeTitle.setId("h1"); // Apply CSS styles

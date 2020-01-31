@@ -5,13 +5,19 @@ import javafx.stage.Stage;
 
 public abstract class Screen {
     private Stage primaryStage;
+    protected Game game;    //easy access in child class
 
-    public Screen(Stage primaryStage) {
+    public Screen(Stage primaryStage, Game game) {
         this.primaryStage = primaryStage;
+        this.game = game;
     }
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public void display() {
