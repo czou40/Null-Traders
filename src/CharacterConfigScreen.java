@@ -1,3 +1,5 @@
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,23 +10,25 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CharacterConfigScreen extends Screen {
-    private static final boolean DEBUG = false; //only set true if testing
+public class CharacterConfigScreen extends GameScreen {
+    private static final boolean DEBUG = true; //only set true if testing
 
     private Player player;
 
     private Label title;
     private TextField nameField;
 
+    private Label difficultyLabel;
     private ToggleGroup difficultyToggleGroup;
+    private MyGridPane difficultyToggleWrapper;
     private RadioButton cadetToggle;
     private RadioButton captainToggle;
     private RadioButton admiralToggle;
 
-    private HBox pointsAvailableWrapper;
     private Label pointsAvailableNumber;
     private Label pointsAvailableLabel;
 
@@ -46,30 +50,53 @@ public class CharacterConfigScreen extends Screen {
 
     private Label errorMessage; //displays error to the user
 
-    private final Slider[] sliders;
+    private Slider[] sliders;
 
     public CharacterConfigScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game);
+        super(primaryStage, game,"New Game");
         player = game.getPlayer();
+    }
 
-        title = new Label("Name your character!");
+    @Override
+    public Scene constructScene() {
+       return super.constructScene(false);
+    }
+
+    @Override
+    public Pane constructContentPane() {
+        initializeUI();
+        initialize();
+        difficultyToggleWrapper = new MyGridPane(new double[]{100}, MyGridPane.getSpan(3),
+                HPos.LEFT, VPos.CENTER);
+        difficultyToggleWrapper.addRow(0,cadetToggle, captainToggle, admiralToggle);
+        //FlowPane root = new FlowPane(
+        //       title, nameField, difficultyToggleWrapper, pointsAvailableWrapper, slidersWrapper, submitButton, errorMessage);
+        MyGridPane content = new MyGridPane(MyGridPane.getSpan(10),new double[]{25,75});
+        content.addColumn(0, title, difficultyLabel, pointsAvailableLabel, pilotSliderLabel,
+                fighterSliderLabel, merchantSliderLabel, engineerSliderLabel);
+        content.addColumn(1,nameField,difficultyToggleWrapper, pointsAvailableNumber,
+                pilotSlider, fighterSlider, merchantSlider, engineerSlider,submitButton, errorMessage);
+        return content;
+    }
+
+    private void initializeUI() {
+        title = new Label("NAME");
         nameField = new TextField();
-        nameField.setPromptText("Enter a name");
-
+        nameField.setPromptText("Enter a Name");
+        difficultyLabel = new Label("DIFFICULTY");
         difficultyToggleGroup = new ToggleGroup();
-        cadetToggle = new RadioButton("Cadet");
-        captainToggle = new RadioButton("Captain");
-        admiralToggle = new RadioButton("Admiral");
+        cadetToggle = new RadioButton("CADET");
+        captainToggle = new RadioButton("CAPTAIN");
+        admiralToggle = new RadioButton("ADMIRAL");
         difficultyToggleGroup.getToggles().addAll(cadetToggle, captainToggle, admiralToggle);
 
-        pointsAvailableLabel = new Label("Skill Points Remaining: ");
+        pointsAvailableLabel = new Label("SKILL POINTS: ");
         pointsAvailableNumber = new Label("30");  //will get filled in through property binding
-        pointsAvailableWrapper = new HBox(pointsAvailableLabel, pointsAvailableNumber);
 
-        pilotSliderLabel = new Label("Pilot: ");
-        fighterSliderLabel = new Label("Fighter: ");
-        merchantSliderLabel = new Label("Merchant: ");
-        engineerSliderLabel = new Label("Engineer: ");
+        pilotSliderLabel = new Label("PILOT");
+        fighterSliderLabel = new Label("FIGHTER");
+        merchantSliderLabel = new Label("MERCHANT");
+        engineerSliderLabel = new Label("ENGINEER");
 
         pilotSlider = new Slider(0, game.getDifficulty().getStartingSkillPoints(), 0);
         fighterSlider = new Slider(0, game.getDifficulty().getStartingSkillPoints(), 0);
@@ -92,38 +119,24 @@ public class CharacterConfigScreen extends Screen {
         }
 
         submitButton = new Button("Submit Character");
-        submitButton.setOnAction(e -> {
-           submitCharacter();
+        submitButton.setOnAction(e->{
+            submitCharacter();
         });
 
         errorMessage = new Label("");
-        initialize();
     }
-
-    @Override
-    public Scene constructScene() {
-        VBox difficultyToggleWrapper = new VBox(cadetToggle, captainToggle, admiralToggle);
-        HBox pointsAvailableWrapper = new HBox(pointsAvailableLabel, pointsAvailableNumber);
-        FlowPane root = new FlowPane(
-                title, nameField, difficultyToggleWrapper, pointsAvailableWrapper, slidersWrapper, submitButton, errorMessage);
-        return new Scene(root,800,600);
-    }
-
-
 
     public void initialize() {
-        player = game.getPlayer();
-
         //set default toggle and update difficulty based on model
         difficultyToggleGroup.selectToggle(cadetToggle);
-        difficultyToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        difficultyToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue)->{
             changeDifficulty(newValue);
         });
 
         //property binding
-        game.difficultyProperty().addListener((observable, oldValue, newValue) -> {
+        game.difficultyProperty().addListener((observable, oldValue, newValue)->{
             System.out.println("Difficulty Changed");
-           pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
+            pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
 
             for (Slider s : sliders) {
                 //bind max value of slider to starting points
@@ -163,7 +176,7 @@ public class CharacterConfigScreen extends Screen {
     }
 
     public boolean validateName() {
-        if((nameField.getText() == null) || (nameField.getText().equals(""))) {
+        if ((nameField.getText() == null) || (nameField.getText().equals(""))) {
             errorMessage.setText("Name cannot be empty.");
             return false;
         }
@@ -189,13 +202,12 @@ public class CharacterConfigScreen extends Screen {
     }
 
     public void moveToCharacterSheetScreen() {
-
         CharacterSheetScreen nextScreen = new CharacterSheetScreen(getPrimaryStage(), game);
         nextScreen.display();
 
         /*
-        if we use FXML
-        primaryStage.setScene(FXMLLoader.load(some syntaxy stuff), width, height))
+           if we use FXML
+           primaryStage.setScene(FXMLLoader.load(some syntaxy stuff), width, height))
          */
 
     }

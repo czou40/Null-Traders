@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -8,10 +9,15 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         game = new Game();
-
+        game.getPlayer().setName("fdmjkss");
+        game.setDifficulty(Difficulty.CADET);
+        game.getPlayer().setEngineer(25);
+        game.getPlayer().setFighter(17);
+        game.getPlayer().setMerchant(5);
+        game.getPlayer().setPilot(22);
         primaryStage.setTitle("Welcome to Null Traders!");
-        WelcomeScreen welcomeScreen = new WelcomeScreen(primaryStage, game);
-        welcomeScreen.display();
+
+        new WelcomeScreen(primaryStage, game).display();
     }
 
     public static void main(String[] args) {
