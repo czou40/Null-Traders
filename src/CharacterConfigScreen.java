@@ -15,7 +15,6 @@ public class CharacterConfigScreen extends Screen {
     private static final boolean DEBUG = false; //only set true if testing
 
     private Player player;
-    private Stage primaryStage;
 
     private Label title;
     private TextField nameField;
@@ -191,7 +190,7 @@ public class CharacterConfigScreen extends Screen {
 
     public void moveToCharacterSheetScreen() {
 
-        CharacterSheetScreen nextScreen = new CharacterSheetScreen(primaryStage, game);
+        CharacterSheetScreen nextScreen = new CharacterSheetScreen(getPrimaryStage(), game);
         nextScreen.display();
 
         /*
