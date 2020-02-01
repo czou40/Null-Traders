@@ -2,13 +2,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
 public class MyProgressBar extends ProgressBar {
     private int point;
     private int maxPoint;
-    private final static int[] COLOR_MAX_POINT = {38, 125, 255};
-    private final static int[] COLOR_ZERO_POINT = {255, 71, 71};
+    private final static int[] COLOR_MAX_POINT = {255, 255, 255};
+    private final static int[] COLOR_ZERO_POINT = {255, 255, 255};
     private final static String PROGRESS_BAR_COLOR = "-fx-accent:rgb(%d,%d,%d);";
 
 
