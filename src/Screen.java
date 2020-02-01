@@ -22,7 +22,6 @@ public abstract class Screen {
 
     public void display() {
         primaryStage.setScene(constructScene());
-        getPrimaryStage().setFullScreen(true);
         primaryStage.show();
     }
 

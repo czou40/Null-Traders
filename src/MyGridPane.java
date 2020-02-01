@@ -1,8 +1,8 @@
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 /**
  * When we add nodes to this customized grid pane, the nodes will be at the center. Also, the constructor
@@ -12,39 +12,6 @@ import javafx.scene.layout.StackPane;
  * @version 1.0
  */
 public class MyGridPane extends GridPane {
-
-    /**
-     * Customized Column Constraints. The constructor allows you to quickly create a useful constraint.
-     */
-    private static class MyColumnConstraints extends ColumnConstraints {
-
-        /**
-         * Constructor.
-         *
-         * @param percentageWidth Percentage Width.
-         */
-        private MyColumnConstraints(double percentageWidth) {
-            super();
-            this.setPercentWidth(percentageWidth);
-        }
-    }
-
-    /**
-     * Customized Row Constraints. The constructor allows you to quickly create a useful constraint.
-     */
-    private static class MyRowConstraints extends RowConstraints {
-
-        /**
-         * Constructor.
-         *
-         * @param percentageHeight Percentage Height.
-         */
-        private MyRowConstraints(double percentageHeight) {
-            super();
-            this.setPercentHeight(percentageHeight);
-        }
-    }
-
     /**
      * Constructor. It allows you to quickly construct a grid pane and specify
      * the size of the grids with respect to the ratio to the size of the Scene.
@@ -52,38 +19,33 @@ public class MyGridPane extends GridPane {
      * @param rowConstraints    Row Constraints.
      * @param columnConstraints Column Constraints.
      */
-    public MyGridPane(double[] rowConstraints, double[] columnConstraints) {
+    public MyGridPane(double[] rowConstraints, double[] columnConstraints, HPos hPos, VPos vPos) {
         super();
         for (int i = 0; i < rowConstraints.length; i++) {
-            this.getRowConstraints().add(new MyRowConstraints(rowConstraints[i]));
+            this.getRowConstraints().add(new MyRowConstraints(rowConstraints[i],vPos));
         }
         for (int i = 0; i < columnConstraints.length; i++) {
-            this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i]));
+            this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i],hPos));
         }
     }
 
-    /**
-     * Specify the size of the grids with respect to the ratio to the size of the Scene.
-     *
-     * @param rowConstraints    Row constraints.
-     * @param columnConstraints Column constraints.
-     */
-    public void setConstraints(double[] rowConstraints, double[] columnConstraints) {
-        this.getRowConstraints().setAll();
-        this.getColumnConstraints().setAll();
-        for (int i = 0; i < rowConstraints.length; i++) {
-            this.getRowConstraints().add(new MyRowConstraints(rowConstraints[i]));
-        }
-        for (int i = 0; i < columnConstraints.length; i++) {
-            this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i]));
-        }
+    public MyGridPane(double[] rowConstraints, double[] columnConstraints) {
+        this(rowConstraints, columnConstraints, HPos.LEFT,VPos.CENTER);
     }
+
 
     /**
      * Constructor.
      */
     public MyGridPane() {
-        super();
+        this(new double[]{100}, new double[]{100}, HPos.LEFT,VPos.CENTER);
+    }
+
+    /**
+     * Constructor.
+     */
+    public MyGridPane(HPos hPos, VPos vPos) {
+        this(new double[]{100}, new double[]{100}, hPos,vPos);
     }
 
     /**
@@ -95,7 +57,7 @@ public class MyGridPane extends GridPane {
      */
     @Override
     public void add(Node node, int i, int i1) {
-        super.add(new StackPane(node), i, i1);
+        super.add(node, i, i1);
     }
 
     /**
@@ -109,7 +71,7 @@ public class MyGridPane extends GridPane {
      */
     @Override
     public void add(Node node, int i, int i1, int i2, int i3) {
-        super.add(new StackPane(node), i, i1, i2, i3);
+        super.add(node, i, i1, i2, i3);
     }
 
     /**
@@ -120,12 +82,16 @@ public class MyGridPane extends GridPane {
      */
     @Override
     public void addColumn(int i, Node... nodes) {
+        addColumn(Pos.TOP_LEFT,i,nodes);
+    }
+
+    public void addColumn(Pos pos, int i, Node... nodes) {
         Node[] newNodes = new Node[nodes.length];
         for (int j = 0; j < nodes.length; j++) {
             if (nodes[j] == null) {
-                newNodes[j] = new StackPane();
+                newNodes[j] = new Pane();
             } else {
-                newNodes[j] = new StackPane(nodes[j]);
+                newNodes[j] =  nodes[j];
             }
         }
         super.addColumn(i, newNodes);
@@ -139,12 +105,16 @@ public class MyGridPane extends GridPane {
      */
     @Override
     public void addRow(int i, Node... nodes) {
+       addRow(Pos.TOP_LEFT,i,nodes);
+    }
+
+    public void addRow(Pos pos, int i, Node... nodes) {
         Node[] newNodes = new Node[nodes.length];
         for (int j = 0; j < nodes.length; j++) {
             if (nodes[j] == null) {
-                newNodes[j] = new StackPane();
+                newNodes[j] = new Pane();
             } else {
-                newNodes[j] = new StackPane(nodes[j]);
+                newNodes[j] = nodes[j];
             }
         }
         super.addRow(i, newNodes);
@@ -165,4 +135,53 @@ public class MyGridPane extends GridPane {
         }
         return result;
     }
+
+    public void setConstraint(int i, int i1, double percentageHeight, double percentageWidth, HPos hPos, VPos vPos) {
+        this.getRowConstraints().set(i, new MyRowConstraints(percentageHeight,vPos));
+        this.getColumnConstraints().set(i1, new MyColumnConstraints(percentageWidth, hPos));
+
+    }
+
+    /**
+     * Customized Column Constraints. The constructor allows you to quickly create a useful constraint.
+     */
+    private static class MyColumnConstraints extends ColumnConstraints {
+
+        /**
+         * Constructor.
+         *
+         * @param percentageWidth Percentage Width.
+         */
+        private MyColumnConstraints(double percentageWidth) {
+            this(percentageWidth, HPos.CENTER);
+        }
+
+        private MyColumnConstraints(double percentageWidth, HPos hPos) {
+            super();
+            this.setPercentWidth(percentageWidth);
+            this.setHalignment(hPos);
+        }
+    }
+
+    /**
+     * Customized Row Constraints. The constructor allows you to quickly create a useful constraint.
+     */
+    private static class MyRowConstraints extends RowConstraints {
+
+        /**
+         * Constructor.
+         *
+         * @param percentageHeight Percentage Height.
+         */
+        private MyRowConstraints(double percentageHeight) {
+            this(percentageHeight, VPos.CENTER);
+        }
+
+        private MyRowConstraints(double percentageHeight, VPos vPos) {
+            super();
+            this.setPercentHeight(percentageHeight);
+            this.setValignment(vPos);
+        }
+    }
+
 }
