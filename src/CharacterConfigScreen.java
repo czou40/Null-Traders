@@ -190,7 +190,6 @@ public class CharacterConfigScreen extends Screen {
     }
 
     public void moveToCharacterSheetScreen() {
-
         CharacterSheetScreen nextScreen = new CharacterSheetScreen(getPrimaryStage(), game);
         nextScreen.display();
 

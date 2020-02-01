@@ -17,9 +17,9 @@ public class WelcomeScreen extends Screen {
             new CharacterConfigScreen(getPrimaryStage(), game).display();
         });
         Label welcomeTitle = new Label("Null-Traders");
-        welcomeTitle.setId("h1"); // Apply CSS styles
+        welcomeTitle.getStyleClass().add("h1"); // Apply CSS styles
         Label groupTitle = new Label("The Null Pointers");
-        groupTitle.setId("h2"); // Apply CSS styles
+        groupTitle.getStyleClass().add("h2"); // Apply CSS styles
         // Demonstration of how to use MyGridPane
         double[] rowConstraints = {30,10,10,20,30};
         double[] columnConstraints = {100};
