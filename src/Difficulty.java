@@ -1,5 +1,4 @@
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+
 
 public enum Difficulty {
     CADET(200, 30), CAPTAIN(150, 20), ADMIRAL(100, 15);

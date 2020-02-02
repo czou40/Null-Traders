@@ -13,7 +13,8 @@ public class Player {
     private IntegerProperty engineer;
     private IntegerProperty credits;
 
-    public Player(Game game, String name, Integer pilot, Integer fighter, Integer merchant, Integer engineer, Integer credits) {
+    public Player(Game game, String name, Integer pilot, Integer fighter,
+                  Integer merchant, Integer engineer, Integer credits) {
         this.game = game;
         this.name = new SimpleStringProperty(name);
         this.pilot = new SimpleIntegerProperty(pilot);

@@ -8,10 +8,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CharacterConfigScreen extends GameScreen {
@@ -54,13 +51,13 @@ public class CharacterConfigScreen extends GameScreen {
     private Slider[] sliders;
 
     public CharacterConfigScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game,"New Game");
+        super(primaryStage, game, "New Game");
         player = game.getPlayer();
     }
 
     @Override
     public Scene constructScene() {
-       return super.constructScene(false);
+        return super.constructScene(false);
     }
 
     @Override
@@ -69,14 +66,17 @@ public class CharacterConfigScreen extends GameScreen {
         initialize();
         difficultyToggleWrapper = new MyGridPane(new double[]{100}, MyGridPane.getSpan(3),
                 HPos.LEFT, VPos.CENTER);
-        difficultyToggleWrapper.addRow(0,cadetToggle, captainToggle, admiralToggle);
+        difficultyToggleWrapper.addRow(0, cadetToggle, captainToggle, admiralToggle);
         //FlowPane root = new FlowPane(
-        //       title, nameField, difficultyToggleWrapper, pointsAvailableWrapper, slidersWrapper, submitButton, errorMessage);
-        MyGridPane content = new MyGridPane(MyGridPane.getSpan(10),new double[]{25,75});
+        //       title, nameField, difficultyToggleWrapper,
+        //       pointsAvailableWrapper, slidersWrapper, submitButton,
+        //       errorMessage);
+        MyGridPane content = new MyGridPane(MyGridPane.getSpan(10), new double[]{25, 75});
         content.addColumn(0, title, difficultyLabel, pointsAvailableLabel, pilotSliderLabel,
                 fighterSliderLabel, merchantSliderLabel, engineerSliderLabel);
-        content.addColumn(1,nameField,difficultyToggleWrapper, pointsAvailableNumber,
-                pilotSlider, fighterSlider, merchantSlider, engineerSlider,submitButton, errorMessage);
+        content.addColumn(1, nameField, difficultyToggleWrapper, pointsAvailableNumber,
+                pilotSlider, fighterSlider, merchantSlider,
+                engineerSlider, submitButton, errorMessage);
         return content;
     }
 
@@ -106,7 +106,8 @@ public class CharacterConfigScreen extends GameScreen {
 
 
         slidersWrapper = new MyGridPane();
-        slidersWrapper.addColumn(0, pilotSliderLabel, fighterSliderLabel, merchantSliderLabel, engineerSliderLabel);
+        slidersWrapper.addColumn(0, pilotSliderLabel, fighterSliderLabel,
+                merchantSliderLabel, engineerSliderLabel);
         slidersWrapper.addColumn(1, pilotSlider, fighterSlider, merchantSlider, engineerSlider);
         sliders = new Slider[] {pilotSlider, fighterSlider, merchantSlider, engineerSlider};
         for (Slider s : sliders) {
@@ -120,7 +121,7 @@ public class CharacterConfigScreen extends GameScreen {
         }
 
         submitButton = new Button("Submit Character");
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(e -> {
             submitCharacter();
         });
 
@@ -130,12 +131,13 @@ public class CharacterConfigScreen extends GameScreen {
     public void initialize() {
         //set default toggle and update difficulty based on model
         difficultyToggleGroup.selectToggle(cadetToggle);
-        difficultyToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue)->{
+        difficultyToggleGroup.selectedToggleProperty().addListener((
+                observable, oldValue, newValue) -> {
             changeDifficulty(newValue);
         });
 
         //property binding
-        game.difficultyProperty().addListener((observable, oldValue, newValue)->{
+        game.difficultyProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Difficulty Changed");
             pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
 
