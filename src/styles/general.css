@@ -46,13 +46,12 @@
 }
 
 .button:hover {
-    -fx-font-size: 150%;
-        -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
-
+    /*-fx-font-size: 150%;*/
+    -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
 }
 
 .button-large:hover {
-    -fx-font-size: 200%;
+    /*-fx-font-size: 200%;*/
     -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
 }
 

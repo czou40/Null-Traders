@@ -115,6 +115,8 @@ public class CharacterConfigScreen extends GameScreen {
         }
 
         submitButton = new Button("Submit Character");
+        submitButton.setSkin(new ButtonScaleHover(submitButton)); //effect is applied here
+
         submitButton.setOnAction(e -> {
             submitCharacter();
         });

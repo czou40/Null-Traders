@@ -27,6 +27,7 @@ public class WelcomeScreen extends Screen {
      */
     public Scene constructScene() {
         Button welcomeButton = new Button("New Game!");
+        welcomeButton.setSkin(new ButtonScaleHover(welcomeButton));
         welcomeButton.getStyleClass().add("button-large");
         welcomeButton.setOnAction(e -> {
             new CharacterConfigScreen(getPrimaryStage(), game).display();
