@@ -134,7 +134,6 @@ public class CharacterConfigScreen extends GameScreen {
 
         //property binding
         game.difficultyProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Difficulty Changed");
             //pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
 
             for (Slider s : sliders) {
