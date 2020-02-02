@@ -1,9 +1,15 @@
+.root {
+    -fx-background-repeat: stretch;
+    -fx-background-size: cover;
+    -fx-background-position: left center;
+}
+
 .text {
     -fx-font-smoothing-type: gray;
 }
 
 .label {
-    -fx-font-size:1.5em; -fx-font-family:calibri-light;-fx-text-fill: #ffffff;
+    -fx-font-size:1.5em; -fx-font-family:calibri-light;-fx-text-fill: #efefef;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.3, 0, 0);
     -fx-text-align: left;
 }
@@ -40,17 +46,22 @@
 }
 
 .button:hover {
-    -fx-text-fill: #434343;
-    -fx-background-color: #dfdfdf;
     -fx-font-size: 150%;
+        -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
+
+}
+
+.button-large:hover {
+    -fx-font-size: 200%;
     -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
 }
 
 .text-field {
     -fx-padding: 10px;
-    -fx-border-insets: 5px;
-    -fx-background-insets: 5px;
-    -fx-background-color: #dfdfdf;
+    -fx-border-color: transparent transparent #efefef transparent;
+    -fx-background-color: transparent;
+    -fx-font-size:1.5em;
+    -fx-text-fill:#efefef;
 }
 .text-field .scroll-pane {
     -fx-background-color: transparent;
@@ -62,25 +73,6 @@
 
 
 .text-field .scroll-pane .content{
-    -fx-background-color: transparent;
-}
-
-.text-area {
-    -fx-padding: 10px;
-    -fx-border-insets: 5px;
-    -fx-background-insets: 5px;
-    -fx-background-color: #dfdfdf;
-}
-.text-area .scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.text-area .scroll-pane .viewport{
-    -fx-background-color: transparent;
-}
-
-
-.text-area .scroll-pane .content{
     -fx-background-color: transparent;
 }
 
@@ -105,10 +97,18 @@
 
 .slider .track {
     -fx-background-color: #434343;
-        -fx-background-radius: 0, 0, 0, 0;
-        -fx-background-insets: 0px;
+     -fx-background-radius: 0, 0, 0, 0;
             -fx-pref-height: 20;
+}
 
+.slider .axis {
+-fx-tick-label-fill: #efefef;
+
+}
+
+.slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #efefef;
 }
 
 .slider .thumb {
@@ -119,17 +119,32 @@
 }
 
 .radio-button {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #efefef;
     -fx-font-size:1.5em;
 }
 
-.radio-button .radio:hover {
-        -fx-color: #efefef;
+.radio-button .radio {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+        -fx-padding: 5px;
 }
-
-.radio-button:selected {
+.radio-button .radio:selected {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
 }
-
-.radio-button:selected .radio {
-        -fx-color: #efefef;
+.radio-button -radio:armed {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 18px;
+    -fx-padding: 8px;
 }

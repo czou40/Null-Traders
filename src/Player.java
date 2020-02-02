@@ -3,6 +3,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.IntegerProperty;
 
+/**
+ * This class describes a player.
+ */
 public class Player {
     private Game game;  //player is dependent on the game
 
@@ -13,7 +16,19 @@ public class Player {
     private IntegerProperty engineer;
     private IntegerProperty credits;
 
-    public Player(Game game, String name, Integer pilot, Integer fighter, Integer merchant, Integer engineer, Integer credits) {
+    /**
+     * Constructs a new instance.
+     *
+     * @param      game      The game
+     * @param      name      The name
+     * @param      pilot     The pilot
+     * @param      fighter   The fighter
+     * @param      merchant  The merchant
+     * @param      engineer  The engineer
+     * @param      credits   The credits
+     */
+    public Player(Game game, String name, Integer pilot, Integer fighter,
+                  Integer merchant, Integer engineer, Integer credits) {
         this.game = game;
         this.name = new SimpleStringProperty(name);
         this.pilot = new SimpleIntegerProperty(pilot);
@@ -23,26 +38,57 @@ public class Player {
         this.credits = new SimpleIntegerProperty(credits);
     }
 
+    /**
+     * Constructs a new instance.
+     *
+     * @param      game  The game
+     * @param      name  The name
+     */
     public Player(Game game, String name) {
         this(game, name, 0, 0, 0, 0, game.getDifficulty().getCredits());
     }
 
+    /**
+     * Constructs a new instance.
+     *
+     * @param      game  The game
+     */
     public Player(Game game) {
         this(game, "", 0, 0, 0, 0, game.getDifficulty().getCredits());
     }
 
+    /**
+     * Gets the game.
+     *
+     * @return     The game.
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Sets the game.
+     *
+     * @param      game  The game
+     */
     public void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * { function_description }
+     *
+     * @return     The string property.
+     */
     public StringProperty nameProperty() {
         return name;
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return     The name.
+     */
     public String getName() {
         return name.getValue();
     }

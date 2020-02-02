@@ -2,22 +2,21 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
 public class MyProgressBar extends ProgressBar {
     private int point;
     private int maxPoint;
-    private final static int[] COLOR_MAX_POINT = {255, 255, 255};
-    private final static int[] COLOR_ZERO_POINT = {255, 255, 255};
-    private final static String PROGRESS_BAR_COLOR = "-fx-accent:rgb(%d,%d,%d);";
+    private static final int[] COLOR_MAX_POINT = {255, 255, 255};
+    private static final int[] COLOR_ZERO_POINT = {255, 255, 255};
+    private static final String PROGRESS_BAR_COLOR = "-fx-accent:rgb(%d,%d,%d);";
 
 
     public MyProgressBar(int point, int maxPoint) {
         super(0);
         this.point = point;
         this.maxPoint = maxPoint;
-        this.getStylesheets().add("styles/my-point-bar.css");
+        this.getStylesheets().add("styles/my-progress-bar.css");
         setPoint(point);
     }
 
@@ -35,10 +34,10 @@ public class MyProgressBar extends ProgressBar {
 
     public void setPoint(int point) {
         this.point = point;
-        int[] color = getBarColor(1.0 * point/maxPoint);
-        this.setStyle(String.format(PROGRESS_BAR_COLOR,color[0], color[1], color[2]));
+        int[] color = getBarColor(1.0 * point / maxPoint);
+        this.setStyle(String.format(PROGRESS_BAR_COLOR, color[0], color[1], color[2]));
         Timeline timeline = new Timeline();
-        KeyValue keyValue = new KeyValue(this.progressProperty(), 1.0 * point/maxPoint);
+        KeyValue keyValue = new KeyValue(this.progressProperty(), 1.0 * point / maxPoint);
         KeyFrame keyFrame = new KeyFrame(new Duration(1000), keyValue);
         timeline.getKeyFrames().addAll(keyFrame);
         timeline.play();
