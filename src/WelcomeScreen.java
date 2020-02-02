@@ -5,12 +5,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * This class describes a welcome screen.
+ */
 public class WelcomeScreen extends Screen {
 
+    /**
+     * Constructs a new instance.
+     *
+     * @param      primaryStage  The primary stage
+     * @param      game          The game
+     */
     public WelcomeScreen(Stage primaryStage, Game game) {
         super(primaryStage, game);
     }
 
+    /**
+     * { function_description }
+     *
+     * @return     { description_of_the_return_value }
+     */
     public Scene constructScene() {
         Button welcomeButton = new Button("New Game!");
         welcomeButton.getStyleClass().add("button-large");
