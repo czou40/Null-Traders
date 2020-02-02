@@ -12,10 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class CharacterConfigScreen extends GameScreen {
-    private static final boolean DEBUG = true; //only set true if testing
+    private static final boolean DEBUG = false; //only set true if testing
 
     private Player player;
-    private Stage primaryStage;
 
     private Label title;
     private TextField nameField;
@@ -114,7 +113,7 @@ public class CharacterConfigScreen extends GameScreen {
             //labels every 5 points, points increment by 1
 
             s.setMajorTickUnit(5.0);
-            s.setMinorTickCount(5);
+            s.setMinorTickCount(4);
             s.setSnapToTicks(true);
             s.setShowTickLabels(true);
             s.setShowTickMarks(true);
@@ -149,10 +148,10 @@ public class CharacterConfigScreen extends GameScreen {
 
         player.nameProperty().bind(nameField.textProperty());
 
-        player.pilotProperty().bind(pilotSlider.valueProperty());
-        player.fighterProperty().bind(fighterSlider.valueProperty());
-        player.merchantProperty().bind(merchantSlider.valueProperty());
-        player.engineerProperty().bind(engineerSlider.valueProperty());
+        player.pilotProperty().bind(pilotSlider.valueProperty().add(0.5));
+        player.fighterProperty().bind(fighterSlider.valueProperty().add(0.5));
+        player.merchantProperty().bind(merchantSlider.valueProperty().add(0.5));
+        player.engineerProperty().bind(engineerSlider.valueProperty().add(0.5));
     }
 
     public void changeDifficulty(Toggle selected) {
