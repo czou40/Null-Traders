@@ -1,10 +1,6 @@
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -54,7 +50,7 @@ public class CharacterConfigScreen extends GameScreen {
     private Slider[] sliders;
 
     public CharacterConfigScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game, "New Game",false);
+        super(primaryStage, game, "New Game", false);
         player = game.getPlayer();
     }
 

@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public abstract class GameScreen extends Screen {
     private String title;
-    boolean requiresSideBar;
+    private boolean requiresSideBar;
     public GameScreen(Stage primaryStage, Game game, String title, boolean requiresSideBar) {
         super(primaryStage, game);
         this.title = title.toUpperCase();
