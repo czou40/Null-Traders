@@ -7,12 +7,15 @@ import javafx.stage.Stage;
 
 public abstract class GameScreen extends Screen {
     private String title;
-    public GameScreen(Stage primaryStage, Game game, String title) {
+    boolean requiresSideBar;
+    public GameScreen(Stage primaryStage, Game game, String title, boolean requiresSideBar) {
         super(primaryStage, game);
         this.title = title.toUpperCase();
+        this.requiresSideBar = requiresSideBar;
     }
 
-    public Scene constructScene(boolean requiresSideBar) {
+    @Override
+    public Scene constructScene() {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("h1");
         MyGridPane titlePane = new MyGridPane();
@@ -37,13 +40,8 @@ public abstract class GameScreen extends Screen {
         root.addColumn(1, null, titlePane, wrapperPane, null);
         Scene characterSheetScene = new Scene(root, 1280, 720);
         characterSheetScene.getStylesheets().addAll("styles/general.css",
-                "styles/character-sheet-screen.css");
+                "styles/blurry-background.css");
         return characterSheetScene;
-    }
-
-    @Override
-    public Scene constructScene() {
-        return constructScene(true);
     }
 
     public abstract Pane constructContentPane();

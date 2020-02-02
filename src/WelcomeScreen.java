@@ -42,7 +42,7 @@ public class WelcomeScreen extends Screen {
                 columnConstraints, HPos.CENTER, VPos.CENTER);
         myGridPane.addColumn(0, null, welcomeTitle, groupTitle, welcomeButton);
         Scene welcomeScene = new Scene(myGridPane, 1280, 720);
-        welcomeScene.getStylesheets().addAll("styles/general.css", "styles/welcome-screen.css");
+        welcomeScene.getStylesheets().addAll("styles/general.css", "styles/clear-background.css");
         return welcomeScene;
     }
 }

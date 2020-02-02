@@ -16,7 +16,7 @@ public class MyProgressBar extends ProgressBar {
         super(0);
         this.point = point;
         this.maxPoint = maxPoint;
-        this.getStylesheets().add("styles/my-point-bar.css");
+        this.getStylesheets().add("styles/my-progress-bar.css");
         setPoint(point);
     }
 

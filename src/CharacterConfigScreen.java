@@ -1,3 +1,7 @@
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -50,13 +54,8 @@ public class CharacterConfigScreen extends GameScreen {
     private Slider[] sliders;
 
     public CharacterConfigScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game, "New Game");
+        super(primaryStage, game, "New Game",false);
         player = game.getPlayer();
-    }
-
-    @Override
-    public Scene constructScene() {
-        return super.constructScene(false);
     }
 
     @Override
@@ -138,13 +137,35 @@ public class CharacterConfigScreen extends GameScreen {
         //property binding
         game.difficultyProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Difficulty Changed");
-            pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
+            //pointsAvailableNumber.setText(newValue.getStartingSkillPoints().toString());
 
             for (Slider s : sliders) {
                 //bind max value of slider to starting points
                 s.setMax(newValue.getStartingSkillPoints());
             }
+            pointsAvailableNumber.textProperty().bind(Bindings.format("%s",
+                    newValue.startingSkillPointsProperty().
+                            subtract(player.pilotProperty().
+                                    add(player.fighterProperty().
+                                            add(player.merchantProperty().
+                                                    add(player.engineerProperty()))))));
         });
+
+        pointsAvailableNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (Integer.parseInt(newValue) < 0) {
+                pointsAvailableNumber.setStyle("-fx-text-fill:#f44336;");
+            } else {
+                pointsAvailableNumber.setStyle("-fx-text-fill:#efefef;");
+
+            }
+        });
+
+        pointsAvailableNumber.textProperty().bind(Bindings.format("%s",
+                game.getDifficulty().startingSkillPointsProperty().
+                        subtract(player.pilotProperty().
+                                add(player.fighterProperty().
+                                        add(player.merchantProperty().
+                                                add(player.engineerProperty()))))));
 
         player.nameProperty().bind(nameField.textProperty());
 
@@ -163,6 +184,8 @@ public class CharacterConfigScreen extends GameScreen {
             game.setDifficulty(Difficulty.ADMIRAL);
         }
     }
+
+
 
     public void submitCharacter() {
         if (DEBUG) {
