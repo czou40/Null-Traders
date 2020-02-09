@@ -15,8 +15,8 @@ public class Main extends Application {
         game.getPlayer().setMerchant(5);
         game.getPlayer().setPilot(22);
         primaryStage.setTitle("Welcome to Null Traders!");
-        new CharacterSheetScreen(primaryStage, game).display();
-        //new WelcomeScreen(primaryStage, game).display();
+        //new CharacterSheetScreen(primaryStage, game).display();
+        new WelcomeScreen(primaryStage, game).display();
     }
 
     public static void main(String[] args) {
