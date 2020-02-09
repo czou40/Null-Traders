@@ -1,0 +1,149 @@
+.root {
+    -fx-background-repeat: stretch;
+    -fx-background-size: cover;
+    -fx-background-position: left center;
+}
+
+.text {
+    -fx-font-smoothing-type: gray;
+}
+
+.label {
+    -fx-font-size:1.5em; -fx-font-family:calibri-light;-fx-text-fill: #efefef;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.3, 0, 0);
+    -fx-text-align: left;
+}
+
+.h0 {
+    -fx-font-size:5em;
+}
+
+.h1 {
+    -fx-font-size:2.8em;
+    }
+
+.h2 {
+    -fx-font-size:2em;
+}
+
+.h3 {
+    -fx-font-size:1.5em;
+}
+
+.image-view {
+     -fx-effect: dropshadow(gaussian, rgba( 255, 255, 255, 0.5), 20, 0.3, 0, 0);
+ }
+
+.button {
+    -fx-text-fill: #434343;
+    -fx-background-color: #dfdfdf;
+    -fx-font-size: 125%;
+    -fx-effect: dropshadow(gaussian, rgba( 255, 255, 255, 0.5), 10, 0, 0, 0);
+}
+
+.button-large {
+    -fx-font-size: 150%;
+}
+
+.button:hover {
+    /*-fx-font-size: 150%;*/
+    -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
+}
+
+.button-large:hover {
+    /*-fx-font-size: 200%;*/
+    -fx-effect: dropshadow(gaussian, rgba( 35, 173, 255, 0.5), 10, 0, 0, 0);
+}
+
+.text-field {
+    -fx-padding: 10px;
+    -fx-border-color: transparent transparent #efefef transparent;
+    -fx-background-color: transparent;
+    -fx-font-size:1.5em;
+    -fx-text-fill:#efefef;
+}
+.text-field .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-field .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-field .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.tooltip {
+    -fx-font-size: 125%;
+}
+
+.transparent-pane-light {
+    -fx-background-color: rgba(192, 192, 192,0.4);
+        -fx-padding: 0px 50px 0px 50px;
+}
+
+.transparent-pane-medium {
+    -fx-background-color: rgba(96, 96, 96,0.5);
+        -fx-padding: 0px 50px 0px 50px;
+}
+
+.transparent-pane-dark {
+    -fx-background-color: rgba(32, 32, 32,0.6);
+        -fx-padding: 0px 50px 0px 50px;
+}
+
+.slider .track {
+    -fx-background-color: #434343;
+     -fx-background-radius: 0, 0, 0, 0;
+            -fx-pref-height: 20;
+}
+
+.slider .axis {
+-fx-tick-label-fill: #efefef;
+
+}
+
+.slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #efefef;
+}
+
+.slider .thumb {
+    -fx-pref-height: 30;
+    -fx-pref-width: 30;
+        -fx-background-color: #efefef;
+
+}
+
+.radio-button {
+    -fx-text-fill: #efefef;
+    -fx-font-size:1.5em;
+}
+
+.radio-button .radio {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+        -fx-padding: 5px;
+}
+.radio-button .radio:selected {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button -radio:armed {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: #efefef;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 18px;
+    -fx-padding: 8px;
+}

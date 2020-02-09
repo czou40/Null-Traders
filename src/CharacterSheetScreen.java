@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 public class CharacterSheetScreen extends GameScreen {
 
     public CharacterSheetScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game, "Summary of " + game.getPlayer().getName(), false);
+        super(primaryStage, game, "Summary of " + game.getPlayer().getName(), true);
     }
 
     @Override //Test
@@ -22,28 +22,25 @@ public class CharacterSheetScreen extends GameScreen {
         //creditLabel.getStyleClass().add("h2");
 
         int startingSkillPoints = game.getDifficulty().getStartingSkillPoints();
-        Label fighterLabel = new Label("FIGHTER: "
-                + player.getFighter() + "/" + startingSkillPoints);
+        Label fighterLabel = new Label("FIGHTER");
         MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter(), startingSkillPoints);
         fighterPointBar.setMaxWidth(9999);
-        Label pilotLabel = new Label("PILOT: " + player.getPilot()
-                + "/" + startingSkillPoints);
+        Label pilotLabel = new Label("PILOT");
         MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot(), startingSkillPoints);
         pilotPointBar.setMaxWidth(9999);
-        Label merchantLabel = new Label("MERCHANT: " + player.getMerchant()
-                + "/" + startingSkillPoints);
+        Label merchantLabel = new Label("MERCHANT");
         MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant(),
                 startingSkillPoints);
         merchantPointBar.setMaxWidth(9999);
-        Label engineerLabel = new Label("ENGINEER: "
-                + player.getEngineer() + "/" + startingSkillPoints);
+        Label engineerLabel = new Label("ENGINEER");
         MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer(),
                 startingSkillPoints);
         engineerPointBar.setMaxWidth(9999);
         contentGridPane.addColumn(0, difficultyLeftLabel, creditLeftLabel,
                 pilotLabel, fighterLabel, merchantLabel, engineerLabel);
         contentGridPane.addColumn(1, difficultyRightLabel, creditRightLabel,
-                pilotPointBar, fighterPointBar, merchantPointBar, engineerPointBar);
+                pilotPointBar.withLabel(), fighterPointBar.withLabel(),
+                merchantPointBar.withLabel(), engineerPointBar.withLabel());
         return contentGridPane;
     }
 }

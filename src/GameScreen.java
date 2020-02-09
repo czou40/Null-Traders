@@ -57,8 +57,12 @@ public abstract class GameScreen extends Screen {
 
         //characterImageView.fitHeightProperty().bind(getPrimaryStage().heightProperty().multiply(
         // 0.1));
-        sideBarPane.addColumn(0, new Label("Function 1"),
-                new Label("Function 2"), new Label("Function 3"), new Label("Function 4"));
+        sideBarPane.addColumn(0,
+                new MyNavigationButton("Buy Cargo", null),
+                new MyNavigationButton("Sell Cargo", null),
+                new MyNavigationButton("Player Profile",
+                        new CharacterSheetScreen(getPrimaryStage(), game)),
+                new MyNavigationButton("Map", new MapScreen(getPrimaryStage(), game)));
         sideBarPane.getStyleClass().addAll("transparent-pane-light");
         return sideBarPane;
     }

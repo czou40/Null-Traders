@@ -141,13 +141,18 @@ public class MyGridPane extends GridPane {
         return result;
     }
 
-    public void setConstraint(int i, int i1, double percentageHeight,
-                              double percentageWidth, HPos hPos, VPos vPos) {
-        this.getRowConstraints().set(i, new MyRowConstraints(percentageHeight, vPos));
-        this.getColumnConstraints().set(i1, new MyColumnConstraints(percentageWidth, hPos));
-
+    public void addRowConstraint(double percentageHeight, VPos vPos) {
+        this.getRowConstraints().add(new MyRowConstraints(percentageHeight, vPos));
     }
 
+    public void addColumnConstraint(double percentageWidth, HPos hPos) {
+        this.getColumnConstraints().add(new MyColumnConstraints(percentageWidth, hPos));
+    }
+
+    public void cleanAllConstraints() {
+        this.getRowConstraints().setAll();
+        this.getColumnConstraints().setAll();
+    }
     /**
      * Customized Column Constraints.
      * The constructor allows you to quickly create a useful constraint.
