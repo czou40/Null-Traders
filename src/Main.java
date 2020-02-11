@@ -16,7 +16,7 @@ public class Main extends Application {
         game.getPlayer().setPilot(22);
         primaryStage.setTitle("Welcome to Null Traders!");
         //new CharacterSheetScreen(primaryStage, game).display();
-        new WelcomeScreen(primaryStage, game).display();
+        new MapScreen(primaryStage, game).display();
     }
 
     public static void main(String[] args) {

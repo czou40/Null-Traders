@@ -2,15 +2,17 @@ public class Region {
     private String name;
     private String description;
     private int technologyLevel;
-    private int[] coordinates;
+    private int x;
+    private int y;
 
     private NPC[] npcList;
 
-    public Region(String name, String description, int technologyLevel, int[] coordinates) {
+    public Region(String name, String description, int technologyLevel, int x, int y) {
         this.name = name;
         this.description = description;
         this.technologyLevel = technologyLevel;
-        this.coordinates = coordinates;
+        this.x = x;
+        this.y = y;
     }
 
     //NOTE: Only add setters if necessary
@@ -27,8 +29,12 @@ public class Region {
         return technologyLevel;
     }
 
-    public int[] getCoordinates() {
-        return coordinates;
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public NPC[] getNpcList() {

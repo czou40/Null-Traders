@@ -44,6 +44,7 @@ public abstract class Screen {
     public void display() {
         primaryStage.setScene(constructScene());
         primaryStage.show();
+        after();
     }
 
     /**
@@ -52,4 +53,7 @@ public abstract class Screen {
      * @return     { description_of_the_return_value }
      */
     public abstract Scene constructScene();
+
+    public void after() {
+    }
 }

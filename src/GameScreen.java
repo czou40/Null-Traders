@@ -1,3 +1,5 @@
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -8,10 +10,19 @@ import javafx.stage.Stage;
 public abstract class GameScreen extends Screen {
     private String title;
     private boolean requiresSideBar;
+    private Pane contentPane;
     public GameScreen(Stage primaryStage, Game game, String title, boolean requiresSideBar) {
         super(primaryStage, game);
         this.title = title.toUpperCase();
         this.requiresSideBar = requiresSideBar;
+    }
+
+    public ReadOnlyDoubleProperty getContentWidth() {
+        return contentPane.widthProperty();
+    }
+
+    public ReadOnlyDoubleProperty getContentHeight() {
+        return contentPane.heightProperty();
     }
 
     @Override
@@ -21,7 +32,7 @@ public abstract class GameScreen extends Screen {
         MyGridPane titlePane = new MyGridPane();
         titlePane.add(titleLabel, 0, 0);
         titlePane.getStyleClass().addAll("transparent-pane-dark");
-        Pane contentPane = constructContentPane();
+        contentPane = constructContentPane();
         contentPane.getStyleClass().addAll("transparent-pane-medium");
         MyGridPane wrapperPane;
         double[] rootRowConstraints = {5, 10, 80, 5};
@@ -65,5 +76,9 @@ public abstract class GameScreen extends Screen {
                 new MyNavigationButton("Map", new MapScreen(getPrimaryStage(), game)));
         sideBarPane.getStyleClass().addAll("transparent-pane-light");
         return sideBarPane;
+    }
+
+    public void addToContentPane(Node node) {
+        contentPane.getChildren().add(node);
     }
 }

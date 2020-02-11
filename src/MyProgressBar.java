@@ -8,14 +8,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 public class MyProgressBar extends ProgressBar {
-    @Deprecated
-    private int point;
-    @Deprecated
-    private int maxPoint;
     private SimpleIntegerProperty pointProperty;
     private SimpleIntegerProperty maxPointProperty;
     private SimpleStringProperty progressStringProperty;
@@ -23,11 +18,20 @@ public class MyProgressBar extends ProgressBar {
     private static final int[] COLOR_ZERO_POINT = {255, 255, 255};
     private static final String PROGRESS_BAR_COLOR = "-fx-accent:rgb(%d,%d,%d);";
 
+    public SimpleIntegerProperty pointProperty() {
+        return pointProperty;
+    }
+
+    public SimpleIntegerProperty maxPointProperty() {
+        return maxPointProperty;
+    }
+
+    public SimpleStringProperty progressStringProperty() {
+        return progressStringProperty;
+    }
 
     public MyProgressBar(int point, int maxPoint) {
         super(0);
-        this.point = point;
-        this.maxPoint = maxPoint;
         this.pointProperty = new SimpleIntegerProperty(point);
         this.maxPointProperty = new SimpleIntegerProperty(maxPoint);
         this.progressStringProperty = new SimpleStringProperty();
@@ -37,25 +41,24 @@ public class MyProgressBar extends ProgressBar {
     }
 
     public int getPoint() {
-        return point;
+        return pointProperty.get();
     }
 
     public int getMaxPoint() {
-        return maxPoint;
+        return maxPointProperty.get();
     }
 
     public void setMaxPoint(int maxPoint) {
-        this.maxPoint = maxPoint;
         this.maxPointProperty.setValue(maxPoint);
     }
 
     public void setPoint(int point) {
-        this.point = point;
         this.pointProperty.set(point);
-        int[] color = getBarColor(1.0 * point / maxPoint);
+        int[] color = getBarColor(1.0 * pointProperty.get() / maxPointProperty.get());
         this.setStyle(String.format(PROGRESS_BAR_COLOR, color[0], color[1], color[2]));
         Timeline timeline = new Timeline();
-        KeyValue keyValue = new KeyValue(this.progressProperty(), 1.0 * point / maxPoint);
+        KeyValue keyValue = new KeyValue(this.progressProperty(),
+                pointProperty.doubleValue() / maxPointProperty.doubleValue());
         KeyFrame keyFrame = new KeyFrame(new Duration(1000), keyValue);
         timeline.getKeyFrames().addAll(keyFrame);
         timeline.play();
@@ -72,7 +75,8 @@ public class MyProgressBar extends ProgressBar {
         Label progressLabel = new Label();
         progressLabel.textProperty().bind(progressStringProperty);
         double[] columnConstraints = {15, 85};
-        MyGridPane myGridPane = new MyGridPane(MyGridPane.getSpan(1), columnConstraints, HPos.LEFT, VPos.CENTER);
+        MyGridPane myGridPane = new MyGridPane(MyGridPane.getSpan(1), columnConstraints,
+                HPos.LEFT, VPos.CENTER);
         myGridPane.addRow(0, progressLabel, this);
         return myGridPane;
     }
