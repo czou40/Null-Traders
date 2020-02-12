@@ -13,7 +13,10 @@ public class Region {
         this.technologyLevel = technologyLevel;
         this.x = x;
         this.y = y;
+
+        this.npcList = new NPC[5];
     }
+
 
     //NOTE: Only add setters if necessary
 

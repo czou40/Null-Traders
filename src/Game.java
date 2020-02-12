@@ -1,12 +1,15 @@
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.NoSuchElementException;
+
 /*
-Handles most of the game logic and keeps reference to the player
+Handles most of the game logic and manages game state
  */
 public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
+    private Region currentRegion;
 
     public Game(Player player, Difficulty difficulty) {
         this.player = player;
@@ -33,5 +36,17 @@ public class Game {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Region getCurrentRegion() {
+        if (currentRegion == null) {
+            throw new NoSuchElementException("Region has not been generated yet");
+        } else {
+            return currentRegion;
+        }
+    }
+
+    public void setCurrentRegion(Region currentRegion) {
+        this.currentRegion = currentRegion;
     }
 }

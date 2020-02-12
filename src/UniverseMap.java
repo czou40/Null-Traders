@@ -8,6 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -21,7 +22,7 @@ public class UniverseMap {
     public UniverseMap() {
         regions = new Vector<>();
         canvas = new MapCanvas(1920, 1080);
-        test();
+        generateRegions();
     }
 
     public Pane getVisualizedMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
@@ -39,10 +40,19 @@ public class UniverseMap {
         return visualizedMap;
     }
 
-    private void test() {
-        for (int i = 0; i <= 50; i++) {
-            regions.add(new Region("Planet " + i, "djskfnjksdjnk",
-                    0, (int) (Math.random() * 1920), (int) (Math.random() * 1080)));
+    private void generateRegions() {
+        for (int i = 0; i <= 10; i++) {
+            int x = (int) (Math.random() * 1920);
+            int y = (int) (Math.random() * 1080);
+            Vector<RegionData> regionData = new Vector<>();
+            for (RegionData data : RegionData.values()) {
+                regionData.add(data);
+            }
+            while (regionData.size() > 0) {
+                RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
+                regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
+                            (int) (Math.random() * 1920), (int) (Math.random() * 1080)));
+            }
         }
         canvas.draw();
     }
