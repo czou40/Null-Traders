@@ -21,6 +21,10 @@ public class MapScreen extends GameScreen {
     @Override
     public void after() {
         UniverseMap universeMap = new UniverseMap();
+
+        game.setCurrentRegion(universeMap.getRandomRegion());
+        game.getCurrentRegion().setFound(true); //player starts in a region, so it is known.
+
         addToContentPane(universeMap.getVisualizedMap(getContentWidth(), getContentHeight()));
     }
 }

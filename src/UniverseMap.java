@@ -21,7 +21,7 @@ public class UniverseMap {
 
     public UniverseMap() {
         regions = new Vector<>();
-        canvas = new MapCanvas(1920, 1080);
+        canvas = new MapCanvas(800, 600);
         generateRegions();
     }
 
@@ -41,20 +41,18 @@ public class UniverseMap {
     }
 
     private void generateRegions() {
-        for (int i = 0; i <= 10; i++) {
-            int x = (int) (Math.random() * 1920);
-            int y = (int) (Math.random() * 1080);
-            Vector<RegionData> regionData = new Vector<>();
-            for (RegionData data : RegionData.values()) {
-                regionData.add(data);
-            }
-            while (regionData.size() > 0) {
-                RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
-                regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
-                            (int) (Math.random() * 1920), (int) (Math.random() * 1080)));
-            }
+        int x = (int) (Math.random() * 1920);
+        int y = (int) (Math.random() * 1080);
+        Vector<RegionData> regionData = new Vector<>();
+        for (RegionData data : RegionData.values()) {
+            regionData.add(data);
         }
-        canvas.draw();
+
+        while (regionData.size() > 0) {
+            RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
+            regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
+                    (int) (Math.random() * canvas.getWidth()), (int) (Math.random() * canvas.getHeight()), false));
+        }
     }
 
     public Vector<MapDot> getDots() {
@@ -65,11 +63,29 @@ public class UniverseMap {
         return result;
     }
 
+
+    public void drawCanvas() {
+        canvas.draw();
+    }
+
+    public Region getRandomRegion() {
+        return regions.get((int) Math.random() * regions.size());
+    }
+
     private class MapDot extends Circle {
         private Region region;
 
         public MapDot(Region region) {
             super(region.getX(), region.getY(), 5, Color.WHITE);
+            Color dotColor;
+            if (region.isFound()) {
+                System.out.println("Region Found");
+                dotColor = Color.WHITE;
+            } else {
+                dotColor = Color.BLACK;
+            }
+            this.setFill(dotColor);
+
             this.region = region;
             this.setCursor(Cursor.HAND);
             this.setOnMouseClicked(e -> {
@@ -103,9 +119,12 @@ public class UniverseMap {
 
         public void draw() {
             GraphicsContext graphicsContext = this.getGraphicsContext2D();
+            System.out.println(regions.size());
             for (int i = 0; i < regions.size(); i++) {
                 Region region = regions.get(i);
-                Circle circle = new Circle(region.getX(), region.getY(), 10, Color.WHITE);
+
+                Circle circle;
+                circle = new Circle(region.getX(), region.getY(), 10, Color.WHITE);
                 circle.setId(String.valueOf(i));
                 graphicsContext.setFill(Color.WHITE);
                 graphicsContext.fillOval(region.getX() - 5,region.getY() - 5, 10,10);
