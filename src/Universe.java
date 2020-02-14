@@ -77,6 +77,7 @@ public class Universe {
 
         dots = constructDots();
         for (MapDot dot: getDots()) {
+            dot.nameLabel.setVisible(false);
             visualizedMap.getChildren().add(dot.nameLabel);
             visualizedMap.getChildren().add(dot);
         }
@@ -196,10 +197,23 @@ public class Universe {
             this.setFill(dotColor);
             this.region = region;
             this.setCursor(Cursor.HAND);
+
+            setupNameLabel();
+
+            //properties
+            this.setOnMouseEntered(e -> {
+               nameLabel.setVisible(true);
+            });
+            this.setOnMouseExited(e -> {
+                nameLabel.setVisible(false);
+            });
+
             this.setOnMouseClicked(e -> {
                 game.travelToRegion(region);
             });
+        }
 
+        private void setupNameLabel() {
             if (region.isFound()) {
                 nameLabel = new Label(region.getName());
             } else {
