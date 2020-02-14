@@ -24,6 +24,7 @@ public class UniverseMap {
     private Vector<Region> regions;
     private MapCanvas canvas;
     private Vector<MapDot> dots;
+    private Vector<RegionDescriptionBox> regionDescriptions;
     private ReadOnlyDoubleProperty widthProperty;
     private ReadOnlyDoubleProperty heightProperty;
 
@@ -35,6 +36,7 @@ public class UniverseMap {
         canvas = new MapCanvas(widthProperty.get(), heightProperty.get());
         generateRegions();
         dots = constructDots();
+        regionDescriptions = constructRegionDescriptions();
     }
 
     public Pane getVisualizedMap() {
@@ -42,6 +44,10 @@ public class UniverseMap {
         canvas.widthProperty().bind(widthProperty);
         canvas.heightProperty().bind(heightProperty);
         visualizedMap.getChildren().add(canvas);
+        for (RegionDescriptionBox box : getRegionDescriptions()) {
+            visualizedMap.getChildren().add(box);
+        }
+
         for (MapDot dot: getDots()) {
             visualizedMap.getChildren().add(dot);
             //visualizedMap.getChildren().add(new RegionDescriptionBox(dot.getRegion(),
@@ -79,6 +85,15 @@ public class UniverseMap {
         return result;
     }
 
+    public Vector<RegionDescriptionBox> constructRegionDescriptions() {
+        Vector<RegionDescriptionBox> result = new Vector<>();
+        for (MapDot dot : dots) {
+            result.add(new RegionDescriptionBox(game, dot.getRegion(), dot.getCenterX(), dot.getCenterY() - 10));
+        }
+
+        return result;
+    }
+
     public void updateDots() {
         for (MapDot dot : dots) {
             Color dotColor;
@@ -95,6 +110,10 @@ public class UniverseMap {
 
     public Vector<MapDot> getDots() {
         return dots;
+    }
+
+    public Vector<RegionDescriptionBox> getRegionDescriptions() {
+        return regionDescriptions;
     }
 
     private class MapDot extends Circle {
@@ -127,26 +146,6 @@ public class UniverseMap {
 
         public Region getRegion() {
             return region;
-        }
-    }
-
-    private class RegionDescriptionBox extends VBox {
-        public RegionDescriptionBox(Region region, double x, double y) {
-            super();
-            Label nameLabel = new Label("Name: " + region.getName());
-            nameLabel.setFont(Font.font(5));
-
-            Label descriptionLabel = new Label("Description: " + region.getDescription());
-            descriptionLabel.setFont(Font.font(5));
-            descriptionLabel.setWrapText(true);
-
-            Label technologyLabel = new Label("Technology Level: " + region.getTechnologyLevel());
-            technologyLabel.setFont(Font.font(5));
-
-            this.getChildren().addAll(nameLabel, descriptionLabel, technologyLabel);
-            this.setLayoutX(x);
-            this.setLayoutY(y);
-            this.toBack();
         }
     }
 

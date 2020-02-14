@@ -1,10 +1,13 @@
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class Region {
     private String name;
     private String description;
     private int technologyLevel;
     private int x;
     private int y;
-    private boolean found;  //if the player has found the region
+    private BooleanProperty found;  //if the player has found the region
 
     private NPC[] npcList;
 
@@ -14,7 +17,7 @@ public class Region {
         this.technologyLevel = technologyLevel;
         this.x = x;
         this.y = y;
-        this.found = found;
+        this.found = new SimpleBooleanProperty(found);
         this.npcList = new NPC[5];
     }
 
@@ -54,11 +57,15 @@ public class Region {
     }
 
     public boolean isFound() {
-        return found;
+        return found.getValue();
     }
 
     public void setFound(boolean found) {
-        this.found = found;
+        this.found.setValue(found);
+    }
+
+    public BooleanProperty foundProperty() {
+        return found;
     }
 
     public NPC[] getNpcList() {

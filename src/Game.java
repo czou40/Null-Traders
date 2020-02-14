@@ -26,6 +26,16 @@ public class Game {
     public void travelToRegion(Region dest) {
         setCurrentRegion(dest);
         universe.updateDots();
+
+        if (universe.getRegionDescriptions() != null) {
+            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
+                if (box.getRegion().equals(currentRegion)) {
+                    box.setLabelsFull();
+                } else {
+                    box.setLabelsOnlyName();
+                }
+            }
+        }
     }
 
     public Difficulty getDifficulty() {
