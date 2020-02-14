@@ -15,8 +15,19 @@ public class Region {
         this.x = x;
         this.y = y;
         this.found = found;
-
         this.npcList = new NPC[5];
+    }
+
+    public Region(RegionData data, int x, int y, boolean found) {
+        this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y, found);
+    }
+
+    public Region(RegionData data, int x, int y) {
+        this(data, x, y, false);
+    }
+
+    public Region(RegionData data) {
+        this(data, 0, 0);
     }
 
 

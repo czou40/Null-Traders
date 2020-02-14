@@ -1,12 +1,16 @@
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -16,22 +20,32 @@ import java.util.Vector;
  * Also, it has a getCanvas method that returns a canvas.
  */
 public class UniverseMap {
+    private Game game;
     private Vector<Region> regions;
     private MapCanvas canvas;
+    private Vector<MapDot> dots;
+    private ReadOnlyDoubleProperty widthProperty;
+    private ReadOnlyDoubleProperty heightProperty;
 
-    public UniverseMap() {
+    public UniverseMap(Game game, ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+        this.game = game;
+        this.widthProperty = widthProperty;
+        this.heightProperty = heightProperty;
         regions = new Vector<>();
-        canvas = new MapCanvas(800, 600);
+        canvas = new MapCanvas(widthProperty.get(), heightProperty.get());
         generateRegions();
+        dots = constructDots();
     }
 
-    public Pane getVisualizedMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+    public Pane getVisualizedMap() {
         Pane visualizedMap = new Pane();
         canvas.widthProperty().bind(widthProperty);
         canvas.heightProperty().bind(heightProperty);
         visualizedMap.getChildren().add(canvas);
         for (MapDot dot: getDots()) {
             visualizedMap.getChildren().add(dot);
+            //visualizedMap.getChildren().add(new RegionDescriptionBox(dot.getRegion(),
+            // dot.getCenterX(), dot.getCenterY() - 10));
         }
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(widthProperty);
@@ -41,21 +55,23 @@ public class UniverseMap {
     }
 
     private void generateRegions() {
-        int x = (int) (Math.random() * 1920);
-        int y = (int) (Math.random() * 1080);
-        Vector<RegionData> regionData = new Vector<>();
-        for (RegionData data : RegionData.values()) {
-            regionData.add(data);
+        System.out.println(widthProperty.get());
+        System.out.println(heightProperty.get());
+        for (RegionData i : RegionData.values()) {
+            int x = (int) (Math.random() * widthProperty.get());
+            int y = (int) (Math.random() * heightProperty.get());
+            regions.add(new Region(i, x, y, false));
         }
 
-        while (regionData.size() > 0) {
-            RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
-            regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
-                    (int) (Math.random() * canvas.getWidth()), (int) (Math.random() * canvas.getHeight()), false));
-        }
+        game.setCurrentRegion(getRandomRegion());
     }
 
-    public Vector<MapDot> getDots() {
+    public Region getRandomRegion() {
+        return regions.get((int) (Math.random() * regions.size()));
+    }
+
+
+    public Vector<MapDot> constructDots() {
         Vector<MapDot> result = new Vector<>();
         for (Region region : regions) {
             result.add(new MapDot(region));
@@ -63,23 +79,39 @@ public class UniverseMap {
         return result;
     }
 
-
-    public void drawCanvas() {
-        canvas.draw();
+    public void updateDots() {
+        for (MapDot dot : dots) {
+            Color dotColor;
+            if (game.getCurrentRegion().equals(dot.region)) {
+                dotColor = Color.GOLD;
+            } else if (dot.region.isFound()) {
+                dotColor = Color.WHITE;
+            } else {
+                dotColor = Color.BLACK;
+            }
+            dot.setFill(dotColor);
+        }
     }
 
-    public Region getRandomRegion() {
-        return regions.get((int) Math.random() * regions.size());
+    public Vector<MapDot> getDots() {
+        return dots;
     }
 
     private class MapDot extends Circle {
         private Region region;
 
         public MapDot(Region region) {
+
             super(region.getX(), region.getY(), 5, Color.WHITE);
+
+            //FOR TESTING PURPOSES ONLY
+            this.setCenterX(region.getX() * 800 / widthProperty.getValue());
+            this.setCenterY(region.getY() * 600 / heightProperty.getValue());
+
             Color dotColor;
-            if (region.isFound()) {
-                System.out.println("Region Found");
+            if (game.getCurrentRegion().equals(region)) {
+                dotColor = Color.GOLD;
+            } else if (region.isFound()) {
                 dotColor = Color.WHITE;
             } else {
                 dotColor = Color.BLACK;
@@ -89,9 +121,7 @@ public class UniverseMap {
             this.region = region;
             this.setCursor(Cursor.HAND);
             this.setOnMouseClicked(e -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(region.getName());
-                alert.show();
+                game.travelToRegion(region);
             });
         }
 
@@ -100,35 +130,38 @@ public class UniverseMap {
         }
     }
 
-    private class MapCanvas extends Canvas {
-        public MapCanvas(int i, int i1) {
+    private class RegionDescriptionBox extends VBox {
+        public RegionDescriptionBox(Region region, double x, double y) {
+            super();
+            Label nameLabel = new Label("Name: " + region.getName());
+            nameLabel.setFont(Font.font(5));
+
+            Label descriptionLabel = new Label("Description: " + region.getDescription());
+            descriptionLabel.setFont(Font.font(5));
+            descriptionLabel.setWrapText(true);
+
+            Label technologyLabel = new Label("Technology Level: " + region.getTechnologyLevel());
+            technologyLabel.setFont(Font.font(5));
+
+            this.getChildren().addAll(nameLabel, descriptionLabel, technologyLabel);
+            this.setLayoutX(x);
+            this.setLayoutY(y);
+            this.toBack();
+        }
+    }
+
+    private static class MapCanvas extends Canvas {
+        public MapCanvas(double i, double i1) {
             super(i, i1);
-            draw();
             widthProperty().addListener(e -> {
-                draw();
             });
             heightProperty().addListener(e -> {
-                draw();
             });
         }
 
         @Override
         public boolean isResizable() {
             return true;
-        }
-
-        public void draw() {
-            GraphicsContext graphicsContext = this.getGraphicsContext2D();
-            System.out.println(regions.size());
-            for (int i = 0; i < regions.size(); i++) {
-                Region region = regions.get(i);
-
-                Circle circle;
-                circle = new Circle(region.getX(), region.getY(), 10, Color.WHITE);
-                circle.setId(String.valueOf(i));
-                graphicsContext.setFill(Color.WHITE);
-                graphicsContext.fillOval(region.getX() - 5,region.getY() - 5, 10,10);
-            }
         }
 
         @Override

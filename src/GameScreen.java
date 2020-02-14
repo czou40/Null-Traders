@@ -69,10 +69,10 @@ public abstract class GameScreen extends Screen {
         }
         MyGridPane root = new MyGridPane(rootRowConstraints, rootColumnConstraints);
         root.addColumn(1, null, titlePane, wrapperPane, null);
-        Scene characterSheetScene = new Scene(root, 1280, 720);
-        characterSheetScene.getStylesheets().addAll("styles/general.css",
+        Scene scene = new Scene(root, 1780, 720);
+        scene.getStylesheets().addAll("styles/general.css",
                 "styles/blurry-background.css");
-        return characterSheetScene;
+        return scene;
     }
 
     public abstract Pane constructContentPane();

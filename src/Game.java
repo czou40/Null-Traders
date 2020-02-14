@@ -10,6 +10,7 @@ public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
     private Region currentRegion;
+    private UniverseMap universe;
 
     public Game(Player player, Difficulty difficulty) {
         this.player = player;
@@ -20,6 +21,11 @@ public class Game {
     public Game() {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
+    }
+
+    public void travelToRegion(Region dest) {
+        setCurrentRegion(dest);
+        universe.updateDots();
     }
 
     public Difficulty getDifficulty() {
@@ -48,5 +54,20 @@ public class Game {
 
     public void setCurrentRegion(Region currentRegion) {
         this.currentRegion = currentRegion;
+        if (!currentRegion.isFound()) {
+            currentRegion.setFound(true);
+        }
+    }
+
+    public UniverseMap getUniverse() {
+        if (universe == null) {
+            throw new NoSuchElementException("Universe not created yet");
+        } else {
+            return universe;
+        }
+    }
+
+    public void setUniverse(UniverseMap universe) {
+        this.universe = universe;
     }
 }

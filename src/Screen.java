@@ -47,11 +47,7 @@ public abstract class Screen {
         after();
     }
 
-    /**
-     * { function_description }
-     *
-     * @return     { description_of_the_return_value }
-     */
+
     public abstract Scene constructScene();
 
     public void after() {
