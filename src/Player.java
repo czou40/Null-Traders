@@ -1,10 +1,14 @@
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
 
 /**
  * This class describes a player.
  */
 public class Player {
     private Game game;  //player is dependent on the game
+
     private StringProperty name;
     private IntegerProperty pilot;
     private IntegerProperty fighter;

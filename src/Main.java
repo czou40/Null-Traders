@@ -1,8 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.Map;
-
 public class Main extends Application {
 
     private Game game;
@@ -20,7 +18,7 @@ public class Main extends Application {
 
          */
         primaryStage.setTitle("Welcome to Null Traders!");
-        (new MapScreen(primaryStage, game)).display();
+        (new WelcomeScreen(primaryStage, game)).display();
         //new MapScreen(primaryStage, game).display();
     }
 
