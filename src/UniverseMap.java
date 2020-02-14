@@ -1,15 +1,17 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.*;
-import javafx.scene.canvas.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -18,26 +20,63 @@ import java.util.Vector;
  */
 public class UniverseMap {
     private Vector<Region> regions;
-    private MapCanvas canvas;
-    private ReadOnlyDoubleProperty widthProperty;
-    private ReadOnlyDoubleProperty heightProperty;
+    //private MapCanvas canvas;
+    private SimpleDoubleProperty offsetX;
+    private SimpleDoubleProperty offsetY;
+    private SimpleDoubleProperty scaling;
+    private static final int MAP_WIDTH = 1920;
+    private static final int MAP_HEIGHT = 1080;
+    private Game game;
 
-    public UniverseMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
-        this.widthProperty = widthProperty;
-        this.heightProperty = heightProperty;
-        regions = new Vector<>();
-        canvas = new MapCanvas(widthProperty.get(), heightProperty.get());
+    public UniverseMap(Game game) {
+        this.game = game;
+        scaling = new SimpleDoubleProperty(1);
+        //canvas = new MapCanvas();
         generateRegions();
     }
 
-    public Pane getVisualizedMap() {
+    private void setScaling(double scaling) {
+        if (scaling >= 0.5 && scaling <= 3) {
+            this.scaling.set(scaling);
+        }
+    }
+
+    private double getScaling() {
+        return scaling.get();
+    }
+
+    private SimpleDoubleProperty scalingProperty() {
+        return scaling;
+    }
+
+    public Pane getVisualizedMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+        scaling = new SimpleDoubleProperty(1);
         Pane visualizedMap = new Pane();
-        canvas.widthProperty().bind(widthProperty);
-        canvas.heightProperty().bind(heightProperty);
-        visualizedMap.getChildren().add(canvas);
+        offsetX = new SimpleDoubleProperty();
+        offsetY = new SimpleDoubleProperty();
+        offsetX.bind(widthProperty.divide(2).subtract(game.getCurrentRegion().getX()));
+        offsetY.bind(heightProperty.divide(2).subtract(game.getCurrentRegion().getY()));
+        Rectangle border = new Rectangle();
+        border.setFill(Color.TRANSPARENT);
+        border.setStroke(Color.WHITE);
+        border.xProperty().bind(scaling.multiply(-game.getCurrentRegion().getX()).
+                add(offsetX).add(game.getCurrentRegion().getX()));
+        border.yProperty().bind(scaling.multiply(-game.getCurrentRegion().getY()).
+                add(offsetY).add(game.getCurrentRegion().getY()));
+        border.widthProperty().bind(scaling.multiply(MAP_WIDTH));
+        border.heightProperty().bind(scaling.multiply(MAP_HEIGHT));
+        visualizedMap.getChildren().add(border);
         for (MapDot dot: getDots()) {
+            visualizedMap.getChildren().add(dot.nameLabel);
             visualizedMap.getChildren().add(dot);
         }
+        visualizedMap.setOnScroll(event -> {
+            Timeline timeline = new Timeline();
+            KeyValue keyValue = new KeyValue(scaling, scaling.get() * (event.getDeltaY() > 0 ? 1.1 : 0.9));
+            KeyFrame keyFrame = new KeyFrame(new Duration(100), keyValue);
+            timeline.getKeyFrames().addAll(keyFrame);
+            timeline.play();
+        });
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(widthProperty);
         clip.heightProperty().bind(heightProperty);
@@ -46,10 +85,17 @@ public class UniverseMap {
     }
 
     private void generateRegions() {
+        regions = new Vector<>();
         for (RegionData i : RegionData.values()) {
-            int x = (int) (Math.random() * widthProperty.get());
-            int y = (int) (Math.random() * heightProperty.get());
+            int x = (int) (Math.random() * MAP_WIDTH);
+            int y = (int) (Math.random() * MAP_HEIGHT);
             regions.add(new Region(i, x, y, false));
+        }
+        NameGenerator nameGenerator = new NameGenerator();
+        for (int i = 1; i <= 20; i++) {
+            int x = (int) (Math.random() * MAP_WIDTH);
+            int y = (int) (Math.random() * MAP_HEIGHT);
+            regions.add(new Region(nameGenerator.getName(), "", 1, x, y, false));
         }
     }
 
@@ -66,66 +112,40 @@ public class UniverseMap {
         return result;
     }
 
-    private static class MapDot extends Circle {
+    private class MapDot extends Circle {
         private Region region;
+        private Label nameLabel;
 
         public MapDot(Region region) {
-            super(region.getX(), region.getY(), 5, Color.WHITE);
+            super(10, 10, 5, Color.WHITE);
+            SimpleDoubleProperty scalingX = new SimpleDoubleProperty();
+            SimpleDoubleProperty scalingY = new SimpleDoubleProperty();
+            scalingX.bind(scaling.multiply(region.getX() - game.getCurrentRegion().getX()));
+            scalingY.bind(scaling.multiply(region.getY() - game.getCurrentRegion().getY()));
+            this.centerXProperty().bind(scalingX.add(offsetX).add(game.getCurrentRegion().getX()));
+            this.centerYProperty().bind(scalingY.add(offsetY).add(game.getCurrentRegion().getY()));
             Color dotColor;
-            if (region.isFound()) {
+            if (region == game.getCurrentRegion()) {
+                dotColor = Color.DEEPSKYBLUE;
+            } else if (region.isFound()) {
                 System.out.println("Region Found");
                 dotColor = Color.WHITE;
             } else {
                 dotColor = Color.BLACK;
             }
             this.setFill(dotColor);
-
             this.region = region;
             this.setCursor(Cursor.HAND);
             this.setOnMouseClicked(e -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(region.getName());
+                alert.setContentText(region.getName() + "\n" + region.getDescription()
+                + "\nTechnology level: " + region.getTechnologyLevel());
                 alert.show();
             });
-        }
-
-        public Region getRegion() {
-            return region;
-        }
-    }
-
-    private static class MapCanvas extends Canvas {
-        public MapCanvas(double i, double i1) {
-            super(i, i1);
-            widthProperty().addListener(e -> {
-            });
-            heightProperty().addListener(e -> {
-            });
-        }
-
-        @Override
-        public boolean isResizable() {
-            return true;
-        }
-
-        @Override
-        public double minWidth(double height) {
-            return 0.0;
-        }
-
-        @Override
-        public double minHeight(double width) {
-            return 0.0;
-        }
-
-        @Override
-        public double maxHeight(double width) {
-            return 9999;
-        }
-
-        @Override
-        public double maxWidth(double height) {
-            return 9999;
+            nameLabel = new Label(region.getName());
+            nameLabel.layoutXProperty().bind(centerXProperty().add(4));
+            nameLabel.layoutYProperty().bind(centerYProperty().add(2));
+            nameLabel.setStyle("-fx-font-size: 16px;");
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class MapScreen extends GameScreen {
     public MapScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game, "Map of Universe", true);
+        super(primaryStage, game, "USE MOUSE OR TOUCH PAD TO ZOOM IN AND OUT!", true);
     }
 
     @Override
@@ -20,9 +20,6 @@ public class MapScreen extends GameScreen {
 
     @Override
     public void after() {
-        UniverseMap universeMap = new UniverseMap(getContentWidth(), getContentHeight());
-
-        game.setCurrentRegion(universeMap.getRandomRegion());
-        addToContentPane(universeMap.getVisualizedMap());
+        addToContentPane(game.getUniverseMap().getVisualizedMap(getContentWidth(), getContentHeight()));
     }
 }

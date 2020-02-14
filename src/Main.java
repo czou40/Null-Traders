@@ -20,7 +20,7 @@ public class Main extends Application {
 
          */
         primaryStage.setTitle("Welcome to Null Traders!");
-        (new MapScreen(primaryStage, game)).display();
+        (new WelcomeScreen(primaryStage, game)).display();
         //new MapScreen(primaryStage, game).display();
     }
 

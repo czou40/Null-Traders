@@ -1,6 +1,6 @@
 public enum RegionData {
-    GEORGIAN_TECH("Georgian Tech", "A place for CS bois", 10)
-    , USICGA("U(sic)GA", "A place that exists ...", 0);
+    GEORGIAN_TECH("Georgian Tech", "A place for CS bois", 10),
+    USICGA("U(sic)GA", "A place that exists ...", 0);
 
     private String name;
     private String description;

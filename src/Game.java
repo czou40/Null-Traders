@@ -9,6 +9,7 @@ Handles most of the game logic and manages game state
 public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
+    private UniverseMap universeMap;
     private Region currentRegion;
 
     public Game(Player player, Difficulty difficulty) {
@@ -20,6 +21,8 @@ public class Game {
     public Game() {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
+        this.universeMap = new UniverseMap(this);
+        this.currentRegion = universeMap.getRandomRegion();
     }
 
     public Difficulty getDifficulty() {
@@ -47,7 +50,11 @@ public class Game {
     }
 
     public void setCurrentRegion(Region currentRegion) {
-        this.currentRegion = currentRegion;
         currentRegion.setFound(true);
+        this.currentRegion = currentRegion;
+    }
+
+    public UniverseMap getUniverseMap() {
+        return universeMap;
     }
 }
