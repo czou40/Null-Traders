@@ -79,6 +79,8 @@ public class Universe {
         dots = constructDots();
         for (MapDot dot: getDots()) {
             dot.nameLabel.setVisible(false);
+            dot.coordinatesLabel.setVisible(false);
+            dot.distanceLabel.setVisible(false);
             visualizedMap.getChildren().addAll(dot.nameLabel, dot.coordinatesLabel, dot.distanceLabel);
             visualizedMap.getChildren().add(dot);
         }
@@ -192,30 +194,24 @@ public class Universe {
             this.region = region;
             this.setCursor(Cursor.HAND);
 
-            setupNameLabel();
+            setupLabels();
 
             //properties
             this.setOnMouseEntered(e -> {
                nameLabel.setVisible(true);
+               coordinatesLabel.setVisible(true);
+               distanceLabel.setVisible(true);
             });
             this.setOnMouseExited(e -> {
                 nameLabel.setVisible(false);
+                coordinatesLabel.setVisible(false);
+                distanceLabel.setVisible(false);
             });
 
             this.setOnMouseClicked(e -> {
                 game.travelToRegion(region);
             });
-        }
 
-        private void setupNameLabel() {
-            if (region.isFound()) {
-                nameLabel = new Label(region.getName());
-            } else {
-                nameLabel = new Label("???");
-            }
-            nameLabel.layoutXProperty().bind(centerXProperty().add(4));
-            nameLabel.layoutYProperty().bind(centerYProperty().add(2));
-            nameLabel.toBack();
             region.foundProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
                     nameLabel.setText(region.getName());
@@ -223,6 +219,17 @@ public class Universe {
                     nameLabel.setText("???");
                 }
             });
+        }
+
+        private void setupLabels() {
+            if (region.isFound()) {
+                nameLabel = new Label(region.getName());
+            } else {
+                nameLabel = new Label("???");
+            }
+            nameLabel.layoutXProperty().bind(centerXProperty().add(4));
+            nameLabel.layoutYProperty().bind(centerYProperty().add(2));
+
             nameLabel.setStyle("-fx-font-size: 16px;");
 
             coordinatesLabel = new Label(region.getX() + ", " + region.getY());
