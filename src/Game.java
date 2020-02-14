@@ -48,5 +48,6 @@ public class Game {
 
     public void setCurrentRegion(Region currentRegion) {
         this.currentRegion = currentRegion;
+        currentRegion.setFound(true);
     }
 }
