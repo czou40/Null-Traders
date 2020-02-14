@@ -7,6 +7,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -18,14 +19,18 @@ import java.util.Vector;
 public class UniverseMap {
     private Vector<Region> regions;
     private MapCanvas canvas;
+    private ReadOnlyDoubleProperty widthProperty;
+    private ReadOnlyDoubleProperty heightProperty;
 
-    public UniverseMap() {
+    public UniverseMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+        this.widthProperty = widthProperty;
+        this.heightProperty = heightProperty;
         regions = new Vector<>();
-        canvas = new MapCanvas(800, 600);
+        canvas = new MapCanvas(widthProperty.get(), heightProperty.get());
         generateRegions();
     }
 
-    public Pane getVisualizedMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+    public Pane getVisualizedMap() {
         Pane visualizedMap = new Pane();
         canvas.widthProperty().bind(widthProperty);
         canvas.heightProperty().bind(heightProperty);
@@ -41,19 +46,17 @@ public class UniverseMap {
     }
 
     private void generateRegions() {
-        int x = (int) (Math.random() * 1920);
-        int y = (int) (Math.random() * 1080);
-        Vector<RegionData> regionData = new Vector<>();
-        for (RegionData data : RegionData.values()) {
-            regionData.add(data);
-        }
-
-        while (regionData.size() > 0) {
-            RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
-            regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
-                    (int) (Math.random() * canvas.getWidth()), (int) (Math.random() * canvas.getHeight()), false));
+        for (RegionData i : RegionData.values()) {
+            int x = (int) (Math.random() * widthProperty.get());
+            int y = (int) (Math.random() * heightProperty.get());
+            regions.add(new Region(i, x, y, false));
         }
     }
+
+    public Region getRandomRegion() {
+        return regions.get((int) Math.random() * regions.size());
+    }
+
 
     public Vector<MapDot> getDots() {
         Vector<MapDot> result = new Vector<>();
@@ -63,16 +66,7 @@ public class UniverseMap {
         return result;
     }
 
-
-    public void drawCanvas() {
-        canvas.draw();
-    }
-
-    public Region getRandomRegion() {
-        return regions.get((int) Math.random() * regions.size());
-    }
-
-    private class MapDot extends Circle {
+    private static class MapDot extends Circle {
         private Region region;
 
         public MapDot(Region region) {
@@ -100,35 +94,18 @@ public class UniverseMap {
         }
     }
 
-    private class MapCanvas extends Canvas {
-        public MapCanvas(int i, int i1) {
+    private static class MapCanvas extends Canvas {
+        public MapCanvas(double i, double i1) {
             super(i, i1);
-            draw();
             widthProperty().addListener(e -> {
-                draw();
             });
             heightProperty().addListener(e -> {
-                draw();
             });
         }
 
         @Override
         public boolean isResizable() {
             return true;
-        }
-
-        public void draw() {
-            GraphicsContext graphicsContext = this.getGraphicsContext2D();
-            System.out.println(regions.size());
-            for (int i = 0; i < regions.size(); i++) {
-                Region region = regions.get(i);
-
-                Circle circle;
-                circle = new Circle(region.getX(), region.getY(), 10, Color.WHITE);
-                circle.setId(String.valueOf(i));
-                graphicsContext.setFill(Color.WHITE);
-                graphicsContext.fillOval(region.getX() - 5,region.getY() - 5, 10,10);
-            }
         }
 
         @Override
