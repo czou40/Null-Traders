@@ -5,9 +5,17 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public abstract class GameScreen extends Screen {
+    private static Media bkg;
+    static MediaPlayer bkgPlayer;
+    private static boolean hasStarted;
+
     private String title;
     private boolean requiresSideBar;
     private Pane contentPane;
@@ -15,6 +23,11 @@ public abstract class GameScreen extends Screen {
         super(primaryStage, game);
         this.title = title.toUpperCase();
         this.requiresSideBar = requiresSideBar;
+
+        //music
+        bkg = new Media(new File("out/production/cs2340/sounds/game.mp3").toURI().toString());
+        bkgPlayer = new MediaPlayer(bkg);
+        bkgPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     public ReadOnlyDoubleProperty getContentWidth() {
@@ -27,6 +40,13 @@ public abstract class GameScreen extends Screen {
 
     @Override
     public Scene constructScene() {
+        //music stuff
+        if(!hasStarted) {
+            bkgPlayer.play();
+            WelcomeScreen.themePlayer.stop();
+            hasStarted = true;
+        }
+
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("h1");
         MyGridPane titlePane = new MyGridPane();

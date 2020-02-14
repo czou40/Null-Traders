@@ -3,12 +3,19 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * This class describes a welcome screen.
  */
 public class WelcomeScreen extends Screen {
+
+    private static Media theme;
+    static MediaPlayer themePlayer;
 
     /**
      * Constructs a new instance.
@@ -18,6 +25,11 @@ public class WelcomeScreen extends Screen {
      */
     public WelcomeScreen(Stage primaryStage, Game game) {
         super(primaryStage, game);
+
+        //music
+        theme = new Media(new File("out/production/cs2340/sounds/theme.mp3").toURI().toString());
+        themePlayer = new MediaPlayer(theme);
+        themePlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     /**
@@ -26,6 +38,7 @@ public class WelcomeScreen extends Screen {
      * @return     { description_of_the_return_value }
      */
     public Scene constructScene() {
+        themePlayer.play();
         Button welcomeButton = new Button("New Game!");
         welcomeButton.setSkin(new ButtonScaleHover(welcomeButton));
         welcomeButton.getStyleClass().add("button-large");
