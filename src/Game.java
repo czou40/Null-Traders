@@ -30,15 +30,18 @@ public class Game {
         setCurrentRegion(dest);
         universe.updateDots();
 
-//        if (universe.getRegionDescriptions() != null) {
-//            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
-//                if (box.getRegion().equals(currentRegion)) {
-//                    box.setLabelsFull();
-//                } else {
-//                    box.setLabelsOnlyName();
-//                }
-//            }
-//        }
+        /*
+        if (universe.getRegionDescriptions() != null) {
+            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
+                if (box.getRegion().equals(currentRegion)) {
+                    box.setLabelsFull();
+                } else {
+                    box.setLabelsOnlyName();
+                }
+            }
+        }
+
+         */
     }
 
     public Difficulty getDifficulty() {

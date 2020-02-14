@@ -194,7 +194,6 @@ public class Universe {
             if (region == game.getCurrentRegion()) {
                 dotColor = Color.GOLD;
             } else if (region.isFound()) {
-                System.out.println("Region Found");
                 dotColor = Color.WHITE;
             } else {
                 dotColor = Color.BLACK;
@@ -213,6 +212,7 @@ public class Universe {
             }
             nameLabel.layoutXProperty().bind(centerXProperty().add(4));
             nameLabel.layoutYProperty().bind(centerYProperty().add(2));
+            nameLabel.toBack();
             region.foundProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
                     nameLabel.setText(region.getName());
