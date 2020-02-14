@@ -33,10 +33,7 @@ public class RegionDescriptionBox extends VBox {
 
     public void setRegion(Region region) {
         this.region = region;
-        nameLabel.setText("Name: " + region.getName());
-        descriptionLabel.setText("Description: " + region.getDescription());
-        technologyLabel.setText("Technology Level: " + region.getTechnologyLevel());
-        marketplaceLabel = new Label("Marketplaces: ");
+        setLabelsFull();
     }
     public Region getRegion() {
         return region;
@@ -58,7 +55,7 @@ public class RegionDescriptionBox extends VBox {
         nameLabel.setText("Name: " + region.getName());
         descriptionLabel.setText("Description: " + region.getDescription());
         technologyLabel.setText("Technology Level: " + region.getTechnologyLevel());
-        marketplaceLabel = new Label("Marketplaces: ");
+        marketplaceLabel.setText("Marketplaces: ");
     }
 
     public void setLabelsOnlyName() {
