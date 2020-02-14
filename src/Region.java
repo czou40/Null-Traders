@@ -11,7 +11,9 @@ public class Region {
 
     private NPC[] npcList;
 
-    public Region(String name, String description, int technologyLevel, int x, int y, boolean found) {
+    public Region(String name, String description, int technologyLevel,
+                  int x, int y, boolean found) {
+
         this.name = name;
         this.description = description;
         this.technologyLevel = technologyLevel;

@@ -13,7 +13,7 @@ import java.io.File;
 
 public abstract class GameScreen extends Screen {
     private static Media bkg;
-    static MediaPlayer bkgPlayer;
+    private static MediaPlayer bkgPlayer;
     private static boolean hasStarted;
 
     private String title;
@@ -41,9 +41,9 @@ public abstract class GameScreen extends Screen {
     @Override
     public Scene constructScene() {
         //music stuff
-        if(!hasStarted) {
+        if (!hasStarted) {
             bkgPlayer.play();
-            WelcomeScreen.themePlayer.stop();
+            WelcomeScreen.getThemePlayer().stop();
             hasStarted = true;
         }
 

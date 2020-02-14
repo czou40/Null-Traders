@@ -4,15 +4,12 @@ import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.scene.text.Font;
 import java.util.Vector;
 
 /**
@@ -54,7 +51,9 @@ public class Universe {
         return scaling;
     }
 
-    public Pane getVisualizedMap(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+    public Pane getVisualizedMap(
+            ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+
         Pane visualizedMap = new Pane();
         //if the panel is not big enough, you cannot use zoom on and zoom out outside of the map.
         visualizedMap.setPrefHeight(9999);
@@ -80,23 +79,18 @@ public class Universe {
         for (MapDot dot: getDots()) {
             visualizedMap.getChildren().add(dot.nameLabel);
             visualizedMap.getChildren().add(dot);
-//            visualizedMap.getChildren().add(new RegionDescriptionBox(game, dot.region,
-//             dot.getCenterX(), dot.getCenterY() - 10));
         }
         currentRegionDescriptionBox = new RegionDescriptionBox(game, game.getCurrentRegion(),
                 widthProperty.get() - 300, heightProperty.get() - 200);
-//        regionDescriptions = constructRegionDescriptions();
-//        for (RegionDescriptionBox box : getRegionDescriptions()) {
-//            visualizedMap.getChildren().add(box);
-//        }
         currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
                 subtract(currentRegionDescriptionBox.widthProperty()));
         currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
                 subtract(currentRegionDescriptionBox.heightProperty()));
         visualizedMap.getChildren().add(currentRegionDescriptionBox);
-        visualizedMap.setOnScroll(event->{
+        visualizedMap.setOnScroll(event -> {
             Timeline timeline = new Timeline();
-            KeyValue keyValue = new KeyValue(scaling, scaling.get() * (event.getDeltaY() > 0 ? 1.1 : 0.9));
+            KeyValue keyValue = new KeyValue(
+                    scaling, scaling.get() * (event.getDeltaY() > 0 ? 1.1 : 0.9));
             KeyFrame keyFrame = new KeyFrame(new Duration(100), keyValue);
             timeline.getKeyFrames().addAll(keyFrame);
             timeline.play();
@@ -142,7 +136,8 @@ public class Universe {
     public Vector<RegionDescriptionBox> constructRegionDescriptions() {
         Vector<RegionDescriptionBox> result = new Vector<>();
         for (MapDot dot : dots) {
-            result.add(new RegionDescriptionBox(game, dot.region, dot.getCenterX(), dot.getCenterY() - 10));
+            result.add(new RegionDescriptionBox(
+                    game, dot.region, dot.getCenterX(), dot.getCenterY() - 10));
         }
 
         return result;
@@ -201,7 +196,7 @@ public class Universe {
             this.setFill(dotColor);
             this.region = region;
             this.setCursor(Cursor.HAND);
-            this.setOnMouseClicked(e->{
+            this.setOnMouseClicked(e -> {
                 game.travelToRegion(region);
             });
 

@@ -14,7 +14,7 @@ import java.io.File;
  */
 public class WelcomeScreen extends Screen {
     private static Media theme;
-    static MediaPlayer themePlayer;
+    private static MediaPlayer themePlayer;
 
     /**
      * Constructs a new instance.
@@ -59,5 +59,9 @@ public class WelcomeScreen extends Screen {
         Scene welcomeScene = new Scene(myGridPane, 1280, 720);
         welcomeScene.getStylesheets().addAll("styles/general.css", "styles/clear-background.css");
         return welcomeScene;
+    }
+
+    public static MediaPlayer getThemePlayer() {
+        return themePlayer;
     }
 }
