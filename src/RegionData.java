@@ -21,6 +21,7 @@ public enum RegionData {
         this.name = name;
         this.description = description;
         this.technologyLevel = technologyLevel;
+
     }
 
     public String getName() {
