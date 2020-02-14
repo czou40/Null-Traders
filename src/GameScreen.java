@@ -25,7 +25,7 @@ public abstract class GameScreen extends Screen {
         this.requiresSideBar = requiresSideBar;
 
         //music
-        bkg = new Media(new File("src/sounds/theme.mp3").toURI().toString());
+        bkg = new Media(new File("src/sounds/game.mp3").toURI().toString());
         bkgPlayer = new MediaPlayer(bkg);
         bkgPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }

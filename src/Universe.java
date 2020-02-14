@@ -81,7 +81,8 @@ public class Universe {
             dot.nameLabel.setVisible(false);
             dot.coordinatesLabel.setVisible(false);
             dot.distanceLabel.setVisible(false);
-            visualizedMap.getChildren().addAll(dot.nameLabel, dot.coordinatesLabel, dot.distanceLabel);
+            visualizedMap.getChildren().addAll(
+                    dot.nameLabel, dot.coordinatesLabel, dot.distanceLabel);
             visualizedMap.getChildren().add(dot);
         }
         currentRegionDescriptionBox = new RegionDescriptionBox(game, game.getCurrentRegion(),
@@ -108,10 +109,22 @@ public class Universe {
 
     private void generateRegions() {
         regions = new Vector<>();
-        for (RegionData i : RegionData.values()) {
-            int x = (int) (Math.random() * MAP_WIDTH);
-            int y = (int) (Math.random() * MAP_HEIGHT);
-            regions.add(new Region(i, x, y, false));
+        Vector<Integer> spotsLeft = new Vector<>();
+        for (int i = 0; i < RegionData.values().length; i++) {
+            spotsLeft.add(i);
+        }
+
+        RegionData[] regionData = RegionData.values();
+        final int numRows = 2;
+        for (RegionData r : regionData) {
+            int spot = spotsLeft.remove((int) (Math.random() * spotsLeft.size()));
+            int spotX = spot % (regionData.length / numRows); //0 to number of regions / 2
+            int spotY = spot / (regionData.length / numRows);   //0 or 1
+            int spotWidth = MAP_WIDTH / (regionData.length / numRows);
+            int spotHeight = MAP_HEIGHT / numRows;
+            int x = (int) ((spotX + Math.random()) * spotWidth);
+            int y = (int) ((spotY + Math.random()) * spotHeight);
+            regions.add(new Region(r, x, y, false));
         }
         /*
         NameGenerator nameGenerator = new NameGenerator();
@@ -148,7 +161,7 @@ public class Universe {
         timeline.play();
         for (MapDot dot : dots) {
             Color dotColor;
-            if (game.getCurrentRegion().equals(dot.region)) {       //Requires further changes; potentially inefficient
+            if (game.getCurrentRegion().equals(dot.region)) {
                 dotColor = Color.GOLD;
             } else if (dot.region.isFound()) {
                 dotColor = Color.WHITE;
@@ -156,6 +169,13 @@ public class Universe {
                 dotColor = Color.BLACK;
             }
             dot.setFill(dotColor);
+
+            Region currentRegion = game.getCurrentRegion();
+            double distance = Math.sqrt(
+                    Math.pow(currentRegion.getX() - dot.region.getX(), 2)
+                    + Math.pow(currentRegion.getY() - dot.region.getY(), 2));
+            DecimalFormat df = new DecimalFormat("#.#");
+            dot.distanceLabel.setText("Distance: " + df.format(distance));
         }
         currentRegionDescriptionBox.setRegion(game.getCurrentRegion());
     }
@@ -198,9 +218,9 @@ public class Universe {
 
             //properties
             this.setOnMouseEntered(e -> {
-               nameLabel.setVisible(true);
-               coordinatesLabel.setVisible(true);
-               distanceLabel.setVisible(true);
+                nameLabel.setVisible(true);
+                coordinatesLabel.setVisible(true);
+                distanceLabel.setVisible(true);
             });
             this.setOnMouseExited(e -> {
                 nameLabel.setVisible(false);
@@ -238,7 +258,9 @@ public class Universe {
             coordinatesLabel.setStyle("-fx-font-size: 16px;");
 
             Region currentRegion = game.getCurrentRegion();
-            double distance = Math.sqrt(Math.pow(currentRegion.getX()-region.getX(), 2) + Math.pow(currentRegion.getY()-region.getY(), 2));
+            double distance = Math.sqrt(
+                    Math.pow(currentRegion.getX() - region.getX(), 2)
+                    + Math.pow(currentRegion.getY() - region.getY(), 2));
             DecimalFormat df = new DecimalFormat("#.#");
             distanceLabel = new Label("Distance: " + df.format(distance));
             distanceLabel.layoutXProperty().bind(centerXProperty().add(4));

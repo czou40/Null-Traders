@@ -12,7 +12,7 @@ public enum RegionData {
     FLEU("Fleu", "A planet with a vast \nskyline and infinite clouds", 7),
     KROARTHAN("Kroarthan", "", 6),
     KRANTLU("Krantlu", "", 5),
-    PROARVIAVZO("Proarviavzo", "The magnificent", 8);
+    PROARVIAVZO("Proarviavzo", "A magnificent planet of vast wealth.", 8);
 
     private String name;
     private String description;
