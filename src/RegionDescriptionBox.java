@@ -14,18 +14,9 @@ public class RegionDescriptionBox extends VBox {
         this.descriptionLabel = new Label("");
         this.technologyLabel = new Label("");
         this.marketplaceLabel = new Label("");
+        setLabelsFull();
 
-        if (region.equals(game.getCurrentRegion())) {
-            setLabelsFull();
-        } else {
-            setLabelsOnlyName();
-        }
-
-        region.foundProperty().addListener((observable, oldValue, newValue) -> {
-            setLabelsOnlyName();
-        });
-
-        this.getChildren().addAll(nameLabel, descriptionLabel, technologyLabel);
+        this.getChildren().addAll(nameLabel, descriptionLabel, technologyLabel, marketplaceLabel);
         this.setLayoutX(x);
         this.setLayoutY(y);
         this.toBack();
@@ -56,19 +47,5 @@ public class RegionDescriptionBox extends VBox {
         descriptionLabel.setText("Description: " + region.getDescription());
         technologyLabel.setText("Technology Level: " + region.getTechnologyLevel());
         marketplaceLabel.setText("Marketplaces: ");
-    }
-
-    public void setLabelsOnlyName() {
-        if (region.isFound()) {
-            nameLabel.setText(region.getName());
-            descriptionLabel.setText("");
-            technologyLabel.setText("");
-            marketplaceLabel = new Label("");
-        } else {
-            nameLabel.setText("???");
-            descriptionLabel.setText("");
-            technologyLabel.setText("");
-            marketplaceLabel = new Label("");
-        }
     }
 }
