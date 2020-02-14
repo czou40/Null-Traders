@@ -10,8 +10,8 @@ public enum RegionData {
                                         + "\nIs it worth the price?", 8),
     ATHREI("Athrei", "A booming planet of infinite sunlight.", 9),
     FLEU("Fleu", "A planet with a vast \nskyline and infinite clouds", 7),
-    KROARTHAN("Kroarthan", "", 6),
-    KRANTLU("Krantlu", "", 5),
+    KROARTHAN("Kroarthan", "A planet of giant proportions.", 6),
+    KRANTLU("Krantlu", "A young, developing planet, \nif only...", 4),
     PROARVIAVZO("Proarviavzo", "A magnificent planet of vast wealth.", 8);
 
     private String name;
