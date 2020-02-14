@@ -4,13 +4,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.util.NoSuchElementException;
 
 /*
-Handles most of the game logic and manages game state
+   Handles most of the game logic and manages game state
  */
 public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
     private UniverseMap universeMap;
     private Region currentRegion;
+    private UniverseMap universe;
 
     public Game(Player player, Difficulty difficulty) {
         this.player = player;
@@ -23,6 +24,21 @@ public class Game {
         this.player = new Player(this);
         this.universeMap = new UniverseMap(this);
         this.currentRegion = universeMap.getRandomRegion();
+    }
+
+    public void travelToRegion(Region dest) {
+        setCurrentRegion(dest);
+        universe.updateDots();
+
+        if (universe.getRegionDescriptions() != null) {
+            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
+                if (box.getRegion().equals(currentRegion)) {
+                    box.setLabelsFull();
+                } else {
+                    box.setLabelsOnlyName();
+                }
+            }
+        }
     }
 
     public Difficulty getDifficulty() {
@@ -50,11 +66,21 @@ public class Game {
     }
 
     public void setCurrentRegion(Region currentRegion) {
-        currentRegion.setFound(true);
         this.currentRegion = currentRegion;
+        if (!currentRegion.isFound()) {
+            currentRegion.setFound(true);
+        }
     }
 
-    public UniverseMap getUniverseMap() {
-        return universeMap;
+    public UniverseMap getUniverse() {
+        if (universe == null) {
+            throw new NoSuchElementException("Universe not created yet");
+        } else {
+            return universe;
+        }
+    }
+
+    public void setUniverse(UniverseMap universe) {
+        this.universe = universe;
     }
 }

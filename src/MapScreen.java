@@ -20,6 +20,12 @@ public class MapScreen extends GameScreen {
 
     @Override
     public void after() {
-        addToContentPane(game.getUniverseMap().getVisualizedMap(getContentWidth(), getContentHeight()));
+            << << << < HEAD
+            addToContentPane(game.getUniverseMap().getVisualizedMap(getContentWidth(), getContentHeight()));
+// ======= now UniverseMap is an attribute in Game and is greated in the game constructor
+//         UniverseMap universeMap = new UniverseMap(game, getContentWidth(), getContentHeight());
+//         game.setUniverse(universeMap);
+//         addToContentPane(universeMap.getVisualizedMap());
+// >>>>>>> 7c7a3dc8c69674a861e469de993103802190d07c
     }
 }
