@@ -115,12 +115,15 @@ public class Universe {
             int y = (int) (Math.random() * MAP_HEIGHT);
             regions.add(new Region(i, x, y, false));
         }
+        /*
         NameGenerator nameGenerator = new NameGenerator();
         for (int i = 1; i <= 10; i++) {
             int x = (int) (Math.random() * MAP_WIDTH);
             int y = (int) (Math.random() * MAP_HEIGHT);
             regions.add(new Region(nameGenerator.getName(), "", 1, x, y, false));
         }
+
+         */
     }
 
     public Region getRandomRegion() {
@@ -202,9 +205,21 @@ public class Universe {
             this.setOnMouseClicked(e->{
                 game.travelToRegion(region);
             });
-            nameLabel = new Label(region.getName());
+
+            if (region.isFound()) {
+                nameLabel = new Label(region.getName());
+            } else {
+                nameLabel = new Label("???");
+            }
             nameLabel.layoutXProperty().bind(centerXProperty().add(4));
             nameLabel.layoutYProperty().bind(centerYProperty().add(2));
+            region.foundProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    nameLabel.setText(region.getName());
+                } else {
+                    nameLabel.setText("???");
+                }
+            });
             nameLabel.setStyle("-fx-font-size: 16px;");
         }
     }
