@@ -40,9 +40,13 @@ public class UniverseMap {
         return visualizedMap;
     }
 
+    public Region getRandomRegion() {
+        System.out.println(regions.size());
+        int randIndex = (int) (Math.random() * regions.size());
+        return regions.get(randIndex);
+    }
+
     private void generateRegions() {
-        int x = (int) (Math.random() * 1920);
-        int y = (int) (Math.random() * 1080);
         Vector<RegionData> regionData = new Vector<>();
         for (RegionData data : RegionData.values()) {
             regionData.add(data);
@@ -50,8 +54,7 @@ public class UniverseMap {
 
         while (regionData.size() > 0) {
             RegionData randRegion = regionData.remove((int) Math.random() * regionData.size());
-            regions.add(new Region(randRegion.getName(), randRegion.getDescription(), randRegion.getTechnologyLevel(),
-                    (int) (Math.random() * canvas.getWidth()), (int) (Math.random() * canvas.getHeight()), false));
+            regions.add(new Region(randRegion, (int) (Math.random() * canvas.getWidth()), (int) (Math.random() * canvas.getHeight()), false));
         }
     }
 
@@ -68,10 +71,6 @@ public class UniverseMap {
         canvas.draw();
     }
 
-    public Region getRandomRegion() {
-        return regions.get((int) Math.random() * regions.size());
-    }
-
     private class MapDot extends Circle {
         private Region region;
 
@@ -79,7 +78,6 @@ public class UniverseMap {
             super(region.getX(), region.getY(), 5, Color.WHITE);
             Color dotColor;
             if (region.isFound()) {
-                System.out.println("Region Found");
                 dotColor = Color.WHITE;
             } else {
                 dotColor = Color.BLACK;

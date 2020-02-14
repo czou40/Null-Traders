@@ -8,10 +8,10 @@ public class Region {
 
     private NPC[] npcList;
 
-    public Region(String name, String description, int technologyLevel, int x, int y, boolean found) {
-        this.name = name;
-        this.description = description;
-        this.technologyLevel = technologyLevel;
+    public Region(RegionData regionData, int x, int y, boolean found) {
+        this.name = regionData.getName();
+        this.description = regionData.getDescription();
+        this.technologyLevel = regionData.getTechnologyLevel();
         this.x = x;
         this.y = y;
         this.found = found;
