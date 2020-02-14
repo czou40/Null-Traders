@@ -10,6 +10,7 @@ import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 /**
@@ -77,7 +78,7 @@ public class Universe {
 
         dots = constructDots();
         for (MapDot dot: getDots()) {
-            visualizedMap.getChildren().add(dot.nameLabel);
+            visualizedMap.getChildren().addAll(dot.nameLabel, dot.coordinatesLabel, dot.distanceLabel);
             visualizedMap.getChildren().add(dot);
         }
         currentRegionDescriptionBox = new RegionDescriptionBox(game, game.getCurrentRegion(),
@@ -133,15 +134,6 @@ public class Universe {
         return result;
     }
 
-    public Vector<RegionDescriptionBox> constructRegionDescriptions() {
-        Vector<RegionDescriptionBox> result = new Vector<>();
-        for (MapDot dot : dots) {
-            result.add(new RegionDescriptionBox(
-                    game, dot.region, dot.getCenterX(), dot.getCenterY() - 10));
-        }
-
-        return result;
-    }
 
     public void updateDots() {
         Timeline timeline = new Timeline();
@@ -153,7 +145,7 @@ public class Universe {
         timeline.play();
         for (MapDot dot : dots) {
             Color dotColor;
-            if (game.getCurrentRegion().equals(dot.region)) {
+            if (game.getCurrentRegion().equals(dot.region)) {       //Requires further changes; potentially inefficient
                 dotColor = Color.GOLD;
             } else if (dot.region.isFound()) {
                 dotColor = Color.WHITE;
@@ -176,6 +168,8 @@ public class Universe {
     private class MapDot extends Circle {
         private Region region;
         private Label nameLabel;
+        private Label coordinatesLabel;
+        private Label distanceLabel;
 
         public MapDot(Region region) {
             super(10, 10, 5, Color.WHITE);
@@ -216,6 +210,20 @@ public class Universe {
                 }
             });
             nameLabel.setStyle("-fx-font-size: 16px;");
+
+            coordinatesLabel = new Label(region.getX() + ", " + region.getY());
+            coordinatesLabel.layoutXProperty().bind(centerXProperty().add(4));
+            coordinatesLabel.layoutYProperty().bind(centerYProperty().add(18));
+            coordinatesLabel.setStyle("-fx-font-size: 16px;");
+
+            Region currentRegion = game.getCurrentRegion();
+            double distance = Math.sqrt(Math.pow(currentRegion.getX()-region.getX(), 2) + Math.pow(currentRegion.getY()-region.getY(), 2));
+            DecimalFormat df = new DecimalFormat("#.#");
+            distanceLabel = new Label("Distance: " + df.format(distance));
+            distanceLabel.layoutXProperty().bind(centerXProperty().add(4));
+            distanceLabel.layoutYProperty().bind(centerYProperty().add(34));
+            distanceLabel.setStyle("-fx-font-size: 16px;");
+
         }
     }
 }
