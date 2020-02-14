@@ -26,7 +26,7 @@ public class WelcomeScreen extends Screen {
         super(primaryStage, game);
 
         //music
-        theme = new Media(new File("out/production/cs2340/sounds/theme.mp3").toURI().toString());
+        theme = new Media(new File("src/sounds/theme.mp3").toURI().toString());
         themePlayer = new MediaPlayer(theme);
         themePlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }

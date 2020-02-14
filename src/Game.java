@@ -9,9 +9,8 @@ import java.util.NoSuchElementException;
 public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
-    private UniverseMap universeMap;
-    private Region currentRegion;
-    private UniverseMap universe;
+    private SimpleObjectProperty<Region> currentRegion;
+    private Universe universe;
 
     public Game(Player player, Difficulty difficulty) {
         this.player = player;
@@ -22,23 +21,24 @@ public class Game {
     public Game() {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
-        this.universeMap = new UniverseMap(this);
-        this.currentRegion = universeMap.getRandomRegion();
+        this.universe = new Universe(this);
+        this.currentRegion = new SimpleObjectProperty<>();
+        setCurrentRegion(universe.getRandomRegion());
     }
 
     public void travelToRegion(Region dest) {
         setCurrentRegion(dest);
         universe.updateDots();
 
-        if (universe.getRegionDescriptions() != null) {
-            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
-                if (box.getRegion().equals(currentRegion)) {
-                    box.setLabelsFull();
-                } else {
-                    box.setLabelsOnlyName();
-                }
-            }
-        }
+//        if (universe.getRegionDescriptions() != null) {
+//            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
+//                if (box.getRegion().equals(currentRegion)) {
+//                    box.setLabelsFull();
+//                } else {
+//                    box.setLabelsOnlyName();
+//                }
+//            }
+//        }
     }
 
     public Difficulty getDifficulty() {
@@ -61,18 +61,22 @@ public class Game {
         if (currentRegion == null) {
             throw new NoSuchElementException("Region has not been generated yet");
         } else {
-            return currentRegion;
+            return currentRegion.get();
         }
     }
 
     public void setCurrentRegion(Region currentRegion) {
-        this.currentRegion = currentRegion;
+        this.currentRegion.set(currentRegion);
         if (!currentRegion.isFound()) {
             currentRegion.setFound(true);
         }
     }
 
-    public UniverseMap getUniverse() {
+    public SimpleObjectProperty<Region> currentRegionProperty() {
+        return currentRegion;
+    }
+
+    public Universe getUniverse() {
         if (universe == null) {
             throw new NoSuchElementException("Universe not created yet");
         } else {
@@ -80,7 +84,7 @@ public class Game {
         }
     }
 
-    public void setUniverse(UniverseMap universe) {
+    public void setUniverse(Universe universe) {
         this.universe = universe;
     }
 }

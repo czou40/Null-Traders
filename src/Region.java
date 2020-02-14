@@ -5,8 +5,8 @@ public class Region {
     private String name;
     private String description;
     private int technologyLevel;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private BooleanProperty found;  //if the player has found the region
 
     private NPC[] npcList;
@@ -48,11 +48,11 @@ public class Region {
         return technologyLevel;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 

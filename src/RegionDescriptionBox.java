@@ -31,6 +31,13 @@ public class RegionDescriptionBox extends VBox {
         this.toBack();
     }
 
+    public void setRegion(Region region) {
+        this.region = region;
+        nameLabel.setText("Name: " + region.getName());
+        descriptionLabel.setText("Description: " + region.getDescription());
+        technologyLabel.setText("Technology Level: " + region.getTechnologyLevel());
+        marketplaceLabel = new Label("Marketplaces: ");
+    }
     public Region getRegion() {
         return region;
     }
