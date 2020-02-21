@@ -5,8 +5,8 @@ public class Marketplace {
     private String name;
     /*
     I was thinking for marketplaces we could implement the item stock as a map from the item name
-    to an item collection, since each marketplace can have multiple items. ItemCollection would
-    just be a class with fields for the Item and the quantity.
+    to an item collection, since each marketplace can have multiple items and the prices are supposed
+    to be unique to the marketplace.
     */
     private Map<String, StockEntry> stock;
     private Region region;
