@@ -1,7 +1,4 @@
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.*;
 
 /**
  * This class describes a player.
@@ -15,6 +12,9 @@ public class Player {
     private IntegerProperty merchant;
     private IntegerProperty engineer;
     private IntegerProperty credits;
+    private SimpleObjectProperty<Region> currentRegion;
+    private SimpleObjectProperty<Ship> ship;
+
 
     /**
      * Constructs a new instance.
@@ -36,6 +36,7 @@ public class Player {
         this.merchant = new SimpleIntegerProperty(merchant);
         this.engineer = new SimpleIntegerProperty(engineer);
         this.credits = new SimpleIntegerProperty(credits);
+        this.currentRegion = new SimpleObjectProperty<>();
     }
 
     /**
@@ -159,5 +160,29 @@ public class Player {
 
     public Integer sumOfPoints() {
         return getPilot() + getFighter() + getMerchant() + getEngineer();
+    }
+
+    public Region getCurrentRegion() {
+        return currentRegion.get();
+    }
+
+    public void setCurrentRegion(Region currentRegion) {
+        this.currentRegion.set(currentRegion);
+        currentRegion.setFound(true);
+        currentRegion.setIsCurrentRegion(true);
+    }
+
+    public SimpleObjectProperty<Region> currentRegionProperty() {
+        return currentRegion;
+    }
+
+    public void travelToRegion(Region dest) {
+        currentRegion.get().setIsCurrentRegion(false);
+        setCurrentRegion(dest);
+        /*
+        More things will happen when the player travels.
+        They will be coded in future implementations.
+         */
+
     }
 }
