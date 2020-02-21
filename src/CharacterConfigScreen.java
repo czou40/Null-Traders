@@ -157,6 +157,7 @@ public class CharacterConfigScreen extends GameScreen {
             }
         });
 
+        //points available decrease as skill points are allocated
         pointsAvailableNumber.textProperty().bind(Bindings.format("%s",
                 game.getDifficulty().startingSkillPointsProperty().
                         subtract(player.pilotProperty().

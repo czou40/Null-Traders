@@ -13,6 +13,7 @@ public class Player {
     private IntegerProperty engineer;
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
+    private SimpleObjectProperty<Ship> ship;
 
 
     /**

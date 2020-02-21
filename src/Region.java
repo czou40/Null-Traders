@@ -9,6 +9,7 @@ public class Region {
     private double y;
     private BooleanProperty found;  //if the player has found the region
     private BooleanProperty isCurrentRegion;
+    private Marketplace marketplace;    //new field
     private NPC[] npcList;
 
     public Region(String name, String description, int technologyLevel,
@@ -21,6 +22,7 @@ public class Region {
         this.y = y;
         this.found = new SimpleBooleanProperty(false);
         this.isCurrentRegion = new SimpleBooleanProperty(false);
+        this.marketplace = new Marketplace();
         this.npcList = new NPC[5];
     }
 
