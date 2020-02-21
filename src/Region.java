@@ -8,27 +8,24 @@ public class Region {
     private double x;
     private double y;
     private BooleanProperty found;  //if the player has found the region
-
+    private BooleanProperty isCurrentRegion;
     private NPC[] npcList;
 
     public Region(String name, String description, int technologyLevel,
-                  int x, int y, boolean found) {
+                  int x, int y) {
 
         this.name = name;
         this.description = description;
         this.technologyLevel = technologyLevel;
         this.x = x;
         this.y = y;
-        this.found = new SimpleBooleanProperty(found);
+        this.found = new SimpleBooleanProperty(false);
+        this.isCurrentRegion = new SimpleBooleanProperty(false);
         this.npcList = new NPC[5];
     }
 
-    public Region(RegionData data, int x, int y, boolean found) {
-        this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y, found);
-    }
-
     public Region(RegionData data, int x, int y) {
-        this(data, x, y, false);
+        this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y);
     }
 
     public Region(RegionData data) {
@@ -70,7 +67,30 @@ public class Region {
         return found;
     }
 
+    public boolean isCurrentRegion() {
+        return isCurrentRegion.get();
+    }
+
+    public BooleanProperty isCurrentRegionProperty() {
+        return isCurrentRegion;
+    }
+
+    public void setIsCurrentRegion(boolean isCurrentRegion) {
+        this.isCurrentRegion.set(isCurrentRegion);
+    }
+
     public NPC[] getNpcList() {
         return npcList;
     }
+
+    /*
+    Calculate distance to another region.
+     */
+    public double distanceTo(Region other) {
+        double diffX = getX() - other.getX();
+        double diffY = getY() - other.getY();
+        return Math.sqrt(diffX * diffX + diffY * diffY);
+    }
+
+
 }

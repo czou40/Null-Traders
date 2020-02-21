@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
-    private SimpleObjectProperty<Region> currentRegion;
+    //private SimpleObjectProperty<Region> currentRegion;
     private Universe universe;
 
     public Game(Player player, Difficulty difficulty) {
@@ -21,28 +21,12 @@ public class Game {
     public Game() {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
-        this.universe = new Universe(this);
-        this.currentRegion = new SimpleObjectProperty<>();
-        setCurrentRegion(universe.getRandomRegion());
+        this.universe = new Universe(player);
+        player.setCurrentRegion(universe.getRandomRegion());
+        //this.currentRegion = new SimpleObjectProperty<>();
+        //setCurrentRegion(universe.getRandomRegion());
     }
 
-    public void travelToRegion(Region dest) {
-        setCurrentRegion(dest);
-        universe.updateDots();
-
-        /*
-        if (universe.getRegionDescriptions() != null) {
-            for (RegionDescriptionBox box : universe.getRegionDescriptions()) {
-                if (box.getRegion().equals(currentRegion)) {
-                    box.setLabelsFull();
-                } else {
-                    box.setLabelsOnlyName();
-                }
-            }
-        }
-
-         */
-    }
 
     public Difficulty getDifficulty() {
         return difficulty.getValue();
@@ -60,6 +44,7 @@ public class Game {
         return player;
     }
 
+    /*
     public Region getCurrentRegion() {
         if (currentRegion == null) {
             throw new NoSuchElementException("Region has not been generated yet");
@@ -78,6 +63,7 @@ public class Game {
     public SimpleObjectProperty<Region> currentRegionProperty() {
         return currentRegion;
     }
+    */
 
     public Universe getUniverse() {
         if (universe == null) {
