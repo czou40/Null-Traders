@@ -22,7 +22,7 @@ public class Region {
         this.y = y;
         this.found = new SimpleBooleanProperty(false);
         this.isCurrentRegion = new SimpleBooleanProperty(false);
-        this.marketplace = new Marketplace();
+        this.marketplace = new Marketplace("Name", technologyLevel);
         this.npcList = new NPC[5];
     }
 

@@ -9,11 +9,10 @@ public class Marketplace {
     to be unique to the marketplace.
     */
     private Map<Item, StockEntry> stock;
-    private Region region;
 
-    public Marketplace(String name, Region region, int merchantSkill) {
+
+    public Marketplace(String name, int merchantSkill) {
         this.name = name;
-        this.region = region;
         this.stock = generateRandomStock(merchantSkill);
     }
 
