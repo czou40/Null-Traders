@@ -8,7 +8,7 @@ public class Marketplace {
     to an item collection, since each marketplace can have multiple items and the prices are supposed
     to be unique to the marketplace.
     */
-    private Map<String, StockEntry> stock;
+    private Map<Item, StockEntry> stock;
     private Region region;
 
     public Marketplace(String name, Region region, int merchantSkill) {
@@ -17,7 +17,7 @@ public class Marketplace {
         this.stock = generateRandomStock(merchantSkill);
     }
 
-    private Map<String, StockEntry> generateRandomStock(int merchantSkill) {
+    private Map<Item, StockEntry> generateRandomStock(int merchantSkill) {
         //This is where we do the algorithm for generating the stock
         return null;
     }
