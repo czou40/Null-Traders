@@ -13,6 +13,7 @@ public class Marketplace {
 
 
     public Marketplace(String name, int techLevel) {
+
         this.name = name;
         this.techLevel = techLevel;
         this.stock = generateRandomStock(techLevel);

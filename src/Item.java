@@ -3,6 +3,7 @@
  * Right now, with this implementation, Item is just a name for lookup
  * in the marketplace map
  */
+
 public enum Item {
     WATER("Water", 1, 1),
     FURS("Furs", 2, 2),
