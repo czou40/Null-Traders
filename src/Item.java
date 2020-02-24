@@ -5,37 +5,52 @@
  */
 
 public enum Item {
-    // Water, Furs, Food, Ore, Games, Firearms, Medicine,Machines, Narcotics, Robots
-    WATER("Water", 1),
-    FURS("Furs", 2),
-    FOOD("Food", 1),
-    ORE("Ore", 4),
-    GAMES("Games", 4),
-    FIREARMS("Firearms", 6),
-    MEDICINE("Medicine", 6),
-    MACHINES("Machines", 7),
-    NARCOTICS("Narcotics", 7),
-    ROBOTS("Robots", 9);
+    WATER("Water", 1, 1),
+    FURS("Furs", 2, 2),
+    FOOD("Food", 1,2),
+    ORE("Ore", 4,4),
+    GAMES("Games", 4, 3),
+    FIREARMS("Firearms", 6, 6),
+    MEDICINE("Medicine", 6, 4),
+    MACHINES("Machines", 7, 6),
+    NARCOTICS("Narcotics", 7, 7),
+    ROBOTS("Robots", 9, 10);
 
 
     private String name;
     private int techLevel;
+    private int basePrice;
 
-    Item(String name, int techLevel){
+    Item(String name, int techLevel, int basePrice){
         this.name = name;
         this.techLevel = techLevel;
+        this.basePrice = basePrice;
     }
 
     public String getName() {return name; }
 
     public int getTechLevel() { return techLevel; }
 
+    public int getBasePrice() { return basePrice; }
+
+//    public void buy(Player player, Marketplace market, Ship ship) {
+//        if(ship.getItemInventory().size() < ship.getCargoCapacity()) {
+//            ship.getItemInventory().put(this, market.getStock().get(this));
 //
-//    public void buy(Player player, Marketplace market) {
+//            //I added getters to Marketplace and StockEntry, but there is probably some way I could use properties
+//            player.setCredits(player.getCredits() - market.getStock().get(this).getBuyingPrice());
+//            market.getStock().remove(this);
+//        } else{
+//            //set an error message on the marketplace screen saying something like "Not enough credits to purchase item"
+//        }
 //
 //    }
+
+//    public void sell(Player player, Marketplace market, Ship ship) {
 //
-//    public void sell(Player player, Marketplace market) {
+//        //I added getters to Marketplace and StockEntry, but there is probably some way I could use properties
+//        player.setCredits(player.getCredits() + market.getStock().get(this).getSellingPrice());
+//        ship.getItemInventory().remove(this);
 //
 //    }
 }

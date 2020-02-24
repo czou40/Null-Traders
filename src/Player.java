@@ -37,6 +37,7 @@ public class Player {
         this.engineer = new SimpleIntegerProperty(engineer);
         this.credits = new SimpleIntegerProperty(credits);
         this.currentRegion = new SimpleObjectProperty<>();
+        this.ship = new SimpleObjectProperty<>();
     }
 
     /**
@@ -176,6 +177,12 @@ public class Player {
         return currentRegion;
     }
 
+    public Ship getShip() { return ship.get(); }
+
+    public SimpleObjectProperty<Ship> shipProperty() { return ship; }
+
+    public void setShip(Ship ship) { this.ship.set(ship); }
+
     public void travelToRegion(Region dest) {
         currentRegion.get().setIsCurrentRegion(false);
         setCurrentRegion(dest);
@@ -185,4 +192,24 @@ public class Player {
          */
 
     }
+
+    public void buy(Item item, Marketplace market, Ship ship) {
+        if(ship.getItemInventory().size() < ship.getCargoCapacity()) {
+            ship.getItemInventory().put(item, market.getStock().get(item));
+
+            //I added getters to Marketplace and StockEntry, but there is probably some way I could use properties
+            this.setCredits(this.getCredits() - market.getStock().get(item).getBuyingPrice());
+            market.getStock().remove(item);
+        } else{
+            //set an error message on the marketplace screen saying something like "Not enough credits to purchase item"
+        }
+    }
+
+    public void sell(Item item, Marketplace market, Ship ship) {
+
+        this.setCredits(this.getCredits() + market.getStock().get(item).getSellingPrice());
+        ship.getItemInventory().remove(item);
+
+    }
+
 }
