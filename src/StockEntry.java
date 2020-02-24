@@ -1,3 +1,5 @@
+import com.sun.deploy.panel.IProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 
 /**
@@ -9,4 +11,32 @@ public class StockEntry {
     private IntegerProperty quantity;
     private IntegerProperty buyingPrice;
     private IntegerProperty sellingPrice;
+
+    public void setQuantity(int quantity) {
+        this.quantity.set(quantity);
+    }
+
+    public void setBuyingPrice(int buyingPrice) {
+        this.buyingPrice.set(buyingPrice);
+    }
+
+    public void setSellingPrice(int sellingPrice) {
+        this.sellingPrice.set(sellingPrice);
+    }
+
+    public int getBuyingPrice() {
+        return buyingPrice.get();
+    }
+
+    public IntegerProperty buyingPriceProperty() {
+        return buyingPrice;
+    }
+
+    public int getSellingPrice() {
+        return sellingPrice.get();
+    }
+
+    public IntegerProperty sellingPriceProperty() {
+        return sellingPrice;
+    }
 }
