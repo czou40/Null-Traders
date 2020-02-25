@@ -1,4 +1,5 @@
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * This is a collection of items that can be found in a region marketplace.
@@ -9,4 +10,46 @@ public class StockEntry {
     private IntegerProperty quantity;
     private IntegerProperty buyingPrice;
     private IntegerProperty sellingPrice;
+
+    public StockEntry(int quantity, int buyingPrice, int sellingPrice) {
+        this.quantity = new SimpleIntegerProperty(quantity);
+        this.buyingPrice = new SimpleIntegerProperty(buyingPrice);
+        this.sellingPrice = new SimpleIntegerProperty(sellingPrice);
+    }
+
+    public int getQuantity() {
+        return quantity.get();
+    }
+
+    public IntegerProperty quantityProperty() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity.set(quantity);
+    }
+
+    public int getBuyingPrice() {
+        return buyingPrice.get();
+    }
+
+    public IntegerProperty buyingPriceProperty() {
+        return buyingPrice;
+    }
+
+    public void setBuyingPrice(int buyingPrice) {
+        this.buyingPrice.set(buyingPrice);
+    }
+
+    public int getSellingPrice() {
+        return sellingPrice.get();
+    }
+
+    public IntegerProperty sellingPriceProperty() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(int sellingPrice) {
+        this.sellingPrice.set(sellingPrice);
+    }
 }

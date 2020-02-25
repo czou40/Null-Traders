@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -18,6 +19,19 @@ public class Marketplace {
 
     private Map<Item, StockEntry> generateRandomStock(int merchantSkill) {
         //This is where we do the algorithm for generating the stock
-        return null;
+        //Only for testing purposes
+        Map<Item, StockEntry> stock = new HashMap<>();
+        for (Item i : Item.values()) {
+            stock.put(i, new StockEntry(10, 2939, 2245));
+        }
+        return stock;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Map<Item, StockEntry> getStock() {
+        return stock;
     }
 }

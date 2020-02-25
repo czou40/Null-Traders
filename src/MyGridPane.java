@@ -24,11 +24,15 @@ public class MyGridPane extends GridPane {
      */
     public MyGridPane(double[] rowConstraints, double[] columnConstraints, HPos hPos, VPos vPos) {
         super();
-        for (int i = 0; i < rowConstraints.length; i++) {
-            this.getRowConstraints().add(new MyRowConstraints(rowConstraints[i], vPos));
+        if (rowConstraints != null) {
+            for (int i = 0; i < rowConstraints.length; i++) {
+                this.getRowConstraints().add(new MyRowConstraints(rowConstraints[i], vPos));
+            }
         }
-        for (int i = 0; i < columnConstraints.length; i++) {
-            this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i], hPos));
+        if (columnConstraints != null) {
+            for (int i = 0; i < columnConstraints.length; i++) {
+                this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i], hPos));
+            }
         }
     }
 
@@ -141,17 +145,30 @@ public class MyGridPane extends GridPane {
         return result;
     }
 
-    public void addRowConstraint(double percentageHeight, VPos vPos) {
-        this.getRowConstraints().add(new MyRowConstraints(percentageHeight, vPos));
+    public void addRowConstraints(double[] rowConstraints, VPos vPos) {
+        for (double rowConstraint : rowConstraints) {
+            this.getRowConstraints().add(new MyRowConstraints(rowConstraint, vPos));
+        }
     }
 
-    public void addColumnConstraint(double percentageWidth, HPos hPos) {
-        this.getColumnConstraints().add(new MyColumnConstraints(percentageWidth, hPos));
+    public void addColumnConstraints(double[] columnConstraints, HPos hPos) {
+        for (double columnConstraint: columnConstraints) {
+            this.getColumnConstraints().add(new MyColumnConstraints(columnConstraint, hPos));
+        }
     }
 
     public void cleanAllConstraints() {
         this.getRowConstraints().setAll();
         this.getColumnConstraints().setAll();
+    }
+
+    public void setRowConstraints(double[] rowConstraints, VPos vPos) {
+        this.getRowConstraints().clear();
+        this.addRowConstraints(rowConstraints, vPos);
+    }
+    public void setColumnConstraints(double[] columnConstraints, HPos hPos) {
+        this.getColumnConstraints().clear();
+        this.addColumnConstraints(columnConstraints, hPos);
     }
     /**
      * Customized Column Constraints.

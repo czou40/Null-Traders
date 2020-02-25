@@ -85,9 +85,13 @@ public class Region {
         return npcList;
     }
 
+    public Marketplace getMarketplace() {
+        return marketplace;
+    }
+
     /*
-    Calculate distance to another region.
-     */
+        Calculate distance to another region.
+         */
     public double distanceTo(Region other) {
         double diffX = getX() - other.getX();
         double diffY = getY() - other.getY();
