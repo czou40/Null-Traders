@@ -3,6 +3,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class Marketplace {
+    private Player player;
     private String name;
     private int techLevel;
     private Map<Item, StockEntry> stock;
@@ -27,6 +28,8 @@ public class Marketplace {
         this.name = name;
         this.techLevel = techLevel;
         this.stock = generateRandomStock();
+
+        this.player = player;
 
         if (DEBUG) {
             printStock();
@@ -71,6 +74,18 @@ public class Marketplace {
         }
 
         return stockMap;
+    }
+
+    public int getBuyingPrice(Item item) {
+        StockEntry marketEntry = this.getStock().get(item);
+
+        return (int) ((1 - player.calcMerchantInfluence()) * marketEntry.getBuyingPrice());
+    }
+
+    public int getSellingPrice(Item item) {
+        StockEntry marketEntry = this.getStock().get(item);
+
+        return (int) ((1 + player.calcMerchantInfluence()) * marketEntry.getSellingPrice());
     }
 
     public Map<Item, StockEntry> getStock() {

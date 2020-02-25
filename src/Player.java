@@ -197,27 +197,7 @@ public class Player {
 
     }
 
-    public int calcMerchantBuyPrice(Item item, Marketplace market) {
-        StockEntry marketEntry = market.getStock().get(item);
-        if (marketEntry == null) {
-            throw new IllegalArgumentException(
-                    "Trying to calculate the price of an item that is not in the given market");
-        }
-
-        return (int) ((1 - calcMerchantInfluence()) * marketEntry.getBuyingPrice());
-    }
-
-    public int calcMerchantSellPrice(Item item, Marketplace market) {
-        StockEntry marketEntry = market.getStock().get(item);
-        if (marketEntry == null) {
-            throw new IllegalArgumentException(
-                    "Trying to calculate the price of an item that is not in the given market");
-        }
-
-        return (int) ((1 + calcMerchantInfluence()) * marketEntry.getSellingPrice());
-    }
-
-    private double calcMerchantInfluence() {
+    public double calcMerchantInfluence() {
         return MAXMERCHANTINFLUENCE * (1 - Math.exp(-1 * MERCHANTDECAYFACTOR * merchant.get()));
     }
 }
