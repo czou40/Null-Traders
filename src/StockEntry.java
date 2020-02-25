@@ -1,3 +1,5 @@
+import com.sun.deploy.panel.IProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
