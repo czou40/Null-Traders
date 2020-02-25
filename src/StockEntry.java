@@ -1,6 +1,7 @@
 import com.sun.deploy.panel.IProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * This is a collection of items that can be found in a region marketplace.
@@ -12,6 +13,12 @@ public class StockEntry {
     private IntegerProperty buyingPrice;
     private IntegerProperty sellingPrice;
 
+    public StockEntry(int quantity, int buyingPrice, int sellingPrice) {
+        this.quantity = new SimpleIntegerProperty(quantity);
+        this.buyingPrice = new SimpleIntegerProperty(buyingPrice);
+        this.sellingPrice = new SimpleIntegerProperty(sellingPrice);
+    }
+
     public void setQuantity(int quantity) {
         this.quantity.set(quantity);
     }
@@ -22,6 +29,14 @@ public class StockEntry {
 
     public void setSellingPrice(int sellingPrice) {
         this.sellingPrice.set(sellingPrice);
+    }
+
+    public int getQuantity() {
+        return quantity.get();
+    }
+
+    public IntegerProperty quantityProperty() {
+        return quantity;
     }
 
     public int getBuyingPrice() {

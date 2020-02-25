@@ -191,9 +191,11 @@ public class CharacterConfigScreen extends GameScreen {
             System.out.println("Sum of points: " + game.getPlayer().sumOfPoints());
             System.out.println("Starting Points: " + game.getDifficulty().getStartingSkillPoints());
         }
+
         if (validateName() && validatePoints()) {
             unbindPlayerProperties();
             player.setCredits(game.getDifficulty().getCredits());
+            player.setShip(new Ship(game.getDifficulty()));
             moveToCharacterSheetScreen();
         }
     }

@@ -17,6 +17,7 @@ public class CharacterSheetScreen extends GameScreen {
         Label difficultyLeftLabel = new Label("DIFFICULTY");
         Label difficultyRightLabel = new Label(game.getDifficulty().toString());
         //difficultyLabel.getStyleClass().add("h2");
+
         Label creditLeftLabel = new Label("CREDIT");
         Label creditRightLabel = new Label(game.getDifficulty().getCredits().toString());
         //creditLabel.getStyleClass().add("h2");
@@ -25,19 +26,24 @@ public class CharacterSheetScreen extends GameScreen {
         Label fighterLabel = new Label("FIGHTER");
         MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter(), startingSkillPoints);
         fighterPointBar.setMaxWidth(9999);
+
         Label pilotLabel = new Label("PILOT");
         MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot(), startingSkillPoints);
         pilotPointBar.setMaxWidth(9999);
+
         Label merchantLabel = new Label("MERCHANT");
         MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant(),
                 startingSkillPoints);
         merchantPointBar.setMaxWidth(9999);
+
         Label engineerLabel = new Label("ENGINEER");
         MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer(),
                 startingSkillPoints);
         engineerPointBar.setMaxWidth(9999);
+
         contentGridPane.addColumn(0, difficultyLeftLabel, creditLeftLabel,
                 pilotLabel, fighterLabel, merchantLabel, engineerLabel);
+
         contentGridPane.addColumn(1, difficultyRightLabel, creditRightLabel,
                 pilotPointBar.withLabel(), fighterPointBar.withLabel(),
                 merchantPointBar.withLabel(), engineerPointBar.withLabel());
