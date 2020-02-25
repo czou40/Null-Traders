@@ -23,7 +23,7 @@ public class MarketScreenController {
         Ship ship = player.getShip();
         InventoryEntry playerEntry = ship.getItemInventory().get(item);
         StockEntry marketEntry = market.getStock().get(item);
-        int price = player.calcMerchantBuyPrice(item, market);
+        int price = market.getBuyingPrice(item);
 
         //Need to check if player has enough credits or cargo capacity is full
         if (price > player.getCredits()) {
@@ -59,6 +59,9 @@ public class MarketScreenController {
      */
     public void sell(Item item, Marketplace market) {
         Ship ship = player.getShip();
+        InventoryEntry playerEntry = ship.getItemInventory().get(item);
+        StockEntry marketEntry = market.getStock().get(item);
+        int price = market.getSellingPrice(item);
 
         //TODO: implement
     }
