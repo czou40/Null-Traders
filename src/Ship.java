@@ -9,11 +9,13 @@ public class Ship {
     private StringProperty name;
     private IntegerProperty cargoCapacity;
     private Map<Item, InventoryEntry> itemInventory;
+    private IntegerProperty totalItems;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
 
     public Ship(String name, int cargoCapacity, int fuelCapacity, int health) {
         this.name = new SimpleStringProperty(name);
+        this.totalItems = new SimpleIntegerProperty(0);
         this.cargoCapacity = new SimpleIntegerProperty(cargoCapacity);
         this.fuelCapacity = new SimpleIntegerProperty(fuelCapacity);
         this.health = new SimpleIntegerProperty(health);
@@ -27,13 +29,16 @@ public class Ship {
         );
     }
 
-    public int calcTotalItems() {
-        int total = 0;
-        for (InventoryEntry entry : itemInventory.values()) {
-            total += entry.getQuantity();
-        }
+    public int getTotalItems() {
+        return totalItems.get();
+    }
 
-        return total;
+    public IntegerProperty totalItemsProperty() {
+        return totalItems;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems.set(totalItems);
     }
 
     public int getCargoCapacity() {

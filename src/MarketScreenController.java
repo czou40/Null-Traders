@@ -25,10 +25,15 @@ public class MarketScreenController {
         StockEntry marketEntry = market.getStock().get(item);
         int price = market.getBuyingPrice(item);
 
+        //check if the market has the item
+        if (marketEntry == null) {
+            throw new IllegalArgumentException("Attempted to buy from a market that does not have the item specified");
+        }
+
         //Need to check if player has enough credits or cargo capacity is full
         if (price > player.getCredits()) {
             //Not enough credits case
-        } else if (ship.calcTotalItems() >= ship.getCargoCapacity()) {
+        } else if (ship.getTotalItems() >= ship.getCargoCapacity()) {
             //Ship is full case
         } else {
             //update ship and market inventories accordingly; decrement player credits
@@ -45,8 +50,9 @@ public class MarketScreenController {
                 market.getStock().remove(item); //remove the item from the stock if necessary
             }
 
-            //decrement player credits
+            //decrement player credits/update item count
             player.setCredits(player.getCredits() - price);
+            ship.setTotalItems(ship.getTotalItems() + 1);
         }
     }
 
@@ -63,6 +69,27 @@ public class MarketScreenController {
         StockEntry marketEntry = market.getStock().get(item);
         int price = market.getSellingPrice(item);
 
-        //TODO: implement
+        //check if the player has the item
+        if (playerEntry == null) {
+            throw new IllegalArgumentException("Attempted to sell an item that the player does not have");
+        }
+
+        //update ship inventory
+        playerEntry.setQuantity(playerEntry.getQuantity() + 1);
+        if (playerEntry.getQuantity() <= 0) {
+            ship.getItemInventory().remove(item);
+        }
+
+        //update market inventory
+        if (marketEntry == null) {
+            marketEntry = new StockEntry(0, market.getBuyingPrice(item), market.getSellingPrice(item));
+        }
+        marketEntry.setQuantity(marketEntry.getQuantity() + 1);
+        market.getStock().put(item, marketEntry);
+
+
+        //increment player credits
+        player.setCredits(player.getCredits() + price);
+        ship.setTotalItems(ship.getTotalItems() - 1);
     }
 }

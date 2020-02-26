@@ -15,7 +15,7 @@ public class Player {
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
 
-    private static final double MAXMERCHANTINFLUENCE = 0.8; //can get a maximum of 80% off each item
+    private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
     private static final double MERCHANTDECAYFACTOR = 0.2;  //rate at which influence decays
                                                             // (need to test to find reasonable value)
 
