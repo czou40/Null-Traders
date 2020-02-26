@@ -1,20 +1,17 @@
 /**
- * idk if Item should be buyable/sellable or StockEntry should be.
- * Right now, with this implementation, Item is just a name for lookup
- * in the marketplace map
+ *
  */
-
 public enum Item {
-    WATER("Water", 1, 1),
-    FURS("Furs", 2, 2),
-    FOOD("Food", 1,2),
-    ORE("Ore", 4,4),
-    GAMES("Games", 4, 3),
-    FIREARMS("Firearms", 6, 6),
-    MEDICINE("Medicine", 6, 4),
-    MACHINES("Machines", 7, 6),
-    NARCOTICS("Narcotics", 7, 7),
-    ROBOTS("Robots", 9, 10);
+    WATER("Water", 1, 5),
+    FURS("Furs", 2, 8),
+    FOOD("Food", 1,8),
+    ORE("Ore", 4,20),
+    GAMES("Games", 4, 25),
+    FIREARMS("Firearms", 6, 35),
+    MEDICINE("Medicine", 6, 35),
+    MACHINES("Machines", 7, 40),
+    NARCOTICS("Narcotics", 7, 50),
+    ROBOTS("Robots", 9, 100);
 
 
     private String name;

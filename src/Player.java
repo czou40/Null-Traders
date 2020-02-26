@@ -15,6 +15,10 @@ public class Player {
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
 
+    private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
+    private static final double MERCHANTDECAYFACTOR = 0.2;  //rate at which influence decays
+                                                            // (need to test to find reasonable value)
+
 
     /**
      * Constructs a new instance.
@@ -37,7 +41,7 @@ public class Player {
         this.engineer = new SimpleIntegerProperty(engineer);
         this.credits = new SimpleIntegerProperty(credits);
         this.currentRegion = new SimpleObjectProperty<>();
-        this.ship = new SimpleObjectProperty<>();
+        this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
     }
 
     /**
@@ -193,23 +197,7 @@ public class Player {
 
     }
 
-    public void buy(Item item, Marketplace market, Ship ship) {
-        if(ship.getItemInventory().size() < ship.getCargoCapacity()) {
-            ship.getItemInventory().put(item, market.getStock().get(item));
-
-            //I added getters to Marketplace and StockEntry, but there is probably some way I could use properties
-            this.setCredits(this.getCredits() - market.getStock().get(item).getBuyingPrice());
-            market.getStock().remove(item);
-        } else{
-            //set an error message on the marketplace screen saying something like "Not enough credits to purchase item"
-        }
+    public double calcMerchantInfluence() {
+        return MAXMERCHANTINFLUENCE * (1 - Math.exp(-1 * MERCHANTDECAYFACTOR * merchant.get()));
     }
-
-    public void sell(Item item, Marketplace market, Ship ship) {
-
-        this.setCredits(this.getCredits() + market.getStock().get(item).getSellingPrice());
-        ship.getItemInventory().remove(item);
-
-    }
-
 }
