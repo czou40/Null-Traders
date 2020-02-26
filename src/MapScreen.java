@@ -14,6 +14,6 @@ public class MapScreen extends GameScreen {
     @Override
     public void adjustUIAfterScreenIsShown() {
         addToContentPane(new VisualizedUniverseMap(game.getUniverse(),
-                getContentWidth(), getContentHeight()));
+                getContentWidth(), getContentHeight(), getPrimaryStage()));
     }
 }

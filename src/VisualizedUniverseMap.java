@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Vector;
@@ -28,11 +29,11 @@ public class VisualizedUniverseMap extends Pane {
     private ReadOnlyDoubleProperty widthProperty;
     private ReadOnlyDoubleProperty heightProperty;
     private SimpleDoubleProperty scaling;
-    private RegionDescriptionBox currentRegionDescriptionBox;
+    private Stage primaryStage;
 
     public VisualizedUniverseMap(Universe universe,
                                  ReadOnlyDoubleProperty widthProperty,
-                                 ReadOnlyDoubleProperty heightProperty) {
+                                 ReadOnlyDoubleProperty heightProperty, Stage primaryStage) {
         super();
         /*
         Adjust the size of scrollable area.
@@ -104,6 +105,11 @@ public class VisualizedUniverseMap extends Pane {
         });
 
         /*
+        Get the primary stage, which allows us to show the region characteristics screen
+         */
+        this.primaryStage = primaryStage;
+
+        /*
         Construct border of the map
          */
         Rectangle border = new Rectangle();
@@ -133,12 +139,13 @@ public class VisualizedUniverseMap extends Pane {
         Since we use binding, the the box automatically updates the information
         of the current regions the player is at as it travels around.
          */
-        currentRegionDescriptionBox = new RegionDescriptionBox(universe.currentRegionProperty());
-        currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
-                subtract(currentRegionDescriptionBox.widthProperty()));
-        currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
-                subtract(currentRegionDescriptionBox.heightProperty()));
-        this.getChildren().add(currentRegionDescriptionBox);
+//        currentRegionDescriptionBox = new RegionDescriptionBox(universe.currentRegionProperty());
+//        currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
+//                subtract(currentRegionDescriptionBox.widthProperty()));
+//        currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
+//                subtract(currentRegionDescriptionBox.heightProperty()));
+//        this.getChildren().add(currentRegionDescriptionBox);
+
 
         /*
         We clip the map so that we only show a portion of the map,
@@ -203,8 +210,10 @@ public class VisualizedUniverseMap extends Pane {
             /*
             Wrap the labels in a VBox.
              */
+            MyNavigationButton goToRegionChar = new MyNavigationButton("See Characteristics",
+                    new RegionCharacteristicsScreen(primaryStage, universe.getPlayer().getGame(), region));
             labels = new VBox();
-            labels.getChildren().addAll(nameLabel, distanceLabel, coordinatesLabel);
+            labels.getChildren().addAll(nameLabel, distanceLabel, coordinatesLabel, goToRegionChar);
             labels.layoutXProperty().bind(centerXProperty().add(15));
             labels.layoutYProperty().bind(centerYProperty());
             labels.setVisible(false);
@@ -227,14 +236,22 @@ public class VisualizedUniverseMap extends Pane {
             this.setCursor(Cursor.HAND);
 
             /*
-            When the user hovers over a dot,
+            When the user hovers over a dot or the corresponding description box,
             the information is displayed
              */
             this.setOnMouseEntered(e -> {
                 labels.setVisible(true);
             });
 
+            labels.setOnMouseEntered(e -> {
+                labels.setVisible(true);
+            });
+
             this.setOnMouseExited(e -> {
+                labels.setVisible(false);
+            });
+
+            labels.setOnMouseExited(e ->{
                 labels.setVisible(false);
             });
 
@@ -245,6 +262,8 @@ public class VisualizedUniverseMap extends Pane {
             this.setOnMouseClicked(e -> {
                 universe.getPlayer().travelToRegion(region);
             });
+
+
         }
 
         private void updateColor() {
