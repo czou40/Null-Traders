@@ -19,30 +19,6 @@ public class StockEntry {
         this.sellingPrice = new SimpleIntegerProperty(sellingPrice);
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity.set(quantity);
-    }
-
-    public int getQuantity() {
-        return quantity.get();
-    }
-
-    public IntegerProperty quantityProperty() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity.set(quantity);
-    }
-
-    public int getQuantity() {
-        return quantity.get();
-    }
-
-    public IntegerProperty quantityProperty() {
-        return quantity;
-    }
-
     public int getBuyingPrice() {
         return buyingPrice.get();
     }
@@ -65,5 +41,17 @@ public class StockEntry {
 
     public void setSellingPrice(int sellingPrice) {
         this.sellingPrice.set(sellingPrice);
+    }
+
+    public int getQuantity() {
+        return quantity.get();
+    }
+
+    public IntegerProperty quantityProperty() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity.set(quantity);
     }
 }

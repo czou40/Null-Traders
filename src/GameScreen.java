@@ -84,4 +84,12 @@ public abstract class GameScreen extends Screen {
     public void addToContentPane(Node node) {
         contentPane.getChildren().add(node);
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title.toUpperCase();
+    }
 }

@@ -5,15 +5,12 @@ import java.util.Random;
 public class Marketplace {
     private Player player;
     private String name;
-        << << << < HEAD
-        /*
-           I was thinking for marketplaces we could implement the item stock as a map from the item name
-           to an item collection, since each marketplace can have multiple items and the prices are supposed
-           to be unique to the marketplace.
-         */
-        == == == =
-            >>> >>> > a3d02c7bb51fdab38291f432d3f5c95b87a9cf26
-            private int techLevel;
+    /*
+       I was thinking for marketplaces we could implement the item stock as a map from the item name
+       to an item collection, since each marketplace can have multiple items and the prices are supposed
+       to be unique to the marketplace.
+     */
+    private int techLevel;
     private Map<Item, StockEntry> stock;
 
     //constants used in price generation algorithm
@@ -29,7 +26,6 @@ public class Marketplace {
     private static final double AVGSELLPERCENT = 0.6;
 
     private static final boolean DEBUG = true;
-
 
 
     public Marketplace(String name, int techLevel) {
@@ -50,7 +46,7 @@ public class Marketplace {
         Item[] items = Item.values();
         Map<Item, StockEntry> stockMap = new HashMap<>();
 
-        for (Item item: items) {
+        for (Item item : items) {
             if (techLevel >= item.getTechLevel()) {
                 int techDifference = techLevel - item.getTechLevel();
                 /*
@@ -90,6 +86,7 @@ public class Marketplace {
 
     /**
      * gets buying price from stock factoring in merchant influence
+     *
      * @param item
      * @return
      */
@@ -103,6 +100,7 @@ public class Marketplace {
 
     /**
      * gets selling price from stock factoring in merchant influence
+     *
      * @param item
      * @return
      */
@@ -130,5 +128,9 @@ public class Marketplace {
             System.out.println("Selling Price: " + entry.getSellingPrice());
             System.out.println();
         }
+    }
+
+    public String getName() {
+        return name;
     }
 }

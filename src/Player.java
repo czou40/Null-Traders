@@ -194,7 +194,7 @@ public class Player {
         More things will happen when the player travels.
         They will be coded in future implementations.
          */
-
+        System.out.println(currentRegion.get().getName());
     }
 
     public double calcMerchantInfluence() {
