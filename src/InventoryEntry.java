@@ -8,13 +8,11 @@ public class InventoryEntry {
     public void add(int buyingPrice) {
         quantity.set(quantity.get() + 1);
 
-        //TODO: Add so that average is updated correctly
+        avgBuyingPrice.set((avgBuyingPrice.get() * (quantity.get() - 1) + buyingPrice) / quantity.get());
     }
 
     public void remove() {
         quantity.set(quantity.get() - 1);
-
-        //TODO: Remove so that average is updated correctly
     }
 
     public int getQuantity() {
