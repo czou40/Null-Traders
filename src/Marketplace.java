@@ -20,10 +20,6 @@ public class Marketplace {
         this.stock = generateRandomStock(techLevel);
     }
 
-    public Map<Item, StockEntry> getStock() {
-        return stock;
-    }
-
     private Map<Item, StockEntry> generateRandomStock(int techLevel) {
         //This is where we do the algorithm for generating the stock
         Random randomInt = new Random();

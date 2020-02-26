@@ -5,18 +5,20 @@ import javafx.scene.control.Slider;
 
 import java.util.Map;
 
-public class ItemBox extends MyGridPane{
+public abstract class ItemBox extends MyGridPane{
     private Map.Entry<Item, StockEntry> entry;
     private Label nameLabel;
     private Label priceLabel;
     private Label quantityLabel;
     private Slider slider;
     private Button button;
+    private boolean forSelling;
 
-    public ItemBox(Map.Entry<Item, StockEntry> entry) {
+    public ItemBox(Map.Entry<Item, StockEntry> entry, boolean forSelling) {
         super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
         this.setMinHeight(50);
         this.entry = entry;
+        this.forSelling = forSelling;
         nameLabel = new Label(entry.getKey().getName());
         priceLabel = new Label();
         priceLabel = new Label(Integer.toString(entry.getValue().getBuyingPrice()));
@@ -27,7 +29,7 @@ public class ItemBox extends MyGridPane{
         quantityLabel = new Label("0/" + entry.getValue().getQuantity());
         quantityLabel.textProperty().bind(Bindings.format("%.0f/%s",
                 slider.valueProperty(), entry.getValue().getQuantity()));
-        button = new Button("Buy");
+        button = new Button(forSelling ? "Sell" : "Buy");
         button.setMaxWidth(9999);
         this.addRow(0, nameLabel, priceLabel, slider, quantityLabel, button);
     }
