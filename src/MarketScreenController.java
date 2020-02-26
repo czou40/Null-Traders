@@ -75,7 +75,7 @@ public class MarketScreenController {
         }
 
         //update ship inventory
-        playerEntry.setQuantity(playerEntry.getQuantity() + 1);
+        playerEntry.remove();
         if (playerEntry.getQuantity() <= 0) {
             ship.getItemInventory().remove(item);
         }

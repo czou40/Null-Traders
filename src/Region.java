@@ -10,10 +10,12 @@ public class Region {
     private BooleanProperty found;  //if the player has found the region
     private BooleanProperty isCurrentRegion;
     private Marketplace marketplace;    //new field
+
     private NPC[] npcList;
+    private Player player;
 
     public Region(String name, String description, int technologyLevel,
-                  int x, int y) {
+                  int x, int y, Player player) {
 
         this.name = name;
         this.description = description;
@@ -22,16 +24,14 @@ public class Region {
         this.y = y;
         this.found = new SimpleBooleanProperty(false);
         this.isCurrentRegion = new SimpleBooleanProperty(false);
-        this.marketplace = new Marketplace(name + "'s Market", technologyLevel);
+
+        this.player = player;
+        this.marketplace = new Marketplace(name + "'s Market", technologyLevel, player);
         this.npcList = new NPC[5];
     }
 
-    public Region(RegionData data, int x, int y) {
-        this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y);
-    }
-
-    public Region(RegionData data) {
-        this(data, 0, 0);
+    public Region(RegionData data, int x, int y, Player player) {
+        this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y, player);
     }
 
 

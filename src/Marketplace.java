@@ -3,7 +3,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Marketplace {
-    private Player player;
     private String name;
     /*
        I was thinking for marketplaces we could implement the item stock as a map from the item name
@@ -12,6 +11,7 @@ public class Marketplace {
      */
     private int techLevel;
     private Map<Item, StockEntry> stock;
+    private Player player;
 
     //constants used in price generation algorithm
     private static final int MAXITEMS = 100;
@@ -25,10 +25,9 @@ public class Marketplace {
     private static final double SELLVARIANCE = 0.2;
     private static final double AVGSELLPERCENT = 0.6;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
-
-    public Marketplace(String name, int techLevel) {
+    public Marketplace(String name, int techLevel, Player player) {
         this.name = name;
         this.techLevel = techLevel;
         this.stock = generateRandomStock();
@@ -64,14 +63,15 @@ public class Marketplace {
                        Higher tech = cheaper item because the region can produce it more efficiently
                      */
                     double buyVariance = randMinusOneToOne() * BUYVARIANCE;
-                    double techInfluence = Math.max(MAXTECHINFLUENCE, INCREMENTALTECHINFLUENCE * techDifference);
-                    int buyingPrice = (int) (item.getBasePrice() * (1 - techInfluence) * (1 + buyVariance));
+                    double techInfluence = Math.min(MAXTECHINFLUENCE, INCREMENTALTECHINFLUENCE * techDifference);
+                    int buyingPrice =
+                            Math.max(1, (int) (item.getBasePrice() * (1 - techInfluence) * (1 + buyVariance)));
                     /*
                        Sell Price Algorithm: The selling price is a percantage of the buying price
                        with some linear variance below or above the average selling price
                      */
                     double sellFactor = AVGSELLPERCENT + randMinusOneToOne() * SELLVARIANCE;
-                    int sellingPrice = ((int) (buyingPrice * sellFactor));
+                    int sellingPrice = Math.max(1, ((int) (buyingPrice * sellFactor)));
                     stockMap.put(item, new StockEntry(itemQuantity, buyingPrice, sellingPrice));
                 }
             }
@@ -116,7 +116,7 @@ public class Marketplace {
         return stock;
     }
 
-    private void printStock() {
+    public void printStock() {
         //USE FOR TESTING ONLY
         System.out.println("Item Stock For " + name + "\n");
         for (Item item : stock.keySet()) {
@@ -125,7 +125,9 @@ public class Marketplace {
             System.out.println(item + ": ");
             System.out.println("Quantity: " + entry.getQuantity());
             System.out.println("Buying Price: " + entry.getBuyingPrice());
+            System.out.println("Buying Price Merchant Influence: " + getBuyingPrice(item));
             System.out.println("Selling Price: " + entry.getSellingPrice());
+            System.out.println("Selling Price Merchant Influence: " + getSellingPrice(item));
             System.out.println();
         }
     }
