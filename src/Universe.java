@@ -36,7 +36,7 @@ public class Universe {
             //regions must be a certain dist from the borders.
             int x = (int) ((spotX + Math.random() * 0.8 + 0.1) * spotWidth);
             int y = (int) ((spotY + Math.random() * 0.8 + 0.1) * spotHeight);
-            regions.add(new Region(r, x, y));
+            regions.add(new Region(r, x, y, player));
         }
     }
 
