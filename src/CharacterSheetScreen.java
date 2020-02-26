@@ -8,9 +8,11 @@ public class CharacterSheetScreen extends GameScreen {
         super(primaryStage, game, "Summary of " + game.getPlayer().getName(), true);
 
         //TEST
+        /*
         for (Region r : game.getUniverse().getRegions()) {
             r.getMarketplace().printStock();
         }
+         */
     }
 
     @Override //Test
