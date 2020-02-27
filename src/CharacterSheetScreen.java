@@ -1,3 +1,5 @@
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -26,7 +28,8 @@ public class CharacterSheetScreen extends GameScreen {
         //difficultyLabel.getStyleClass().add("h2");
 
         Label creditLeftLabel = new Label("CREDIT");
-        Label creditRightLabel = new Label(game.getDifficulty().getCredits().toString());
+        Label creditRightLabel = new Label();
+        creditRightLabel.textProperty().bind(Bindings.format("%s", player.creditsProperty()));
         //creditLabel.getStyleClass().add("h2");
 
         int startingSkillPoints = game.getDifficulty().getStartingSkillPoints();

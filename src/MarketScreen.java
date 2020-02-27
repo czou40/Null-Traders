@@ -148,7 +148,6 @@ public class MarketScreen extends GameScreen {
         private Label quantityLabel;
         private Slider slider;
         private Button button;
-        private MarketScreenController controller;
 
 //<<<<<<< HEAD
         public ItemBox(Map.Entry<Item, ? extends Entry> entry) {
@@ -171,12 +170,15 @@ public class MarketScreen extends GameScreen {
             button.setMaxWidth(9999);
             if (buyingMode) {
                 button.setOnAction(e -> {
+                    System.out.println(controller);
                     controller.buy(entry.getKey(), marketplace);
+                    itemsPane = constructBuyItemBoxesPane();
+                    scrollPane.setContent(itemsPane);
                 });
             } else {
                 button.setOnAction(e -> {
                     controller.sell(entry.getKey(), marketplace);
-                    itemsPane = constructBuyItemBoxesPane();
+                    itemsPane = constructSellItemBoxesPane();
                     scrollPane.setContent(itemsPane);
                 });
             }
