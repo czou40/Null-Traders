@@ -1,12 +1,21 @@
+import javafx.scene.Node;
+
+import java.util.Vector;
+
 public class MarketScreenController {
-    Player player;
-    Marketplace market;
+    private Player player;
+    private Marketplace market;
+
+    private MarketScreen ui;
+
+    private static final boolean DEBUG = true;
 
     //UI elements so can display messages and stuff
 
-    public MarketScreenController(Player player, Marketplace market) {
+    public MarketScreenController(Player player, Marketplace market, MarketScreen ui) {
         this.player = player;
         this.market = market;
+        this.ui = ui;
     }
 
     /**
@@ -40,19 +49,27 @@ public class MarketScreenController {
 
             //update ship inventory
             if (playerEntry == null) {
-                ship.getItemInventory().put(item, new InventoryEntry());
+                playerEntry = new InventoryEntry();
             }
             playerEntry.add(price);
+            ship.getItemInventory().put(item, playerEntry);
 
             //update market inventory
             marketEntry.setQuantity(marketEntry.getQuantity() - 1); //decrement quantity
             if (marketEntry.getQuantity() <= 0) {
-                market.getStock().remove(item); //remove the item from the stock if necessary
+                market.getStock().remove(item); //remove the item from the stock if
+
+                ui.removeItem(item);
             }
 
             //decrement player credits/update item count
             player.setCredits(player.getCredits() - price);
             ship.setTotalItems(ship.getTotalItems() + 1);
+
+            if (DEBUG) {
+                market.printStock();
+                ship.printInventory();
+            }
         }
     }
 

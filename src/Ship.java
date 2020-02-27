@@ -63,4 +63,16 @@ public class Ship {
         this.itemInventory = itemInventory;
     }
 
+    public void printInventory() {
+        //USE FOR TESTING ONLY
+        System.out.println("Item Stock For " + name.get() + "\n");
+        for (Item item : itemInventory.keySet()) {
+            InventoryEntry entry = itemInventory.get(item);
+
+            System.out.println(item + ": ");
+            System.out.println("Quantity: " + entry.getQuantity());
+            System.out.println("Average Price: " + entry.getAvgSellingPrice());
+            System.out.println();
+        }
+    }
 }
