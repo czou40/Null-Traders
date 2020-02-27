@@ -100,7 +100,7 @@ public class Player {
     }
 
     public void setName(String name) {
-        this.name = new SimpleStringProperty(name);
+        this.name.setValue(name);
     }
 
     public IntegerProperty pilotProperty() {
@@ -112,7 +112,7 @@ public class Player {
     }
 
     public void setPilot(Integer pilot) {
-        this.pilot = new SimpleIntegerProperty(pilot);
+        this.pilot.setValue(pilot);
     }
 
     public IntegerProperty fighterProperty() {
@@ -124,7 +124,7 @@ public class Player {
     }
 
     public void setFighter(Integer fighter) {
-        this.fighter = new SimpleIntegerProperty(fighter);
+        this.fighter.setValue(fighter);
     }
 
     public IntegerProperty merchantProperty() {
@@ -136,7 +136,7 @@ public class Player {
     }
 
     public void setMerchant(Integer merchant) {
-        this.merchant = new SimpleIntegerProperty(merchant);
+        this.merchant.setValue(merchant);
     }
 
     public IntegerProperty engineerProperty() {
@@ -148,7 +148,7 @@ public class Player {
     }
 
     public void setEngineer(Integer engineer) {
-        this.engineer = new SimpleIntegerProperty(engineer);
+        this.engineer.setValue(engineer);
     }
 
     public IntegerProperty creditsProperty() {
@@ -160,7 +160,7 @@ public class Player {
     }
 
     public void setCredits(Integer credits) {
-        this.credits = new SimpleIntegerProperty(credits);
+        this.credits.setValue(credits);
     }
 
     public Integer sumOfPoints() {

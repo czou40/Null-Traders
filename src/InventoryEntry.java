@@ -1,8 +1,14 @@
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class InventoryEntry implements Entry {
     private IntegerProperty quantity;
     private IntegerProperty avgBuyingPrice;
+
+    public InventoryEntry() {
+        quantity = new SimpleIntegerProperty();
+        avgBuyingPrice = new SimpleIntegerProperty();
+    }
 
 
     public void add(int buyingPrice) {

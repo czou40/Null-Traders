@@ -17,7 +17,7 @@ public class Ship {
     public Ship(String name, int cargoCapacity, int fuelCapacity, int health) {
         this.name = new SimpleStringProperty(name);
         this.totalItems = new SimpleIntegerProperty(0);
-        itemInventory = new HashMap<>();
+        this.itemInventory = new HashMap<>();
         this.cargoCapacity = new SimpleIntegerProperty(cargoCapacity);
         this.fuelCapacity = new SimpleIntegerProperty(fuelCapacity);
         this.health = new SimpleIntegerProperty(health);
@@ -63,4 +63,16 @@ public class Ship {
         this.itemInventory = itemInventory;
     }
 
+    public void printInventory() {
+        //USE FOR TESTING ONLY
+        System.out.println("Item Stock For " + name.get() + "\n");
+        for (Item item : itemInventory.keySet()) {
+            InventoryEntry entry = itemInventory.get(item);
+
+            System.out.println(item + ": ");
+            System.out.println("Quantity: " + entry.getQuantity());
+            System.out.println("Average Price: " + entry.getAvgSellingPrice());
+            System.out.println();
+        }
+    }
 }
