@@ -6,7 +6,6 @@ public class MarketScreenController {
     private Player player;
     private Marketplace market;
 
-    private MarketScreen ui;
 
     private static final boolean DEBUG = true;
 
@@ -15,7 +14,6 @@ public class MarketScreenController {
     public MarketScreenController(Player player, Marketplace market) {
         this.player = player;
         this.market = market;
-        this.ui = null;
     }
 
     /**
@@ -24,7 +22,7 @@ public class MarketScreenController {
      * @param item item to buy
      * @param market market to buy from
      */
-    public void buy(Item item, Marketplace market) {
+    public void buy(Item item, Marketplace market) throws Exception{
         //Still need to handle a few cases:
         //For now, buying will be 1 at a time,
         //but once this works we can add buying multiple items if time permits
@@ -42,8 +40,13 @@ public class MarketScreenController {
         //Need to check if player has enough credits or cargo capacity is full
         if (price > player.getCredits()) {
             //Not enough credits case
+            throw new IllegalAccessException("You don't have enough money!");
         } else if (ship.getTotalItems() >= ship.getCargoCapacity()) {
             //Ship is full case
+            throw new IllegalAccessException("You ship is full!");
+        } else if (marketEntry.getQuantity() <= 0) {
+            throw new IllegalAccessException("There are no more " + item.getName()
+                    + " left in the market!");
         } else {
             //update ship and market inventories accordingly; decrement player credits
 
@@ -56,11 +59,11 @@ public class MarketScreenController {
 
             //update market inventory
             marketEntry.setQuantity(marketEntry.getQuantity() - 1); //decrement quantity
-            if (marketEntry.getQuantity() <= 0) {
-                market.getStock().remove(item); //remove the item from the stock if
-
-                //ui.removeItem(item);
-            }
+//            if (marketEntry.getQuantity() <= 0) {
+//                market.getStock().remove(item); //remove the item from the stock if
+//
+//                //ui.removeItem(item);
+//            }
 
             //decrement player credits/update item count
             player.setCredits(player.getCredits() - price);

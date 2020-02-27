@@ -23,6 +23,7 @@ public class MarketScreen extends GameScreen {
     private MyGridPane headerPane;
     private ScrollPane scrollPane;
     private MyGridPane itemsPane;
+    private Label messageLabel;
     private MarketScreenController controller;
     private boolean buyingMode;
 
@@ -61,7 +62,9 @@ public class MarketScreen extends GameScreen {
         scrollPane = new ScrollPane(itemsPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        messageLabel = new Label();
 
         Label creditsLabel = new Label();
         Label shipCapacityLabel = new Label();
@@ -70,8 +73,8 @@ public class MarketScreen extends GameScreen {
         creditsLabel.textProperty().bind(Bindings.format("CREDITS: %s", player.creditsProperty()));
         MyGridPane playerInfoPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{30, 30});
         playerInfoPane.addRow(0, creditsLabel, shipCapacityLabel);
-        MyGridPane contentPane = new MyGridPane(new double[]{90, 10}, MyGridPane.getSpan(1));
-        contentPane.addColumn(0, scrollPane, playerInfoPane);
+        MyGridPane contentPane = new MyGridPane(new double[]{80, 10, 10}, MyGridPane.getSpan(1));
+        contentPane.addColumn(0, scrollPane, messageLabel, playerInfoPane);
         return contentPane;
     }
 
@@ -153,12 +156,13 @@ public class MarketScreen extends GameScreen {
         public ItemBox(Map.Entry<Item, ? extends Entry> entry) {
             super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
             this.setMinHeight(50);
+            boolean availableAtMarket = stock.containsKey(entry.getKey());
             //this.entry = entry;
             nameLabel = new Label(entry.getKey().getName());
             priceLabel = new Label();
-            priceLabel = new Label(Integer.toString(buyingMode
+            priceLabel = new Label(availableAtMarket ? Integer.toString(buyingMode
                     ? stock.get(entry.getKey()).getBuyingPrice()
-                    : stock.get(entry.getKey()).getSellingPrice()));
+                    : stock.get(entry.getKey()).getSellingPrice()) : "NOT SOLD");
             slider = new Slider(0, entry.getValue().getQuantity(), 0);
             slider.setBlockIncrement(1);
             slider.setMaxWidth(9999);
@@ -168,12 +172,19 @@ public class MarketScreen extends GameScreen {
                     slider.valueProperty(), entry.getValue().getQuantity()));
             button = new Button(buyingMode ? "Buy" : "Sell");
             button.setMaxWidth(9999);
+            if (!availableAtMarket) {
+                button.setDisable(true);
+            }
             if (buyingMode) {
                 button.setOnAction(e -> {
                     System.out.println(controller);
-                    controller.buy(entry.getKey(), marketplace);
-                    itemsPane = constructBuyItemBoxesPane();
-                    scrollPane.setContent(itemsPane);
+                    try {
+                        controller.buy(entry.getKey(), marketplace);
+                        itemsPane = constructBuyItemBoxesPane();
+                        scrollPane.setContent(itemsPane);
+                    } catch (Exception exception) {
+                        messageLabel.setText(exception.getMessage());
+                    }
                 });
             } else {
                 button.setOnAction(e -> {
