@@ -41,6 +41,7 @@ public class MarketScreenController {
             //update ship inventory
             if (playerEntry == null) {
                 ship.getItemInventory().put(item, new InventoryEntry());
+                playerEntry = ship.getItemInventory().get(item);
             }
             playerEntry.add(price);
 

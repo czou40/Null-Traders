@@ -1,6 +1,6 @@
 import javafx.beans.property.IntegerProperty;
 
-public class InventoryEntry {
+public class InventoryEntry implements Entry {
     private IntegerProperty quantity;
     private IntegerProperty avgBuyingPrice;
 
@@ -15,14 +15,17 @@ public class InventoryEntry {
         quantity.set(quantity.get() - 1);
     }
 
+    @Override
     public int getQuantity() {
         return quantity.get();
     }
 
+    @Override
     public IntegerProperty quantityProperty() {
         return quantity;
     }
 
+    @Override
     public void setQuantity(int quantity) {
         this.quantity.set(quantity);
     }

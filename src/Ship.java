@@ -3,6 +3,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Ship {
@@ -16,6 +17,7 @@ public class Ship {
     public Ship(String name, int cargoCapacity, int fuelCapacity, int health) {
         this.name = new SimpleStringProperty(name);
         this.totalItems = new SimpleIntegerProperty(0);
+        itemInventory = new HashMap<>();
         this.cargoCapacity = new SimpleIntegerProperty(cargoCapacity);
         this.fuelCapacity = new SimpleIntegerProperty(fuelCapacity);
         this.health = new SimpleIntegerProperty(health);
