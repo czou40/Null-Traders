@@ -19,6 +19,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
         Label nameRightLabel= new Label();
         Label descriptionRightLabel= new Label();
         Label techLevelRightLabel= new Label();
+        Label marketplaceRightLabel = new Label();
         //Vector<Label> itemsRightLabels = new Vector<>();
         Label itemsRightLabel = new Label();
 
@@ -29,6 +30,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
         Label nameLeftLabel = new Label("NAME");
         Label descriptionLeftLabel = new Label("DESCRIPTION");
         Label techLevelLeftLabel = new Label("TECHNOLOGY LEVEL");
+        Label marketplaceLeftLabel = new Label("MARKETPLACE");
         Label itemsLeftLabel = new Label("ITEMS SOLD");
         if(!displayedRegion.isFound()){
             nameRightLabel.setText("???");
@@ -40,6 +42,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
             nameRightLabel.setText(displayedRegion.getName());
             descriptionRightLabel.setText(displayedRegion.getDescription());
             techLevelRightLabel.setText("" + displayedRegion.getTechnologyLevel());
+            marketplaceRightLabel.setText(displayedRegion.getMarketplace().getName());
             String itemString = "";
             for (Item item : displayedRegion.getMarketplace().getStock().keySet()) {
                 itemString += item.getName() + ", ";
@@ -48,11 +51,12 @@ public class RegionCharacteristicsScreen extends GameScreen {
             itemString = itemString.substring(0, itemString.length() - 2);
             itemsRightLabel.setText(itemString);
         }
+        itemsRightLabel.setWrapText(true);
 
         contentGridPane.addColumn(0, nameLeftLabel, descriptionLeftLabel,
-                techLevelLeftLabel, itemsLeftLabel);
+                techLevelLeftLabel, marketplaceLeftLabel, itemsLeftLabel);
         contentGridPane.addColumn(1, nameRightLabel, descriptionRightLabel,
-                techLevelRightLabel, itemsRightLabel);
+                techLevelRightLabel, marketplaceRightLabel, itemsRightLabel);
         /*
         for (int i = 0; i < itemsRightLabels.size(); i++) {
             contentGridPane.add(itemsRightLabels.get(i), 1, i + 3);
