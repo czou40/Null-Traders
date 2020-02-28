@@ -39,7 +39,7 @@ public class MarketScreenController {
         if (price * number > player.getCredits()) {
             //Not enough credits case
             throw new IllegalAccessException("You don't have enough money!");
-        } else if (ship.getTotalItems() + number >= ship.getCargoCapacity()) {
+        } else if (ship.getTotalItems() + number > ship.getCargoCapacity()) {
             //Ship is full case
             throw new IllegalAccessException("You ship does not have enough space!");
         } else if (marketEntry.getQuantity() < number) {
