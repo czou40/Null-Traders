@@ -37,7 +37,7 @@ public class MyGridPane extends GridPane {
     }
 
     public MyGridPane(double[] rowConstraints, double[] columnConstraints) {
-        this(rowConstraints, columnConstraints, HPos.LEFT, VPos.CENTER);
+        this(rowConstraints, columnConstraints, HPos.LEFT, VPos.TOP);
     }
 
 
@@ -45,7 +45,7 @@ public class MyGridPane extends GridPane {
      * Constructor.
      */
     public MyGridPane() {
-        this(new double[]{100}, new double[]{100}, HPos.LEFT, VPos.CENTER);
+        this(new double[]{100}, new double[]{100}, HPos.LEFT, VPos.TOP);
     }
 
     /**
@@ -182,7 +182,7 @@ public class MyGridPane extends GridPane {
          * @param percentageWidth Percentage Width.
          */
         private MyColumnConstraints(double percentageWidth) {
-            this(percentageWidth, HPos.CENTER);
+            this(percentageWidth, HPos.LEFT);
         }
 
         private MyColumnConstraints(double percentageWidth, HPos hPos) {
@@ -203,7 +203,7 @@ public class MyGridPane extends GridPane {
          * @param percentageHeight Percentage Height.
          */
         private MyRowConstraints(double percentageHeight) {
-            this(percentageHeight, VPos.CENTER);
+            this(percentageHeight, VPos.TOP);
         }
 
         private MyRowConstraints(double percentageHeight, VPos vPos) {

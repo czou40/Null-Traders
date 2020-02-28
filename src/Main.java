@@ -8,9 +8,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         game = new Game();
-
         primaryStage.setTitle("Welcome to Null Traders!");
-        (new MarketScreen(primaryStage, game, false)).display();
+        (new WelcomeScreen(primaryStage, game)).display();
         //new MapScreen(primaryStage, game).display();
     }
 

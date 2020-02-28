@@ -10,7 +10,11 @@ public class RegionCharacteristicsScreen extends GameScreen {
 
 
     public RegionCharacteristicsScreen(Stage primaryStage, Game game, Region region) {
-        super(primaryStage, game, "Characteristics for " + region.getName(), true);
+        super(primaryStage, game, "Characteristics for "
+                + (region.isFound() ? region.getName() : "Unknown Region"), true);
+        region.foundProperty().addListener(e -> {
+                setTitle("Characteristics for " + (region.isFound() ? region.getName() : "Unknown Region"));
+        });
         this.displayedRegion = region;
     }
 
@@ -24,7 +28,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
         Label itemsRightLabel = new Label();
 
 
-        MyGridPane contentGridPane = new MyGridPane(new double[]{10, 10, 10, 10, 10, 10},
+        MyGridPane contentGridPane = new MyGridPane(new double[]{10, 20, 10, 10, 20},
                 new double[]{30, 70});
 
         Label nameLeftLabel = new Label("NAME");
@@ -52,7 +56,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
             itemsRightLabel.setText(itemString);
         }
         itemsRightLabel.setWrapText(true);
-
+        descriptionRightLabel.setWrapText(true);
         contentGridPane.addColumn(0, nameLeftLabel, descriptionLeftLabel,
                 techLevelLeftLabel, marketplaceLeftLabel, itemsLeftLabel);
         contentGridPane.addColumn(1, nameRightLabel, descriptionRightLabel,

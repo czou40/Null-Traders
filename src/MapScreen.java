@@ -3,7 +3,7 @@ import javafx.stage.Stage;
 
 public class MapScreen extends GameScreen {
     public MapScreen(Stage primaryStage, Game game) {
-        super(primaryStage, game, "USE MOUSE OR TOUCH PAD TO ZOOM IN AND OUT!", true);
+        super(primaryStage, game, "MAP OF UNIVERSE", true);
     }
 
     @Override
