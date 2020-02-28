@@ -71,7 +71,7 @@ public class Ship {
 
             System.out.println(item + ": ");
             System.out.println("Quantity: " + entry.getQuantity());
-            System.out.println("Average Price: " + entry.getAvgSellingPrice());
+            System.out.println("Average Price: " + entry.getAverageBuyingPrice());
             System.out.println();
         }
     }

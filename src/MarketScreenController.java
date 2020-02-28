@@ -22,7 +22,7 @@ public class MarketScreenController {
      * @param item item to buy
      * @param market market to buy from
      */
-    public void buy(Item item, Marketplace market) throws Exception{
+    public void buy(Item item, Marketplace market, int number) throws Exception{
         //Still need to handle a few cases:
         //For now, buying will be 1 at a time,
         //but once this works we can add buying multiple items if time permits
@@ -36,17 +36,20 @@ public class MarketScreenController {
         if (marketEntry == null) {
             throw new IllegalArgumentException("Attempted to buy from a market that does not have the item specified");
         }
-
+        //check if the player inputs the wrong number
+        if (number == 0) {
+            throw new IllegalArgumentException("Please specify a number for your purchase!");
+        }
         //Need to check if player has enough credits or cargo capacity is full
-        if (price > player.getCredits()) {
+        if (price * number > player.getCredits()) {
             //Not enough credits case
             throw new IllegalAccessException("You don't have enough money!");
-        } else if (ship.getTotalItems() >= ship.getCargoCapacity()) {
+        } else if (ship.getTotalItems() + number >= ship.getCargoCapacity()) {
             //Ship is full case
-            throw new IllegalAccessException("You ship is full!");
-        } else if (marketEntry.getQuantity() <= 0) {
-            throw new IllegalAccessException("There are no more " + item.getName()
-                    + " left in the market!");
+            throw new IllegalAccessException("You ship does not have enough space!");
+        } else if (marketEntry.getQuantity() < number) {
+            throw new IllegalAccessException("There are not that many " + item.getName()
+                    + " in the market!");
         } else {
             //update ship and market inventories accordingly; decrement player credits
 
@@ -54,11 +57,11 @@ public class MarketScreenController {
             if (playerEntry == null) {
                 playerEntry = new InventoryEntry();
             }
-            playerEntry.add(price);
+            playerEntry.add(price, number);
             ship.getItemInventory().put(item, playerEntry);
 
             //update market inventory
-            marketEntry.setQuantity(marketEntry.getQuantity() - 1); //decrement quantity
+            marketEntry.setQuantity(marketEntry.getQuantity() - number); //decrement quantity
 //            if (marketEntry.getQuantity() <= 0) {
 //                market.getStock().remove(item); //remove the item from the stock if
 //
@@ -66,8 +69,8 @@ public class MarketScreenController {
 //            }
 
             //decrement player credits/update item count
-            player.setCredits(player.getCredits() - price);
-            ship.setTotalItems(ship.getTotalItems() + 1);
+            player.setCredits(player.getCredits() - price * number);
+            ship.setTotalItems(ship.getTotalItems() + number);
 
             if (DEBUG) {
                 market.printStock();
@@ -83,7 +86,7 @@ public class MarketScreenController {
      * @param item  item to sell
      * @param market market to sell to
      */
-    public void sell(Item item, Marketplace market) {
+    public void sell(Item item, Marketplace market, int number) {
         Ship ship = player.getShip();
         InventoryEntry playerEntry = ship.getItemInventory().get(item);
         StockEntry marketEntry = market.getStock().get(item);
@@ -91,25 +94,34 @@ public class MarketScreenController {
 
         //check if the player has the item
         if (playerEntry == null) {
-            throw new IllegalArgumentException("Attempted to sell an item that the player does not have");
+            throw new IllegalArgumentException(
+                    "Attempted to sell an item that the player does not have");
         }
-
+        //check if the player inputs the wrong number
+        if (number == 0) {
+            throw new IllegalArgumentException("Please specify a number for your purchase!");
+        }
+        if (playerEntry.getQuantity() < number) {
+            throw new IllegalArgumentException("You don't have that many "
+                    + item.getName() + " for sale!");
+        }
         //update ship inventory
-        playerEntry.remove();
+        playerEntry.remove(number);
         if (playerEntry.getQuantity() <= 0) {
             ship.getItemInventory().remove(item);
         }
 
         //update market inventory
         if (marketEntry == null) {
-            marketEntry = new StockEntry(0, market.getBuyingPrice(item), market.getSellingPrice(item));
+            marketEntry = new StockEntry(0,
+                    market.getBuyingPrice(item), market.getSellingPrice(item));
         }
-        marketEntry.setQuantity(marketEntry.getQuantity() + 1);
+        marketEntry.setQuantity(marketEntry.getQuantity() + number);
         market.getStock().put(item, marketEntry);
 
 
         //increment player credits
-        player.setCredits(player.getCredits() + price);
-        ship.setTotalItems(ship.getTotalItems() - 1);
+        player.setCredits(player.getCredits() + price * number);
+        ship.setTotalItems(ship.getTotalItems() - number);
     }
 }

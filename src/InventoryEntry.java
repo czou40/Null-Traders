@@ -3,22 +3,21 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class InventoryEntry implements Entry {
     private IntegerProperty quantity;
-    private IntegerProperty avgBuyingPrice;
+    private IntegerProperty totalCost;
 
     public InventoryEntry() {
         quantity = new SimpleIntegerProperty();
-        avgBuyingPrice = new SimpleIntegerProperty();
+        totalCost = new SimpleIntegerProperty();
     }
 
 
-    public void add(int buyingPrice) {
-        quantity.set(quantity.get() + 1);
-
-        avgBuyingPrice.set((avgBuyingPrice.get() * (quantity.get() - 1) + buyingPrice) / quantity.get());
+    public void add(int buyingPrice, int number) {
+        quantity.set(quantity.get() + number);
+        totalCost.set(totalCost.get() + buyingPrice * number);
     }
 
-    public void remove() {
-        quantity.set(quantity.get() - 1);
+    public void remove(int number) {
+        quantity.set(quantity.get() - number);
     }
 
     @Override
@@ -36,11 +35,19 @@ public class InventoryEntry implements Entry {
         this.quantity.set(quantity);
     }
 
-    public int getAvgSellingPrice() {
-        return avgBuyingPrice.get();
+    public int getTotalCost() {
+        return totalCost.get();
     }
 
-    public IntegerProperty avgSellingPriceProperty() {
-        return avgBuyingPrice;
+    public IntegerProperty totalCostProperty() {
+        return totalCost;
+    }
+
+    public void setTotalCost(int totalCost) {
+        this.totalCost.set(totalCost);
+    }
+
+    public double getAverageBuyingPrice() {
+        return (0.0 + getTotalCost()) / getQuantity();
     }
 }

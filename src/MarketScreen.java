@@ -1,7 +1,4 @@
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -9,10 +6,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import sun.text.resources.no.CollationData_no;
 
 import java.util.Map;
-import java.util.Stack;
 
 public class MarketScreen extends GameScreen {
     private Game game;
@@ -165,21 +160,24 @@ public class MarketScreen extends GameScreen {
                     : stock.get(entry.getKey()).getSellingPrice()) : "NOT SOLD");
             slider = new Slider(0, entry.getValue().getQuantity(), 0);
             slider.setBlockIncrement(1);
+            slider.setMajorTickUnit(1);
+            slider.setMinorTickCount(0);
             slider.setMaxWidth(9999);
+            slider.setSnapToTicks(true);
             quantityLabel = new Label();
             quantityLabel = new Label("0/" + entry.getValue().getQuantity());
             quantityLabel.textProperty().bind(Bindings.format("%.0f/%s",
                     slider.valueProperty(), entry.getValue().getQuantity()));
             button = new Button(buyingMode ? "Buy" : "Sell");
             button.setMaxWidth(9999);
-            if (!availableAtMarket) {
+            if (!availableAtMarket || entry.getValue().getQuantity() == 0) {
                 button.setDisable(true);
+                slider.setDisable(true);
             }
             if (buyingMode) {
                 button.setOnAction(e -> {
-                    System.out.println(controller);
                     try {
-                        controller.buy(entry.getKey(), marketplace);
+                        controller.buy(entry.getKey(), marketplace, (int) slider.getValue());
                         itemsPane = constructBuyItemBoxesPane();
                         scrollPane.setContent(itemsPane);
                     } catch (Exception exception) {
@@ -188,9 +186,13 @@ public class MarketScreen extends GameScreen {
                 });
             } else {
                 button.setOnAction(e -> {
-                    controller.sell(entry.getKey(), marketplace);
+                    try {
+                    controller.sell(entry.getKey(), marketplace, (int) slider.getValue());
                     itemsPane = constructSellItemBoxesPane();
                     scrollPane.setContent(itemsPane);
+                    } catch (Exception exception) {
+                        messageLabel.setText(exception.getMessage());
+                    }
                 });
             }
             this.addRow(0, nameLabel, priceLabel, slider, quantityLabel, button);

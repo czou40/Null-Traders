@@ -1,4 +1,6 @@
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -32,7 +34,7 @@ public abstract class GameScreen extends Screen {
     public Scene constructScene() {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("h1");
-        MyGridPane titlePane = new MyGridPane();
+        MyGridPane titlePane = new MyGridPane(HPos.LEFT, VPos.CENTER);
         titlePane.add(titleLabel, 0, 0);
         titlePane.getStyleClass().addAll("transparent-pane-dark");
         contentPane = constructContentPane();
