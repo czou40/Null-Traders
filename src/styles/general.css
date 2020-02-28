@@ -56,7 +56,7 @@
 }
 
 .text-field {
-    -fx-padding: 10px;
+    -fx-padding: 0px 10px 0px 10px;
     -fx-border-color: transparent transparent #efefef transparent;
     -fx-background-color: transparent;
     -fx-font-size:1.5em;
