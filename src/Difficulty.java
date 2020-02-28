@@ -12,7 +12,8 @@ public enum Difficulty {
     private IntegerProperty startFuelCapacity;
     private IntegerProperty startHealth;
 
-    Difficulty(int credits, int startingSkillPoints, int startCargoCapacity, int startFuelCapacity, int startHealth) {
+    Difficulty(int credits, int startingSkillPoints,
+               int startCargoCapacity, int startFuelCapacity, int startHealth) {
         this.credits = new SimpleIntegerProperty(credits);
         this.startingSkillPoints = new SimpleIntegerProperty(startingSkillPoints);
         this.startCargoCapacity = new SimpleIntegerProperty(startCargoCapacity);

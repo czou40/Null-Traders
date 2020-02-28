@@ -3,8 +3,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.util.Vector;
-
 public class RegionCharacteristicsScreen extends GameScreen {
     private Region displayedRegion;
 
@@ -13,16 +11,17 @@ public class RegionCharacteristicsScreen extends GameScreen {
         super(primaryStage, game, "Characteristics for "
                 + (region.isFound() ? region.getName() : "Unknown Region"), true);
         region.foundProperty().addListener(e -> {
-                setTitle("Characteristics for " + (region.isFound() ? region.getName() : "Unknown Region"));
+            setTitle("Characteristics for "
+                + (region.isFound() ? region.getName() : "Unknown Region"));
         });
         this.displayedRegion = region;
     }
 
     @Override //Test
     public Pane constructContentPane() {
-        Label nameRightLabel= new Label();
-        Label descriptionRightLabel= new Label();
-        Label techLevelRightLabel= new Label();
+        Label nameRightLabel = new Label();
+        Label descriptionRightLabel = new Label();
+        Label techLevelRightLabel = new Label();
         Label marketplaceRightLabel = new Label();
         //Vector<Label> itemsRightLabels = new Vector<>();
         Label itemsRightLabel = new Label();
@@ -36,7 +35,7 @@ public class RegionCharacteristicsScreen extends GameScreen {
         Label techLevelLeftLabel = new Label("TECHNOLOGY LEVEL");
         Label marketplaceLeftLabel = new Label("MARKETPLACE");
         Label itemsLeftLabel = new Label("ITEMS SOLD");
-        if(!displayedRegion.isFound()){
+        if (!displayedRegion.isFound()) {
             nameRightLabel.setText("???");
             descriptionRightLabel.setText("???");
             techLevelRightLabel.setText("???");

@@ -17,7 +17,6 @@ public class Player {
 
     private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
     private static final double MERCHANTDECAYFACTOR = 0.05;  //rate at which influence decays
-                                                            // (need to test to find reasonable value)
 
 
     /**
@@ -181,11 +180,17 @@ public class Player {
         return currentRegion;
     }
 
-    public Ship getShip() { return ship.get(); }
+    public Ship getShip() {
+        return ship.get();
+    }
 
-    public SimpleObjectProperty<Ship> shipProperty() { return ship; }
+    public SimpleObjectProperty<Ship> shipProperty() {
+        return ship;
+    }
 
-    public void setShip(Ship ship) { this.ship.set(ship); }
+    public void setShip(Ship ship) {
+        this.ship.set(ship);
+    }
 
     public void travelToRegion(Region dest) {
         currentRegion.get().setIsCurrentRegion(false);

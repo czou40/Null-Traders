@@ -23,7 +23,10 @@ public class MarketScreen extends GameScreen {
     private boolean buyingMode;
 
     public MarketScreen(Stage primaryStage, Game game, boolean buyingMode) {
-        super(primaryStage, game, game.getPlayer().getCurrentRegion().getMarketplace().getName(), true);
+        super(primaryStage,
+                game,
+                game.getPlayer().getCurrentRegion().getMarketplace().getName(),
+                true);
         this.game = game;
         this.player = game.getPlayer();
         this.marketplace = player.getCurrentRegion().getMarketplace();
@@ -44,16 +47,13 @@ public class MarketScreen extends GameScreen {
         headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
         headerPane.addRow(0, nameHeader, priceHeader, quantityHeader);
 
-//<<<<<<< HEAD
         itemsPane = buyingMode ? constructBuyItemBoxesPane() : constructSellItemBoxesPane();
-//=======
-//        itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
-//        itemsPane.addColumn(0, headerPane);
-//        for (Map.Entry<Item, StockEntry> i : stock.entrySet()) {
-//            itemsPane.addColumn(0, new BuyItemBox(i, controller, marketplace));
-//        }
-//
-//>>>>>>> fb18836cdf3239a921b31f4de32fb309a897b8f0
+        //itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
+        //itemsPane.addColumn(0, headerPane);
+        //for (Map.Entry<Item, StockEntry> i : stock.entrySet()) {
+        //itemsPane.addColumn(0, new BuyItemBox(i, controller, marketplace));
+        //}
+
         scrollPane = new ScrollPane(itemsPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -73,7 +73,6 @@ public class MarketScreen extends GameScreen {
         return contentPane;
     }
 
-//<<<<<<< HEAD
     private void updateMarketInfo() {
         this.marketplace = player.getCurrentRegion().getMarketplace();
         this.stock = marketplace.getStock();
@@ -104,31 +103,33 @@ public class MarketScreen extends GameScreen {
             itemsPane.addColumn(0, new StackPane(noItemLabel));
         }
         return itemsPane;
-//=======
-//    public void removeItem(Item item) {
-//        //search for and remove the item
-//        System.out.println("removing item");
-//        for (Node node : itemsPane.getChildren()) {
-//            System.out.println(node);
-//            if (node instanceof BuyItemBox) {
-//                System.out.println("found item box");
-//                BuyItemBox itemBox = (BuyItemBox) node;
-//                if (itemBox.getNameLabel().getText().equals(item.getName())) {
-//                    System.out.println("Item box has same name");
-//                    itemsPane.getChildren().remove(itemBox);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//
-//    private void updateRegion() {
-//        this.marketplace = game.getPlayer().getCurrentRegion().getMarketplace();
-//        this.stock = marketplace.getStock();
-//        setTitle(marketplace.getName());
-//        this.controller = new MarketScreenController(player, marketplace, this);
-//>>>>>>> fb18836cdf3239a921b31f4de32fb309a897b8f0
     }
+    /*
+    public void removeItem(Item item) {
+        //search for and remove the item
+        System.out.println("removing item");
+        for (Node node : itemsPane.getChildren()) {
+            System.out.println(node);
+            if (node instanceof BuyItemBox) {
+                System.out.println("found item box");
+                BuyItemBox itemBox = (BuyItemBox) node;
+                if (itemBox.getNameLabel().getText().equals(item.getName())) {
+                    System.out.println("Item box has same name");
+                    itemsPane.getChildren().remove(itemBox);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void updateRegion() {
+        this.marketplace = game.getPlayer().getCurrentRegion().getMarketplace();
+        this.stock = marketplace.getStock();
+        setTitle(marketplace.getName());
+        this.controller = new MarketScreenController(player, marketplace, this);
+    }
+
+
 
     @Override
     public void adjustUIAfterScreenIsShown() {
@@ -139,7 +140,9 @@ public class MarketScreen extends GameScreen {
         return controller;
     }
 
-    private class ItemBox extends MyGridPane{
+     */
+
+    private class ItemBox extends MyGridPane {
         //private Map.Entry<Item, StockEntry> entry;
         private Label nameLabel;
         private Label priceLabel;
@@ -147,7 +150,6 @@ public class MarketScreen extends GameScreen {
         private Slider slider;
         private Button button;
 
-//<<<<<<< HEAD
         public ItemBox(Map.Entry<Item, ? extends Entry> entry) {
             super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
             this.setMinHeight(50);
@@ -187,9 +189,9 @@ public class MarketScreen extends GameScreen {
             } else {
                 button.setOnAction(e -> {
                     try {
-                    controller.sell(entry.getKey(), marketplace, (int) slider.getValue());
-                    itemsPane = constructSellItemBoxesPane();
-                    scrollPane.setContent(itemsPane);
+                        controller.sell(entry.getKey(), marketplace, (int) slider.getValue());
+                        itemsPane = constructSellItemBoxesPane();
+                        scrollPane.setContent(itemsPane);
                     } catch (Exception exception) {
                         messageLabel.setText(exception.getMessage());
                     }
@@ -197,59 +199,60 @@ public class MarketScreen extends GameScreen {
             }
             this.addRow(0, nameLabel, priceLabel, slider, quantityLabel, button);
         }
-//=======
-//        public BuyItemBox(Map.Entry<Item, StockEntry> entry, MarketScreenController controller, Marketplace market) {
-//            super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
-//            this.setMinHeight(50);
-//            this.entry = entry;
-//            this.controller = controller;
-//            nameLabel = new Label(entry.getKey().getName());
-//            priceLabel = new Label();
-//            priceLabel = new Label(Integer.toString(entry.getValue().getBuyingPrice()));
-//        /*
-//        slider = new Slider(0, entry.getValue().getQuantity(), 0);
-//        slider.setBlockIncrement(1);
-//        slider.setMaxWidth(9999);
-//        slider.maxProperty().bind(entry.getValue().quantityProperty());
-//
-//         */
-//            quantityLabel = new Label();
-//            quantityLabel = new Label("" + entry.getValue().getQuantity());
-//            quantityLabel.textProperty().bind(Bindings.format("%s",
-//                    /*slider.valueProperty(), */entry.getValue().quantityProperty()));
-//            button = new Button("Buy");
-//            button.setMaxWidth(9999);
-//            button.setOnAction(e -> {
-//                controller.buy(entry.getKey(), market);
-//            });
-//            this.addRow(0, nameLabel, priceLabel, quantityLabel, button);
-//        }
-//
-//        public Map.Entry<Item, StockEntry> getEntry() {
-//            return entry;
-//        }
-//
-//        public Label getNameLabel() {
-//            return nameLabel;
-//        }
-//
-//        public Label getPriceLabel() {
-//            return priceLabel;
-//        }
-//
-//        public Label getQuantityLabel() {
-//            return quantityLabel;
-//        }
-//
-//        /*
-//        public Slider getSlider() {
-//            return slider;
-//        }
-//         */
-//
-//        public Button getButton() {
-//            return button;
-//        }
-//>>>>>>> fb18836cdf3239a921b31f4de32fb309a897b8f0
+        /*
+        public BuyItemBox(Map.Entry<Item, StockEntry> entry, MarketScreenController controller,
+        Marketplace market) {
+            super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
+            this.setMinHeight(50);
+            this.entry = entry;
+            this.controller = controller;
+            nameLabel = new Label(entry.getKey().getName());
+            priceLabel = new Label();
+            priceLabel = new Label(Integer.toString(entry.getValue().getBuyingPrice()));
+
+        slider = new Slider(0, entry.getValue().getQuantity(), 0);
+        slider.setBlockIncrement(1);
+        slider.setMaxWidth(9999);
+        slider.maxProperty().bind(entry.getValue().quantityProperty());
+
+
+            quantityLabel = new Label();
+            quantityLabel = new Label("" + entry.getValue().getQuantity());
+            quantityLabel.textProperty().bind(Bindings.format("%s",
+                    slider.valueProperty(), entry.getValue().quantityProperty()));
+            button = new Button("Buy");
+            button.setMaxWidth(9999);
+            button.setOnAction(e -> {
+                controller.buy(entry.getKey(), market);
+            });
+            this.addRow(0, nameLabel, priceLabel, quantityLabel, button);
+        }
+
+        public Map.Entry<Item, StockEntry> getEntry() {
+            return entry;
+        }
+
+        public Label getNameLabel() {
+            return nameLabel;
+        }
+
+        public Label getPriceLabel() {
+            return priceLabel;
+        }
+
+        public Label getQuantityLabel() {
+            return quantityLabel;
+        }
+
+
+        public Slider getSlider() {
+            return slider;
+        }
+
+
+        public Button getButton() {
+            return button;
+        }
+        */
     }
 }

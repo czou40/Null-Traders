@@ -139,13 +139,15 @@ public class VisualizedUniverseMap extends Pane {
         Since we use binding, the the box automatically updates the information
         of the current regions the player is at as it travels around.
          */
-//        currentRegionDescriptionBox = new RegionDescriptionBox(universe.currentRegionProperty());
-//        currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
-//                subtract(currentRegionDescriptionBox.widthProperty()));
-//        currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
-//                subtract(currentRegionDescriptionBox.heightProperty()));
-//        this.getChildren().add(currentRegionDescriptionBox);
 
+        /*
+        currentRegionDescriptionBox = new RegionDescriptionBox(universe.currentRegionProperty());
+        currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
+                subtract(currentRegionDescriptionBox.widthProperty()));
+        currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
+                subtract(currentRegionDescriptionBox.heightProperty()));
+        this.getChildren().add(currentRegionDescriptionBox);
+        */
 
         /*
         We clip the map so that we only show a portion of the map,
@@ -211,7 +213,8 @@ public class VisualizedUniverseMap extends Pane {
             Wrap the labels in a VBox.
              */
             MyNavigationButton goToRegionChar = new MyNavigationButton("See Characteristics",
-                    new RegionCharacteristicsScreen(primaryStage, universe.getPlayer().getGame(), region));
+                    new RegionCharacteristicsScreen(
+                            primaryStage, universe.getPlayer().getGame(), region));
             labels = new VBox();
             labels.getChildren().addAll(nameLabel, distanceLabel, coordinatesLabel, goToRegionChar);
             labels.layoutXProperty().bind(centerXProperty().add(15));
@@ -251,7 +254,7 @@ public class VisualizedUniverseMap extends Pane {
                 labels.setVisible(false);
             });
 
-            labels.setOnMouseExited(e ->{
+            labels.setOnMouseExited(e -> {
                 labels.setVisible(false);
             });
 

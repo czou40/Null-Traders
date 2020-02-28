@@ -1,4 +1,3 @@
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;

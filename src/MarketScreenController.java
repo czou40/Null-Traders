@@ -1,7 +1,3 @@
-import javafx.scene.Node;
-
-import java.util.Vector;
-
 public class MarketScreenController {
     private Player player;
     private Marketplace market;
@@ -21,12 +17,10 @@ public class MarketScreenController {
      * Updates the player's credits as a result of the exchange
      * @param item item to buy
      * @param market market to buy from
+     * @param number number of items to buy
+     * @throws Exception if input is invalid
      */
-    public void buy(Item item, Marketplace market, int number) throws Exception{
-        //Still need to handle a few cases:
-        //For now, buying will be 1 at a time,
-        //but once this works we can add buying multiple items if time permits
-
+    public void buy(Item item, Marketplace market, int number) throws Exception {
         Ship ship = player.getShip();
         InventoryEntry playerEntry = ship.getItemInventory().get(item);
         StockEntry marketEntry = market.getStock().get(item);
@@ -34,7 +28,8 @@ public class MarketScreenController {
 
         //check if the market has the item
         if (marketEntry == null) {
-            throw new IllegalArgumentException("Attempted to buy from a market that does not have the item specified");
+            throw new IllegalArgumentException(
+                    "Attempted to buy from a market that does not have the item specified");
         }
         //check if the player inputs the wrong number
         if (number == 0) {
@@ -62,11 +57,6 @@ public class MarketScreenController {
 
             //update market inventory
             marketEntry.setQuantity(marketEntry.getQuantity() - number); //decrement quantity
-//            if (marketEntry.getQuantity() <= 0) {
-//                market.getStock().remove(item); //remove the item from the stock if
-//
-//                //ui.removeItem(item);
-//            }
 
             //decrement player credits/update item count
             player.setCredits(player.getCredits() - price * number);
@@ -85,6 +75,7 @@ public class MarketScreenController {
      *
      * @param item  item to sell
      * @param market market to sell to
+     * @param number number of items to sell
      */
     public void sell(Item item, Marketplace market, int number) {
         Ship ship = player.getShip();

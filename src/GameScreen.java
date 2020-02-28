@@ -74,8 +74,10 @@ public abstract class GameScreen extends Screen {
         //characterImageView.fitHeightProperty().bind(getPrimaryStage().heightProperty().multiply(
         // 0.1));
         sideBarPane.addColumn(0,
-                new MyNavigationButton("Buy Cargo", new MarketScreen(getPrimaryStage(), game, true)),
-                new MyNavigationButton("Sell Cargo", new MarketScreen(getPrimaryStage(), game, false)),
+                new MyNavigationButton(
+                        "Buy Cargo", new MarketScreen(getPrimaryStage(), game, true)),
+                new MyNavigationButton(
+                        "Sell Cargo", new MarketScreen(getPrimaryStage(), game, false)),
                 new MyNavigationButton("Player Profile",
                         new CharacterSheetScreen(getPrimaryStage(), game)),
                 new MyNavigationButton("Map", new MapScreen(getPrimaryStage(), game)));

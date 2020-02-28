@@ -31,7 +31,8 @@ public class MyGridPane extends GridPane {
         }
         if (columnConstraints != null) {
             for (int i = 0; i < columnConstraints.length; i++) {
-                this.getColumnConstraints().add(new MyColumnConstraints(columnConstraints[i], hPos));
+                this.getColumnConstraints().add(
+                        new MyColumnConstraints(columnConstraints[i], hPos));
             }
         }
     }

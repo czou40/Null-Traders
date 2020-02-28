@@ -4,11 +4,6 @@ import java.util.Random;
 
 public class Marketplace {
     private String name;
-    /*
-       I was thinking for marketplaces we could implement the item stock as a map from the item name
-       to an item collection, since each marketplace can have multiple items and the prices are supposed
-       to be unique to the marketplace.
-     */
     private int techLevel;
     private Map<Item, StockEntry> stock;
     private Player player;
@@ -18,9 +13,12 @@ public class Marketplace {
     private static final double MINQUANTITYFACTOR = 0.1;
     private static final double INCREMENTALQUANTITYFACTOR = 0.15;
 
-    private static final double BUYVARIANCE = 0.1;  //percentage of which the price can vary
-    private static final double MAXTECHINFLUENCE = 0.3; //The maximum amount that technology can influence buying price
-    private static final double INCREMENTALTECHINFLUENCE = 0.1; //The percentage increase of each tech point above
+    //percentage of which the price can vary
+    private static final double BUYVARIANCE = 0.1;
+    //The maximum amount that technology can influence buying price
+    private static final double MAXTECHINFLUENCE = 0.3;
+    //The percentage increase of each tech point above
+    private static final double INCREMENTALTECHINFLUENCE = 0.1;
 
     private static final double SELLVARIANCE = 0.2;
     private static final double AVGSELLPERCENT = 0.6;
@@ -38,7 +36,8 @@ public class Marketplace {
     }
 
     private Map<Item, StockEntry> generateRandomStock() {
-        //NOTE: For each attribute of the stock, keep everything in doubles until the final calculation
+        //NOTE: For each attribute of the stock, keep everything in doubles
+        // until the final calculation
 
         Random rand = new Random();
 
@@ -49,23 +48,28 @@ public class Marketplace {
             if (techLevel >= item.getTechLevel()) {
                 int techDifference = techLevel - item.getTechLevel();
                 /*
-                   Quantity Algorithm: item quantity is determined by a random amount that is then multiplied
-                   buy a technology factor. Higher tech = more of the item
-                   Specifically, the max quantity starts at 10 for a region meeting the minimum tech level, then increases
-                   by 20 at each additional point above the minimum until reaching a hard cap at 100.
+                   Quantity Algorithm: item quantity is determined by a random amount
+                   that is then multiplied by a technology factor. Higher tech = more of the item
+                   Specifically, the max quantity starts at 10 for a region meeting the minimum
+                   tech level, then increases by 20 at each additional point above the minimum until
+                   reaching a hard cap at 100.
                  */
-                double quantityFactor = Math.min(1, MINQUANTITYFACTOR + INCREMENTALQUANTITYFACTOR * techDifference);
+                double quantityFactor = Math.min(
+                        1, MINQUANTITYFACTOR + INCREMENTALQUANTITYFACTOR * techDifference);
                 int itemQuantity = (int) (rand.nextInt(MAXITEMS) * quantityFactor);
                 if (itemQuantity > 0) {
                     /*
                        Buy Price Algorithm:
-                       Base Price * tech influence factor + some percentage variance of the base price
+                       Base Price * tech influence factor + some percentage variance of the
+                       base price
                        Higher tech = cheaper item because the region can produce it more efficiently
                      */
                     double buyVariance = randMinusOneToOne() * BUYVARIANCE;
-                    double techInfluence = Math.min(MAXTECHINFLUENCE, INCREMENTALTECHINFLUENCE * techDifference);
+                    double techInfluence = Math.min(
+                            MAXTECHINFLUENCE, INCREMENTALTECHINFLUENCE * techDifference);
                     int buyingPrice =
-                            Math.max(1, (int) (item.getBasePrice() * (1 - techInfluence) * (1 + buyVariance)));
+                            Math.max(1,
+                            (int) (item.getBasePrice() * (1 - techInfluence) * (1 + buyVariance)));
                     /*
                        Sell Price Algorithm: The selling price is a percantage of the buying price
                        with some linear variance below or above the average selling price
@@ -84,11 +88,9 @@ public class Marketplace {
         return 2 * (Math.random() - 0.5);
     }
 
-    /**
+    /*
      * gets buying price from stock factoring in merchant influence
      *
-     * @param item
-     * @return
      */
     public int getBuyingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
@@ -98,11 +100,8 @@ public class Marketplace {
         return (int) ((1 - player.calcMerchantInfluence()) * marketEntry.getBuyingPrice());
     }
 
-    /**
+    /*
      * gets selling price from stock factoring in merchant influence
-     *
-     * @param item
-     * @return
      */
     public int getSellingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
