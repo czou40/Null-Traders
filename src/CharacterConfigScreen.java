@@ -58,8 +58,7 @@ public class CharacterConfigScreen extends GameScreen {
     public Pane constructContentPane() {
         initializeUI();
         initialize();
-        difficultyToggleWrapper = new MyGridPane(new double[]{100}, MyGridPane.getSpan(3),
-                HPos.LEFT, VPos.CENTER);
+        difficultyToggleWrapper = new MyGridPane(new double[]{100}, MyGridPane.getSpan(3));
         difficultyToggleWrapper.addRow(0, cadetToggle, captainToggle, admiralToggle);
         //FlowPane root = new FlowPane(
         //       title, nameField, difficultyToggleWrapper,
