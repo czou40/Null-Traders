@@ -1,4 +1,5 @@
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -43,9 +44,10 @@ public class MarketScreen extends GameScreen {
     public Pane constructContentPane() {
         Label nameHeader = new Label("NAME");
         Label priceHeader = new Label("PRICE");
+        Label playerQuantityHeader = new Label("SHIP STOCK");
         Label quantityHeader = new Label("QUANTITY");
-        headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
-        headerPane.addRow(0, nameHeader, priceHeader, quantityHeader);
+        headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{13, 13, 13, 50, 10});
+        headerPane.addRow(0, nameHeader, priceHeader, playerQuantityHeader, quantityHeader);
 
         itemsPane = buyingMode ? constructBuyItemBoxesPane() : constructSellItemBoxesPane();
         //itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
@@ -146,12 +148,13 @@ public class MarketScreen extends GameScreen {
         //private Map.Entry<Item, StockEntry> entry;
         private Label nameLabel;
         private Label priceLabel;
+        private Label shipStockLabel;
         private Label quantityLabel;
         private Slider slider;
         private Button button;
 
         public ItemBox(Map.Entry<Item, ? extends Entry> entry) {
-            super(MyGridPane.getSpan(1), new double[]{15, 15, 50, 10, 10});
+            super(MyGridPane.getSpan(1), new double[]{15, 15, 15, 50, 10, 10});
             this.setMinHeight(50);
             boolean availableAtMarket = stock.containsKey(entry.getKey());
             //this.entry = entry;
@@ -166,10 +169,26 @@ public class MarketScreen extends GameScreen {
             slider.setMinorTickCount(0);
             slider.setMaxWidth(9999);
             slider.setSnapToTicks(true);
-            quantityLabel = new Label();
+
+            ObjectProperty<Map<Item, InventoryEntry>> inventory =
+                    player.getShip().itemInventoryProperty();
+            InventoryEntry shipEntry = inventory.get().get(entry.getKey());
+            shipStockLabel = new Label(
+                    "" + ((shipEntry == null) ? 0 : shipEntry.getQuantity()));
+
+            inventory.addListener(((observable, oldValue, newValue) -> {
+                InventoryEntry changedEntry = inventory.get().get(entry.getKey());
+                if (changedEntry == null) {
+                    shipStockLabel.setText("" + 0);
+                } else {
+                    shipStockLabel.setText("" + changedEntry.getQuantity());
+                }
+            }));
+
+
             quantityLabel = new Label("0/" + entry.getValue().getQuantity());
             quantityLabel.textProperty().bind(Bindings.format("%.0f/%s",
-                    slider.valueProperty(), entry.getValue().getQuantity()));
+                    slider.valueProperty(), entry.getValue().quantityProperty()));
             button = new Button(buyingMode ? "Buy" : "Sell");
             button.setMaxWidth(9999);
             if (!availableAtMarket || entry.getValue().getQuantity() == 0) {
@@ -197,7 +216,7 @@ public class MarketScreen extends GameScreen {
                     }
                 });
             }
-            this.addRow(0, nameLabel, priceLabel, slider, quantityLabel, button);
+            this.addRow(0, nameLabel, priceLabel, shipStockLabel, slider, quantityLabel, button);
         }
         /*
         public BuyItemBox(Map.Entry<Item, StockEntry> entry, MarketScreenController controller,
