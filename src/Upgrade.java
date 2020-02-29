@@ -22,4 +22,8 @@ public class Upgrade {
         }
         return null;
     }
+
+    public int getUpgradeLvl() {
+        return upgradeLvl;
+    }
 }

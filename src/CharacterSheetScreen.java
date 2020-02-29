@@ -33,6 +33,7 @@ public class CharacterSheetScreen extends GameScreen {
 
         int startingSkillPoints = game.getDifficulty().getStartingSkillPoints();
         Label fighterLabel = new Label("FIGHTER");
+//<<<<<<< HEAD
         MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter(), startingSkillPoints);
         fighterPointBar.pointProperty().bind(player.fighterProperty());
         fighterPointBar.setMaxWidth(9999);
@@ -40,16 +41,23 @@ public class CharacterSheetScreen extends GameScreen {
         Label pilotLabel = new Label("PILOT");
         MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot(), startingSkillPoints);
         pilotPointBar.pointProperty().bind(player.pilotProperty());
+//=======
+//        MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter() + player.getUpgrades()[1].getUpgradeLvl(), startingSkillPoints);
+//        fighterPointBar.setMaxWidth(9999);
+//
+//        Label pilotLabel = new Label("PILOT");
+//        MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot() + player.getUpgrades()[0].getUpgradeLvl(), startingSkillPoints);
+//>>>>>>> 568ef872fa2eaff4d1025ef4d9e2531a500e758b
         pilotPointBar.setMaxWidth(9999);
 
         Label merchantLabel = new Label("MERCHANT");
-        MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant(),
+        MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant() + player.getUpgrades()[2].getUpgradeLvl(),
                 startingSkillPoints);
         merchantPointBar.pointProperty().bind(player.merchantProperty());
         merchantPointBar.setMaxWidth(9999);
 
         Label engineerLabel = new Label("ENGINEER");
-        MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer(),
+        MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer() + player.getUpgrades()[3].getUpgradeLvl(),
                 startingSkillPoints);
         engineerPointBar.pointProperty().bind(player.engineerProperty());
         engineerPointBar.setMaxWidth(9999);

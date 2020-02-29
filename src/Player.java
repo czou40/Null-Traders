@@ -49,8 +49,8 @@ public class Player {
         this.credits = new SimpleIntegerProperty(credits);
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
-        this.characterUpgrades = new Vector<>();
-        this.emptySlot = new Upgrade (null, -1, "");
+        //this.characterUpgrades = new Vector<>();
+        this.emptySlot = new Upgrade (null, 0, "");
         this.upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
     }
 
