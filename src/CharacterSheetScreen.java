@@ -54,12 +54,45 @@ public class CharacterSheetScreen extends GameScreen {
         engineerPointBar.pointProperty().bind(player.engineerProperty());
         engineerPointBar.setMaxWidth(9999);
 
+        //UPGRADE STUFF
+        Label pilLabel = new Label("Pilot Upgrade:");
+        Label pilVal;
+        if(player.getUpgrades()[0] == player.emptySlot) {
+            pilVal = new Label("[None Installed]");
+        } else {
+            pilVal = new Label(player.getUpgrades()[0].toString());
+        }
+
+        Label figLabel = new Label("Fighter Upgrade:");
+        Label figVal;
+        if(player.getUpgrades()[0] == player.emptySlot) {
+            figVal = new Label("[None Installed]");
+        } else {
+            figVal = new Label(player.getUpgrades()[1].toString());
+        }
+
+        Label merLabel = new Label("Merchant Upgrade:");
+        Label merVal;
+        if(player.getUpgrades()[0] == player.emptySlot) {
+            merVal = new Label("[None Installed]");
+        } else {
+            merVal = new Label(player.getUpgrades()[2].toString());
+        }
+
+        Label engLabel = new Label("Engineering Upgrade:");
+        Label engVal;
+        if(player.getUpgrades()[0] == player.emptySlot) {
+            engVal = new Label("[None Installed]");
+        } else {
+            engVal = new Label(player.getUpgrades()[3].toString());
+        }
+
         contentGridPane.addColumn(0, difficultyLeftLabel, creditLeftLabel,
-                pilotLabel, fighterLabel, merchantLabel, engineerLabel);
+                pilotLabel, fighterLabel, merchantLabel, engineerLabel, pilLabel, figLabel, merLabel, engLabel);
 
         contentGridPane.addColumn(1, difficultyRightLabel, creditRightLabel,
                 pilotPointBar.withLabel(), fighterPointBar.withLabel(),
-                merchantPointBar.withLabel(), engineerPointBar.withLabel());
+                merchantPointBar.withLabel(), engineerPointBar.withLabel(), pilVal, figVal, merVal, engVal);
         return contentGridPane;
     }
 }

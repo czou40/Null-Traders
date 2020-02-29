@@ -6,6 +6,12 @@ import java.util.Vector;
  * This class describes a player.
  */
 public class Player {
+    public enum SkillType {
+        PIL, FIG, MER, ENG
+    }
+    private Upgrade[] upgrades; //upgrades tab
+    public final Upgrade emptySlot;
+
     private Game game;  //player is dependent on the game
 
     private StringProperty name;
@@ -20,7 +26,6 @@ public class Player {
 
     private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
     private static final double MERCHANTDECAYFACTOR = 0.05;  //rate at which influence decays
-
 
     /**
      * Constructs a new instance.
@@ -45,6 +50,8 @@ public class Player {
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
         this.characterUpgrades = new Vector<>();
+        this.emptySlot = new Upgrade (null, -1, "");
+        this.upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
     }
 
     /**
@@ -221,4 +228,6 @@ public class Player {
         this.setMerchant(getMerchant() + upgrade.getMerchant());
         this.setEngineer(getEngineer() + upgrade.getEngineer());
     }
+
+    public Upgrade[] getUpgrades() { return upgrades; }
 }

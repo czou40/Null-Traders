@@ -1,10 +1,13 @@
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.util.Random;
+
 public class Region {
     private String name;
     private String description;
     private int technologyLevel;
+
     private double x;
     private double y;
     private BooleanProperty found;  //if the player has found the region
