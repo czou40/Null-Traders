@@ -1,4 +1,4 @@
-import java.nio.charset.Charset;
+import javafx.beans.property.SimpleBooleanProperty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -27,10 +27,8 @@ public class Marketplace {
     private static final boolean DEBUG = false;
 
     //upgrade item info
-    private Player.SkillType upgradeType;
-    private int upgradeLvl;
-    private String upgradeName;
-    private boolean hasBoughtUpgrade;
+    private Upgrade upgrade;
+    private SimpleBooleanProperty boughtUpgrade;
 
     public Marketplace(String name, int techLevel, Player player) {
         this.name = name;
@@ -40,35 +38,8 @@ public class Marketplace {
         if (DEBUG) {
             printStock();
         }
-
-        //upgrade item generation
-        Random upGen = new Random();
-        int diff = player.getGame().getDifficulty().ordinal();
-        this.upgradeType = Player.SkillType.values()[upGen.nextInt(Player.SkillType.values().length)];
-        this.upgradeLvl = ((6 / (diff+1)) + (upGen.nextInt(techLevel+1)));
-        hasBoughtUpgrade = false;
-
-        String bet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < techLevel/2; ++i) {
-            sb.append(bet.charAt(upGen.nextInt(bet.length())));
-        }
-        String nameGen = sb.toString();
-        switch(upgradeType) {
-            case PIL:
-                upgradeName = nameGen.toUpperCase() +"corp Engine Upgrade v" + (upGen.nextInt(9)+1) + "." + (upGen.nextInt(9)+1);
-                break;
-            case FIG:
-                upgradeName = nameGen.toUpperCase() + "corp Weapons Module v" + (upGen.nextInt(9)+1) + "." + (upGen.nextInt(9)+1);
-                break;
-            case MER:
-                upgradeName = ((char)(upGen.nextInt(26) + 'A')) + "/" + ((char)(upGen.nextInt(26) + 'A'))
-                        + " TradeAssist Mk. " + (upGen.nextInt(9)+1);
-                break;
-            case ENG:
-                upgradeName = nameGen.toUpperCase() + "corp Multitool " + (upGen.nextInt(9)+1) + "-" + (upGen.nextInt(9)+1);
-                break;
-        }
+        this.upgrade = Upgrade.getRandomUpgrade(player, techLevel);
+        this.boughtUpgrade = new SimpleBooleanProperty(false);
     }
 
     private Map<Item, StockEntry> generateRandomStock() {
@@ -169,5 +140,21 @@ public class Marketplace {
 
     public String getName() {
         return name;
+    }
+
+    public Upgrade getUpgrade() {
+        return upgrade;
+    }
+
+    public boolean hasBoughtUpgrade() {
+        return boughtUpgrade.get();
+    }
+
+    public SimpleBooleanProperty boughtUpgradeProperty() {
+        return boughtUpgrade;
+    }
+
+    public void setBoughtUpgrade(boolean boughtUpgrade) {
+        this.boughtUpgrade.set(boughtUpgrade);
     }
 }

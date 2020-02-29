@@ -13,7 +13,6 @@ public enum Item {
     NARCOTICS("Narcotics", 7, 50),
     ROBOTS("Robots", 9, 100);
 
-
     private String name;
     private int techLevel;
     private int basePrice;

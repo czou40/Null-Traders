@@ -8,7 +8,7 @@ public class Player {
         PIL, FIG, MER, ENG
     }
     private Upgrade[] upgrades; //upgrades tab
-    public final Upgrade emptySlot;
+    private final Upgrade emptySlot;
 
     private Game game;  //player is dependent on the game
 
@@ -46,9 +46,9 @@ public class Player {
         this.credits = new SimpleIntegerProperty(credits);
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
-
-        this.emptySlot = new Upgrade (null, 0, "");
-        this.upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
+        //this.characterUpgrades = new Vector<>();
+        this.emptySlot = new Upgrade(null, 0, "");
+        upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
     }
 
     /**
@@ -214,5 +214,11 @@ public class Player {
         return MAXMERCHANTINFLUENCE * (1 - Math.exp(-1 * MERCHANTDECAYFACTOR * merchant.get()));
     }
 
-    public Upgrade[] getUpgrades() { return upgrades; }
+    public Upgrade[] getUpgrades() {
+        return upgrades;
+    }
+
+    public Upgrade getEmptySlot() {
+        return emptySlot;
+    }
 }
