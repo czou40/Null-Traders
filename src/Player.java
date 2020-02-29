@@ -1,5 +1,7 @@
 import javafx.beans.property.*;
 
+import java.util.Vector;
+
 /**
  * This class describes a player.
  */
@@ -14,6 +16,7 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
+    private Vector<CharacterUpgrade> characterUpgrades;
 
     private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
     private static final double MERCHANTDECAYFACTOR = 0.05;  //rate at which influence decays
@@ -41,6 +44,7 @@ public class Player {
         this.credits = new SimpleIntegerProperty(credits);
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
+        this.characterUpgrades = new Vector<>();
     }
 
     /**
@@ -204,5 +208,17 @@ public class Player {
 
     public double calcMerchantInfluence() {
         return MAXMERCHANTINFLUENCE * (1 - Math.exp(-1 * MERCHANTDECAYFACTOR * merchant.get()));
+    }
+
+    public Vector<CharacterUpgrade> getCharacterUpgrades() {
+        return characterUpgrades;
+    }
+
+    public void addCharacterUpgrade(CharacterUpgrade upgrade) {
+        this.characterUpgrades.add(upgrade);
+        this.setPilot(getPilot() + upgrade.getPilot());
+        this.setFighter(getFighter() + upgrade.getFighter());
+        this.setMerchant(getMerchant() + upgrade.getMerchant());
+        this.setEngineer(getEngineer() + upgrade.getEngineer());
     }
 }

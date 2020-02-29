@@ -90,7 +90,7 @@ public class MarketScreenController {
         }
         //check if the player inputs the wrong number
         if (number == 0) {
-            throw new IllegalArgumentException("Please specify a number for your purchase!");
+            throw new IllegalArgumentException("Please specify a number for your sale!");
         }
         if (playerEntry.getQuantity() < number) {
             throw new IllegalArgumentException("You don't have that many "
