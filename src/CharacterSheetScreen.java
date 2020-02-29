@@ -33,20 +33,20 @@ public class CharacterSheetScreen extends GameScreen {
 
         int startingSkillPoints = game.getDifficulty().getStartingSkillPoints();
         Label fighterLabel = new Label("FIGHTER");
-        MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter(), startingSkillPoints);
+        MyProgressBar fighterPointBar = new MyProgressBar(player.getFighter() + player.getUpgrades()[1].getUpgradeLvl(), startingSkillPoints);
         fighterPointBar.setMaxWidth(9999);
 
         Label pilotLabel = new Label("PILOT");
-        MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot(), startingSkillPoints);
+        MyProgressBar pilotPointBar = new MyProgressBar(player.getPilot() + player.getUpgrades()[0].getUpgradeLvl(), startingSkillPoints);
         pilotPointBar.setMaxWidth(9999);
 
         Label merchantLabel = new Label("MERCHANT");
-        MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant(),
+        MyProgressBar merchantPointBar = new MyProgressBar(player.getMerchant() + player.getUpgrades()[2].getUpgradeLvl(),
                 startingSkillPoints);
         merchantPointBar.setMaxWidth(9999);
 
         Label engineerLabel = new Label("ENGINEER");
-        MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer(),
+        MyProgressBar engineerPointBar = new MyProgressBar(player.getEngineer() + player.getUpgrades()[3].getUpgradeLvl(),
                 startingSkillPoints);
         engineerPointBar.setMaxWidth(9999);
 
