@@ -48,7 +48,7 @@ public class MarketScreen extends GameScreen {
         Label quantityHeader = new Label("QUANTITY");
         headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{13, 13, 13, 50, 10});
         headerPane.addRow(0, nameHeader, priceHeader, playerQuantityHeader, quantityHeader);
-
+        headerPane.setMinHeight(50);
         itemsPane = buyingMode ? constructBuyItemBoxesPane() : constructSellItemBoxesPane();
         //itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
         //itemsPane.addColumn(0, headerPane);
@@ -68,10 +68,36 @@ public class MarketScreen extends GameScreen {
         shipCapacityLabel.textProperty().bind(Bindings.format("SHIP CAPACITY: %s/%s",
                 player.getShip().totalItemsProperty(), player.getShip().cargoCapacityProperty()));
         creditsLabel.textProperty().bind(Bindings.format("CREDITS: %s", player.creditsProperty()));
+        
+        MyGridPane upgradePane = new MyGridPane(MyGridPane.getSpan(1), new double[]{90, 10});
+        if (buyingMode) {
+            Label upgradeLabel = new Label(!marketplace.hasBoughtUpgrade()
+                    ? "Special! " + marketplace.getUpgrade().toString()
+                    + " for " + marketplace.getUpgrade().getPrice() + " credits!"
+                    : "This market does not sell any play upgrades.");
+            marketplace.boughtUpgradeProperty().addListener(e -> {
+                upgradeLabel.setText(!marketplace.hasBoughtUpgrade()
+                        ? "Special! " + marketplace.getUpgrade().toString()
+                        + " for " + marketplace.getUpgrade().getPrice() + " credits!"
+                        : "This market does not sell any play upgrades.");
+            });
+            Button buyUpgradeButton = new Button("Buy");
+            buyUpgradeButton.setMaxWidth(9999);
+            buyUpgradeButton.disableProperty().bind(marketplace.boughtUpgradeProperty());
+            buyUpgradeButton.setOnAction(e -> {
+                try {
+                    controller.buyUpgrade(marketplace.getUpgrade());
+                } catch (IllegalAccessException ex) {
+                    messageLabel.setText(ex.getMessage());
+                }
+            });
+            upgradePane.addRow(0, upgradeLabel, buyUpgradeButton);
+        }
         MyGridPane playerInfoPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{30, 30});
         playerInfoPane.addRow(0, creditsLabel, shipCapacityLabel);
-        MyGridPane contentPane = new MyGridPane(new double[]{80, 10, 10}, MyGridPane.getSpan(1));
-        contentPane.addColumn(0, scrollPane, messageLabel, playerInfoPane);
+        MyGridPane contentPane
+                = new MyGridPane(new double[]{70, 10, 10, 10}, MyGridPane.getSpan(1));
+        contentPane.addColumn(0, scrollPane, upgradePane, messageLabel, playerInfoPane);
         return contentPane;
     }
 
@@ -84,7 +110,7 @@ public class MarketScreen extends GameScreen {
     }
 
     private MyGridPane constructBuyItemBoxesPane() {
-        itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
+        itemsPane = new MyGridPane(null, MyGridPane.getSpan(1));
         itemsPane.addColumn(0, headerPane);
         for (Map.Entry<Item, StockEntry> i : stock.entrySet()) {
             itemsPane.addColumn(0, new ItemBox(i));
@@ -93,7 +119,7 @@ public class MarketScreen extends GameScreen {
     }
 
     private MyGridPane constructSellItemBoxesPane() {
-        itemsPane = new MyGridPane(MyGridPane.getSpan(10), MyGridPane.getSpan(1));
+        itemsPane = new MyGridPane(null, MyGridPane.getSpan(1));
         boolean haveItemsToSell = !inventory.isEmpty();
         if (haveItemsToSell) {
             itemsPane.addColumn(0, headerPane);

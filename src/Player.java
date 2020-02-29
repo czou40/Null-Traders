@@ -1,7 +1,5 @@
 import javafx.beans.property.*;
 
-import java.util.Vector;
-
 /**
  * This class describes a player.
  */
@@ -10,7 +8,7 @@ public class Player {
         PIL, FIG, MER, ENG
     }
     private Upgrade[] upgrades; //upgrades tab
-    public final Upgrade emptySlot;
+    private final Upgrade emptySlot;
 
     private Game game;  //player is dependent on the game
 
@@ -22,7 +20,6 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
-    private Vector<CharacterUpgrade> characterUpgrades;
 
     private static final double MAXMERCHANTINFLUENCE = 0.3; //can get a maximum of 30% off each item
     private static final double MERCHANTDECAYFACTOR = 0.05;  //rate at which influence decays
@@ -50,8 +47,8 @@ public class Player {
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
         //this.characterUpgrades = new Vector<>();
-        this.emptySlot = new Upgrade (null, 0, "");
-        this.upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
+        this.emptySlot = new Upgrade(null, 0, "");
+        upgrades = new Upgrade[]{emptySlot, emptySlot, emptySlot, emptySlot};
     }
 
     /**
@@ -217,17 +214,11 @@ public class Player {
         return MAXMERCHANTINFLUENCE * (1 - Math.exp(-1 * MERCHANTDECAYFACTOR * merchant.get()));
     }
 
-    public Vector<CharacterUpgrade> getCharacterUpgrades() {
-        return characterUpgrades;
+    public Upgrade[] getUpgrades() {
+        return upgrades;
     }
 
-    public void addCharacterUpgrade(CharacterUpgrade upgrade) {
-        this.characterUpgrades.add(upgrade);
-        this.setPilot(getPilot() + upgrade.getPilot());
-        this.setFighter(getFighter() + upgrade.getFighter());
-        this.setMerchant(getMerchant() + upgrade.getMerchant());
-        this.setEngineer(getEngineer() + upgrade.getEngineer());
+    public Upgrade getEmptySlot() {
+        return emptySlot;
     }
-
-    public Upgrade[] getUpgrades() { return upgrades; }
 }

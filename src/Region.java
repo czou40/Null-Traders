@@ -1,8 +1,6 @@
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
-import java.util.Random;
-
 public class Region {
     private String name;
     private String description;

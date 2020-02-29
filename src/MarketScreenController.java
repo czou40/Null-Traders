@@ -115,4 +115,29 @@ public class MarketScreenController {
         player.setCredits(player.getCredits() + price * number);
         ship.setTotalItems(ship.getTotalItems() - number);
     }
+
+    public void buyUpgrade(Upgrade upgrade) throws IllegalAccessException {
+        if (upgrade.getPrice() > player.getCredits()) {
+            throw new IllegalAccessException("You don't have enough money!");
+        }
+        market.setBoughtUpgrade(true);
+        player.setCredits(player.getCredits() - upgrade.getPrice());
+        player.getUpgrades()[upgrade.getIndex()] = upgrade;
+        switch (upgrade.getUpgradeType()) {
+        case PIL:
+            player.setPilot(player.getPilot() + upgrade.getUpgradeLvl());
+            break;
+        case FIG:
+            player.setFighter(player.getFighter() + upgrade.getUpgradeLvl());
+            break;
+        case MER:
+            player.setMerchant(player.getMerchant() + upgrade.getUpgradeLvl());
+            break;
+        case ENG:
+            player.setEngineer(player.getEngineer() + upgrade.getUpgradeLvl());
+            break;
+        default:
+            throw new UnknownError("Unknown Error!");
+        }
+    }
 }
