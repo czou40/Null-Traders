@@ -1,5 +1,7 @@
 package cores.characters;
 
+import cores.NPCEncounters.EncounterFactory;
+import cores.NPCEncounters.NPC;
 import cores.Game;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
@@ -108,19 +110,23 @@ public class Player {
     Returns whether the travel was successful
      */
     public boolean travelToRegion(Region dest) {
-        System.out.println(getCurrentRegion().distanceTo(dest) / 10);
         int fuelNeeded = (int) (getCurrentRegion().distanceTo(dest) / 10 * calcPilotInfluence());
         if (getShip().getFuel() < fuelNeeded) {     //check if the player has enough fuel
             //not enough fuel
             return false;
         } else {
+            handleEncounters();
             currentRegion.get().setIsCurrentRegion(false);
             setCurrentRegion(dest);
             getShip().setFuel(getShip().getFuel() - fuelNeeded);
-            System.out.println(fuelNeeded);
 
             return true;
         }
+    }
+
+    private void handleEncounters() {
+        NPC encounter = EncounterFactory.generateRandomEncounter(this);
+        encounter.interact();
     }
 
     public double calcPilotInfluence() {
