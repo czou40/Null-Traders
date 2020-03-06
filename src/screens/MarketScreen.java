@@ -114,7 +114,7 @@ public class MarketScreen extends GameScreen {
     }
 
     private MyGridPane constructHeaderPane() {
-        MyGridPane headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{15, 15, 15, 45, 10});
+        MyGridPane headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{15, 15, 20, 40, 10});
         Label nameHeader = new Label("NAME");
         nameHeader.getStyleClass().add("h2");
         Label priceHeader = new Label("PRICE");
@@ -170,8 +170,8 @@ public class MarketScreen extends GameScreen {
             nameLabel = new Label(entry.getKey().getName().toUpperCase());
             priceLabel = new Label();
             priceLabel = new Label(availableAtMarket ? Integer.toString(buyingMode
-                    ? stock.get(entry.getKey()).getBuyingPrice()
-                    : stock.get(entry.getKey()).getSellingPrice()) : "NOT SOLD");
+                    ? marketplace.getBuyingPrice(entry.getKey())
+                    : marketplace.getSellingPrice(entry.getKey())) : "NOT SOLD");
             slider = new Slider(0, entry.getValue().getQuantity(), 0);
             slider.setBlockIncrement(1);
             slider.setMajorTickUnit(1);

@@ -1,5 +1,8 @@
 package screens;
 
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;
@@ -19,5 +22,12 @@ public class MapScreen extends GameScreen {
     public void doAfterScreenIsShown() {
         addToContentPane(new VisualizedUniverseMap(game.getUniverse(),
                 getContentWidth(), getContentHeight(), getPrimaryStage()));
+
+        Label fuelLabel = new Label();
+        fuelLabel.textProperty().bind(
+                Bindings.format("Ship Fuel: %d", getGame().getPlayer().getShip().fuelProperty())
+        );
+
+        addToContentPane(fuelLabel);
     }
 }

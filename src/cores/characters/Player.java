@@ -39,7 +39,8 @@ public class Player {
     private SimpleObjectProperty<Ship> ship;
 
     private static final double MAX_MERCHANT_INFLUENCE = 0.3; //can get a maximum of 30% off each item
-    private static final double MERCHANT_DECAY_FACTOR = 0.05;  //rate at which influence decays
+    private static final double MAX_PILOT_INFLUENCE = 0.4;
+    private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
 
     /**
      * Constructs a new instance.
@@ -103,18 +104,32 @@ public class Player {
         currentRegion.setIsCurrentRegion(true);
     }
 
-    public void travelToRegion(Region dest) {
-        currentRegion.get().setIsCurrentRegion(false);
-        setCurrentRegion(dest);
-        /*
-        More things will happen when the player travels.
-        They will be coded in future implementations.
-         */
-        System.out.println(currentRegion.get().getName());
+    /*
+    Returns whether the travel was successful
+     */
+    public boolean travelToRegion(Region dest) {
+        System.out.println(getCurrentRegion().distanceTo(dest) / 10);
+        int fuelNeeded = (int) (getCurrentRegion().distanceTo(dest) / 10 * calcPilotInfluence());
+        if (getShip().getFuel() < fuelNeeded) {     //check if the player has enough fuel
+            //not enough fuel
+            return false;
+        } else {
+            currentRegion.get().setIsCurrentRegion(false);
+            setCurrentRegion(dest);
+            getShip().setFuel(getShip().getFuel() - fuelNeeded);
+            System.out.println(fuelNeeded);
+
+            return true;
+        }
+    }
+
+    public double calcPilotInfluence() {
+        return 1 - MAX_PILOT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
+                * skills.get(SkillType.PIL).get()));
     }
 
     public double calcMerchantInfluence() {
-        return MAX_MERCHANT_INFLUENCE * (1 - Math.exp(-1 * MERCHANT_DECAY_FACTOR
+        return MAX_MERCHANT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
                 * skills.get(SkillType.MER).get()));
     }
 
