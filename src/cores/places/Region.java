@@ -1,7 +1,7 @@
 package cores.places;
 
 import cores.tradingsystem.Marketplace;
-import cores.characters.NPC;
+import cores.NPCEncounters.NPC;
 import cores.characters.Player;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

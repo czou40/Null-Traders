@@ -28,7 +28,7 @@ public class Marketplace {
     private static final double INCREMENTALTECHINFLUENCE = 0.1;
 
     private static final double SELLVARIANCE = 0.2;
-    private static final double AVGSELLPERCENT = 0.6;
+    private static final double AVGSELLPERCENT = 0.8;
 
     private static final boolean DEBUG = false;
 

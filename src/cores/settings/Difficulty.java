@@ -4,9 +4,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public enum Difficulty {
-    CADET(200, 30, 75, 1000, 500),
-    CAPTAIN(150, 20, 50, 500, 300),
-    ADMIRAL(100, 15, 25, 400, 100);
+    CADET(500, 30, 75, 1000, 500),
+    CAPTAIN(250, 20, 50, 750, 300),
+    ADMIRAL(150, 15, 25, 500, 100);
 
     private IntegerProperty credits;
     private IntegerProperty startingSkillPoints;

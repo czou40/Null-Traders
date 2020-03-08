@@ -2,6 +2,9 @@ package screens;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;
@@ -45,5 +48,12 @@ public class MapScreen extends Screen {
         back.layoutXProperty().bind(getRootWidth().subtract(back.widthProperty()).subtract(50));
         System.out.println(back.layoutXProperty().get());
         back.layoutYProperty().set(50);
+        Label fuelLabel = new Label();
+        fuelLabel.layoutXProperty().set(50);
+        fuelLabel.layoutYProperty().set(50);
+        fuelLabel.textProperty().bind(
+                Bindings.format("Ship Fuel: %d", getGame().getPlayer().getShip().fuelProperty())
+        );
+        addToRoot(fuelLabel);
     }
 }

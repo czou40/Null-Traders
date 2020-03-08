@@ -18,6 +18,7 @@ public class Ship {
     private IntegerProperty cargoCapacity;
     private ObjectProperty<Map<Item, InventoryEntry>> itemInventory;
     private IntegerProperty totalItems;
+    private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
 
@@ -26,12 +27,13 @@ public class Ship {
         this.totalItems = new SimpleIntegerProperty(0);
         this.itemInventory = new SimpleObjectProperty<>(new HashMap<>());
         this.cargoCapacity = new SimpleIntegerProperty(cargoCapacity);
+        this.fuel = new SimpleIntegerProperty(fuelCapacity);
         this.fuelCapacity = new SimpleIntegerProperty(fuelCapacity);
         this.health = new SimpleIntegerProperty(health);
     }
 
     public Ship(Difficulty difficulty) {
-        this("cores.Player cores.Ship",
+        this("Player Ship",
                 difficulty.getStartCargoCapacity(),
                 difficulty.getStartFuelCapacity(),
                 difficulty.getStartHealth()
@@ -72,6 +74,54 @@ public class Ship {
 
     public void setItemInventory(Map<Item, InventoryEntry> itemInventory) {
         this.itemInventory.set(itemInventory);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public int getFuel() {
+        return fuel.get();
+    }
+
+    public IntegerProperty fuelProperty() {
+        return fuel;
+    }
+
+    public void setFuel(int fuel) {
+        this.fuel.set(fuel);
+    }
+
+    public int getFuelCapacity() {
+        return fuelCapacity.get();
+    }
+
+    public IntegerProperty fuelCapacityProperty() {
+        return fuelCapacity;
+    }
+
+    public void setFuelCapacity(int fuelCapacity) {
+        this.fuelCapacity.set(fuelCapacity);
+    }
+
+    public int getHealth() {
+        return health.get();
+    }
+
+    public IntegerProperty healthProperty() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health.set(health);
     }
 
     public void printInventory() {
