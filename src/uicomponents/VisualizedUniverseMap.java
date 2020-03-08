@@ -1,11 +1,14 @@
 package uicomponents;
 
-import cores.characters.Player;
 import cores.places.Region;
 import cores.places.Universe;
 import javafx.animation.PauseTransition;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Line;
 import screens.RegionCharacteristicsScreen;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,27 +26,33 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * this class is the UI element that represents the universe.
  */
 public class VisualizedUniverseMap extends Pane {
     private Universe universe;
-    private Vector<MapDot> dots;
+    private HashMap<Region, MapDot> dots;
+    private Line route;
     private SimpleDoubleProperty centerX;
     private SimpleDoubleProperty centerY;
     private SimpleDoubleProperty offsetX;
     private SimpleDoubleProperty offsetY;
-    private ReadOnlyDoubleProperty widthProperty;
-    private ReadOnlyDoubleProperty heightProperty;
+    private SimpleDoubleProperty mapWidth;
+    private SimpleDoubleProperty mapHeight;
     private SimpleDoubleProperty scaling;
     private Stage primaryStage;
+    private SimpleBooleanProperty isTraveling;
+    private ImageView spaceShip;
 
     public VisualizedUniverseMap(Universe universe,
                                  ReadOnlyDoubleProperty widthProperty,
                                  ReadOnlyDoubleProperty heightProperty, Stage primaryStage) {
         super();
+
+        this.isTraveling = new SimpleBooleanProperty(false);
         /*
         Adjust the size of scrollable area.
         if the panel is not big enough, you cannot use zoom on and zoom out outside of the map.
@@ -55,13 +64,14 @@ public class VisualizedUniverseMap extends Pane {
         Set up the universe.
          */
         this.universe = universe;
-
         /*
         Adjust the size of the visualized map according to the given size
         and making the map responsive.
          */
-        this.widthProperty = widthProperty;
-        this.heightProperty = heightProperty;
+        this.mapWidth = new SimpleDoubleProperty();
+        this.mapHeight = new SimpleDoubleProperty();
+        this.mapWidth.bind(widthProperty);
+        this.mapHeight.bind(heightProperty);
 
         /*
         Set up zooming in and zooming out function.
@@ -94,9 +104,9 @@ public class VisualizedUniverseMap extends Pane {
         centerY = new SimpleDoubleProperty(universe.getCurrentRegion().getY());
         offsetX = new SimpleDoubleProperty();
         offsetY = new SimpleDoubleProperty();
-        offsetX.bind(widthProperty.divide(2).subtract(centerX));
-        offsetY.bind(heightProperty.divide(2).subtract(centerY));
-        universe.currentRegionProperty().addListener(e -> {
+        offsetX.bind(mapWidth.divide(2).subtract(centerX));
+        offsetY.bind(mapHeight.divide(2).subtract(centerY));
+        universe.currentRegionProperty().addListener((observableValue, oldValue, newValue) -> {
             /*
             Update centerX and centerY information.
             The following codes are equivalent to:
@@ -104,13 +114,9 @@ public class VisualizedUniverseMap extends Pane {
             centerY.set(universe.getCurrentRegion().getY());
             We used timeline to make the transition smooth.
              */
-            Timeline timeline = new Timeline();
-            KeyValue keyValueX = new KeyValue(centerX, universe.getCurrentRegion().getX());
-            KeyFrame keyFrameX = new KeyFrame(new Duration(1000), keyValueX);
-            KeyValue keyValueY = new KeyValue(centerY, universe.getCurrentRegion().getY());
-            KeyFrame keyFrameY = new KeyFrame(new Duration(1000), keyValueY);
-            timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
-            timeline.play();
+            visualizeTravelTo(universe.getCurrentRegion().getX(),
+                    universe.getCurrentRegion().getY(),
+                    true, newValue);
         });
 
         /*
@@ -135,13 +141,30 @@ public class VisualizedUniverseMap extends Pane {
         /*
         Construct all the dots.
          */
-        dots = new Vector<>();
+        dots = new HashMap<>();
         for (Region region : universe.getRegions()) {
             MapDot dot = new MapDot(region);
-            dots.add(dot);
+            dots.put(region, dot);
             //Note! We must add labels first. Otherwise, the labels will cover the dot!
             this.getChildren().addAll(dot.nameLabel, dot.infoLabels, dot);
+
         }
+        PauseTransition twinkle = new PauseTransition(Duration.millis(50));
+        twinkle.setOnFinished(e -> {
+            for(MapDot dot : dots.values()) {
+                dot.light += (dot.increaseInLightIntensity ? 1 : -1) * Math.random() * 0.1;
+                if (dot.light >= 1) {
+                    dot.increaseInLightIntensity = false;
+                    dot.light = 1;
+                } else if (dot.light < 0) {
+                    dot.increaseInLightIntensity = true;
+                    dot.light = 0;
+                }
+                dot.setOpacity(dot.light);
+            }
+            twinkle.playFromStart();
+        });
+        twinkle.play();
 
         /*
         Construct current region description box.
@@ -163,21 +186,64 @@ public class VisualizedUniverseMap extends Pane {
         preventing it from overflowing on the screen.
          */
         Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(widthProperty);
-        clip.heightProperty().bind(heightProperty);
+        clip.widthProperty().bind(mapWidth);
+        clip.heightProperty().bind(mapHeight);
         this.setClip(clip);
+
+        this.route = new Line();
+        this.spaceShip = new ImageView("file:src/images/ship.png");
+        this.spaceShip.setFitWidth(20);
+        this.spaceShip.setFitHeight(20);
+        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
+        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).subtract(10));
+    }
+
+    private void visualizeTravelTo(double x, double y, boolean isReal, Region region) {
+        double duration = Math.sqrt(Math.pow(centerX.get() - x, 2)
+                + Math.pow(centerY.get() - y, 2)) * 5;
+        Timeline timeline = new Timeline();
+        KeyValue keyValueX = new KeyValue(centerX, x);
+        KeyFrame keyFrameX = new KeyFrame(new Duration(duration), keyValueX);
+        KeyValue keyValueY = new KeyValue(centerY, y);
+        KeyFrame keyFrameY = new KeyFrame(new Duration(duration), keyValueY);
+        timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
+        timeline.setOnFinished(event -> {
+            if (isReal) {
+                VisualizedUniverseMap.this.getChildren().remove(route);
+                VisualizedUniverseMap.this.getChildren().remove(spaceShip);
+                isTraveling.set(false);
+            } else {
+                universe.getPlayer().travelToRegion(region);
+            }
+        });
+        timeline.play();
+    }
+
+    public boolean isIsTraveling() {
+        return isTraveling.get();
+    }
+
+    public SimpleBooleanProperty isTravelingProperty() {
+        return isTraveling;
+    }
+
+    public void updateWidthAndHeightProperty(ReadOnlyDoubleProperty widthProperty,
+                                             ReadOnlyDoubleProperty heightProperty) {
+        this.mapWidth.bind(widthProperty);
+        this.mapHeight.bind(heightProperty);
     }
 
     private class MapDot extends Circle {
         private VBox infoLabels;
         private Label nameLabel;
         private Region region;
+        private double light = 1.0;
+        private boolean increaseInLightIntensity = true;
 
         public MapDot(Region region) {
-            super(10, 10, 5, Color.BLACK);
+            super(10, 10, 2, Color.GHOSTWHITE);
 
             this.region = region;
-
             /*
             Positioning the Dot in the correct place on the map.
             The position of the dot depends on where the player is currently at
@@ -197,6 +263,7 @@ public class VisualizedUniverseMap extends Pane {
             nameLabel = new Label(region.isFound() ? region.getName() : "???");
             region.foundProperty().addListener(e -> {
                 nameLabel.setText(region.isFound() ? region.getName() : "???");
+                nameLabel.setVisible(region.isFound());
             });
             nameLabel.setStyle("-fx-font-size: 16px;");
             nameLabel.layoutXProperty().bind(centerXProperty().add(15));
@@ -255,6 +322,7 @@ public class VisualizedUniverseMap extends Pane {
             this.setCursor(Cursor.HAND);
 
             EventHandler<MouseEvent> display = event -> {
+                nameLabel.setOpacity(1);
                 nameLabel.setVisible(true);
                 infoLabels.setVisible(true);
             };
@@ -280,9 +348,44 @@ public class VisualizedUniverseMap extends Pane {
             it travels to the region associated with the dots.
              */
             this.setOnMouseClicked(e -> {
-                universe.getPlayer().travelToRegion(region);
+                if (!isTraveling.get() && !region.equals(universe.getCurrentRegion())) {
+                    isTraveling.set(true);
+                    route.startXProperty().bind(centerXProperty());
+                    route.startYProperty().bind(centerYProperty());
+                    route.endXProperty().bind(dots.get(universe.getCurrentRegion()).centerXProperty());
+                    route.endYProperty().bind(dots.get(universe.getCurrentRegion()).centerYProperty());
+                    route.setStroke(Color.GOLD);
+                    route.setOpacity(0.5);
+                    route.setStrokeWidth(1);
+                    double diffY = route.getStartY() - route.getEndY();
+                    double diffX = route.getStartX() - route.getEndX();
+                    double angle;
+                    if (diffX == 0) {
+                        angle = diffY > 0 ? 90 : -90;
+                    } else {
+                        angle = Math.atan(diffY / diffX) / Math.PI * 180;
+                    }
+                    spaceShip.setRotate(angle + (diffX < 0 ? 90 : -90));
+                    System.out.println(angle);
+                    VisualizedUniverseMap.this.getChildren().add(route);
+                    VisualizedUniverseMap.this.getChildren().add(spaceShip);
+                    visualizeTravelTo(
+                            (universe.getCurrentRegion().getX() + region.getX()) / 2,
+                            (universe.getCurrentRegion().getY() + region.getY()) / 2, false, region);
+                }
             });
 
+            scaling.addListener(((observable, oldValue, newValue) -> {
+                double s = newValue.doubleValue();
+                if (s > 1.0 / 3) {
+                    setRadius(s * 3);
+                } else {
+                    setRadius(1);
+                }
+                if (s < 0.25) {
+                    nameLabel.setOpacity(Math.max(s * 10 - 1.5, 0));
+                }
+            }));
         }
 
         private void updateColor() {
@@ -290,9 +393,9 @@ public class VisualizedUniverseMap extends Pane {
             if (region.isCurrentRegion()) {
                 dotColor = Color.GOLD;
             } else if (region.isFound()) {
-                dotColor = Color.WHITE;
+                dotColor = Color.LIGHTSKYBLUE;
             } else {
-                dotColor = Color.BLACK;
+                dotColor = Color.GHOSTWHITE;
             }
             this.setFill(dotColor);
         }
