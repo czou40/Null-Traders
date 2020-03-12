@@ -86,7 +86,8 @@ public abstract class GameScreen extends Screen {
                         "SELL CARGO", new MarketScreen(getPrimaryStage(), game, false)),
                 new MyNavigationButton("PROFILE",
                         new CharacterSheetScreen(getPrimaryStage(), game)),
-                new MyNavigationButton("MAP", new MapScreen(getPrimaryStage(), game)));
+                new MyNavigationButton("MAP", new MapScreen(getPrimaryStage(), game)),
+                new MyNavigationButton("SHIP", new ShipScreen(getPrimaryStage(), game)));
         sideBarPane.getStyleClass().addAll("transparent-pane-light");
         return sideBarPane;
     }
