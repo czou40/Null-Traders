@@ -39,11 +39,11 @@ public class MapScreen extends Screen {
             map = new VisualizedUniverseMap(game.getUniverse(),
                     getRootWidth(), getRootHeight(), getPrimaryStage());
         } else {
+            map.errorMessageProperty().set("");
             map.updateWidthAndHeightProperty(getRootWidth(), getRootHeight());
         }
         addToRoot(map);
         MyNavigationButton back = new MyNavigationButton("Back", from);
-        back.visibleProperty().bind(map.isTravelingProperty().not());
         addToRoot(back);
         back.layoutXProperty().bind(getRootWidth().subtract(back.widthProperty()).subtract(50));
         System.out.println(back.layoutXProperty().get());
@@ -54,6 +54,26 @@ public class MapScreen extends Screen {
         fuelLabel.textProperty().bind(
                 Bindings.format("Ship Fuel: %d", getGame().getPlayer().getShip().fuelProperty())
         );
+        Label errorLabel = new Label();
+        errorLabel.setVisible(false);
+        errorLabel.layoutXProperty().set(50);
+        errorLabel.layoutYProperty().set(50);
+        map.errorMessageProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                fuelLabel.setVisible(true);
+                errorLabel.setVisible(false);
+            } else {
+                fuelLabel.setVisible(false);
+                errorLabel.setText(newValue);
+                errorLabel.setVisible(true);
+            }
+        }));
+        map.isTravelingProperty().addListener((observable, oldValue, newValue) -> {
+            back.setVisible(!newValue);
+            fuelLabel.setVisible(!newValue);
+            errorLabel.setVisible(false);
+        });
         addToRoot(fuelLabel);
+        addToRoot(errorLabel);
     }
 }

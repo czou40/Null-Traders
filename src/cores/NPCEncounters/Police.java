@@ -22,5 +22,6 @@ public class Police implements NPC, Fightable {
 
     @Override
     public boolean handleForfeit(Player player) {
+        return true;
     }
 }

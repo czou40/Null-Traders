@@ -101,19 +101,19 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
-    public boolean travelToRegion(Region dest) {
-        int fuelNeeded = (int) (getCurrentRegion().distanceTo(dest) / 10 * calcPilotInfluence());
-        if (getShip().getFuel() < fuelNeeded) {     //check if the player has enough fuel
-            //not enough fuel
-            return false;
-        } else {
+    public void travelToRegion(Region dest) {
+        if (ableToTravelTo(dest)) {
             handleEncounters();
             currentRegion.get().setIsCurrentRegion(false);
+            getShip().decrementFuel(getCurrentRegion(), dest, calcPilotInfluence());
             setCurrentRegion(dest);
-            getShip().setFuel(getShip().getFuel() - fuelNeeded);
-
-            return true;
+        } else {
+            throw new IllegalArgumentException("There is not enough fuel!");
         }
+    }
+
+    public boolean ableToTravelTo(Region dest) {
+        return getShip().ableToTravelTo(getCurrentRegion(), dest, calcPilotInfluence());
     }
 
     private void handleEncounters() {

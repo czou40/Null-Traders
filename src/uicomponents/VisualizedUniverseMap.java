@@ -3,8 +3,7 @@ package uicomponents;
 import cores.places.Region;
 import cores.places.Universe;
 import javafx.animation.PauseTransition;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -14,8 +13,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -46,6 +43,7 @@ public class VisualizedUniverseMap extends Pane {
     private Stage primaryStage;
     private SimpleBooleanProperty isTraveling;
     private ImageView spaceShip;
+    private SimpleStringProperty errorMessage;
 
     public VisualizedUniverseMap(Universe universe,
                                  ReadOnlyDoubleProperty widthProperty,
@@ -53,6 +51,7 @@ public class VisualizedUniverseMap extends Pane {
         super();
 
         this.isTraveling = new SimpleBooleanProperty(false);
+        this.errorMessage = new SimpleStringProperty();
         /*
         Adjust the size of scrollable area.
         if the panel is not big enough, you cannot use zoom on and zoom out outside of the map.
@@ -64,42 +63,98 @@ public class VisualizedUniverseMap extends Pane {
         Set up the universe.
          */
         this.universe = universe;
-        /*
-        Adjust the size of the visualized map according to the given size
-        and making the map responsive.
-         */
-        this.mapWidth = new SimpleDoubleProperty();
-        this.mapHeight = new SimpleDoubleProperty();
-        this.mapWidth.bind(widthProperty);
-        this.mapHeight.bind(heightProperty);
+        setupMapAutosize(widthProperty, heightProperty);
+        setUpZooming();
+        setUpMapAutoCenteredAtCurrentRegion();
 
         /*
-        Set up zooming in and zooming out function.
-        When the user scrolls the mouse or uses the touch pad,
-        the scaling coefficient will change,
-        enabling the user to zoom in or zoom out.
+        Get the primary stage, which allows us to show the region characteristics screen
          */
-        scaling = new SimpleDoubleProperty(1);
-        this.setOnScroll(event -> {
-            /*
-             * The following codes are equivalent to
-             * scaling.set(scaling.get() * (event.getDeltaY() > 0 ? 1.1 : 0.9));
-             * We use a timeline to make the transition smooth.
-             */
-            Timeline timeline = new Timeline();
-            KeyValue keyValue = new KeyValue(
-                    scaling, scaling.get() * (event.getDeltaY() > 0 ? 1.15 : 0.85));
-            KeyFrame keyFrame = new KeyFrame(new Duration(250), keyValue);
-            timeline.getKeyFrames().addAll(keyFrame);
-            timeline.play();
+        this.primaryStage = primaryStage;
+
+        addBorderToMap();
+        addDotsToMap();
+        makeDotsTwinkle();
+        clipMapToHideOverflow();
+
+        this.route = new Line();
+        this.spaceShip = new ImageView("file:src/images/ship.png");
+        this.spaceShip.setFitWidth(20);
+        this.spaceShip.setFitHeight(20);
+        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
+        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).subtract(10));
+    }
+
+    /**
+     * We clip the map so that we only show a portion of the map,
+     * preventing it from overflowing on the screen.
+     */
+    private void clipMapToHideOverflow() {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(mapWidth);
+        clip.heightProperty().bind(mapHeight);
+        this.setClip(clip);
+    }
+
+    /**
+     * Make dots twinkle on the map. This makes the map visually appealing.
+     */
+    private void makeDotsTwinkle() {
+        PauseTransition twinkle = new PauseTransition(Duration.millis(50));
+        twinkle.setOnFinished(e -> {
+            for (MapDot dot : dots.values()) {
+                dot.light += (dot.increaseInLightIntensity ? 1 : -1) * Math.random() * 0.1;
+                if (dot.light >= 1) {
+                    dot.increaseInLightIntensity = false;
+                    dot.light = 1;
+                } else if (dot.light < 0) {
+                    dot.increaseInLightIntensity = true;
+                    dot.light = 0;
+                }
+                dot.setOpacity(dot.light);
+            }
+            twinkle.playFromStart();
         });
+        twinkle.play();
+    }
 
-        /*
-        As the player travels in the universe, its position changes.
-        However,
-        the current region the player is at should always be at the center of the visualized map.
-        That's why we need to calculate where the regions should be displayed on the map.
-         */
+    /**
+     * Construct all the dots.
+     */
+    private void addDotsToMap() {
+        dots = new HashMap<>();
+        for (Region region : universe.getRegions()) {
+            MapDot dot = new MapDot(region);
+            dots.put(region, dot);
+            //Note! We must add labels first. Otherwise, the labels will cover the dot!
+            this.getChildren().addAll(dot.nameLabel, dot.infoLabels, dot);
+
+        }
+    }
+
+    /**
+     * Construct border of the map
+     */
+    private void addBorderToMap() {
+        Rectangle border = new Rectangle();
+        border.setFill(Color.TRANSPARENT);
+        border.setStroke(Color.WHITE);
+        border.xProperty().bind(scaling.multiply(centerX).multiply(-1).
+                add(offsetX).add(centerX));
+        border.yProperty().bind(scaling.multiply(centerY).multiply(-1).
+                add(offsetY).add(centerY));
+        border.widthProperty().bind(scaling.multiply(Universe.WIDTH));
+        border.heightProperty().bind(scaling.multiply(Universe.HEIGHT));
+        this.getChildren().add(border);
+    }
+
+    /**
+     * As the player travels in the universe, its position changes.
+     * However,
+     * the current region the player is at should always be at the center of the visualized map.
+     * That's why we need to calculate where the regions should be displayed on the map.
+     */
+    private void setUpMapAutoCenteredAtCurrentRegion() {
         centerX = new SimpleDoubleProperty(universe.getCurrentRegion().getX());
         centerY = new SimpleDoubleProperty(universe.getCurrentRegion().getY());
         offsetX = new SimpleDoubleProperty();
@@ -118,86 +173,48 @@ public class VisualizedUniverseMap extends Pane {
                     universe.getCurrentRegion().getY(),
                     true, newValue);
         });
-
-        /*
-        Get the primary stage, which allows us to show the region characteristics screen
-         */
-        this.primaryStage = primaryStage;
-
-        /*
-        Construct border of the map
-         */
-        Rectangle border = new Rectangle();
-        border.setFill(Color.TRANSPARENT);
-        border.setStroke(Color.WHITE);
-        border.xProperty().bind(scaling.multiply(centerX).multiply(-1).
-                add(offsetX).add(centerX));
-        border.yProperty().bind(scaling.multiply(centerY).multiply(-1).
-                add(offsetY).add(centerY));
-        border.widthProperty().bind(scaling.multiply(Universe.WIDTH));
-        border.heightProperty().bind(scaling.multiply(Universe.HEIGHT));
-        this.getChildren().add(border);
-
-        /*
-        Construct all the dots.
-         */
-        dots = new HashMap<>();
-        for (Region region : universe.getRegions()) {
-            MapDot dot = new MapDot(region);
-            dots.put(region, dot);
-            //Note! We must add labels first. Otherwise, the labels will cover the dot!
-            this.getChildren().addAll(dot.nameLabel, dot.infoLabels, dot);
-
-        }
-        PauseTransition twinkle = new PauseTransition(Duration.millis(50));
-        twinkle.setOnFinished(e -> {
-            for(MapDot dot : dots.values()) {
-                dot.light += (dot.increaseInLightIntensity ? 1 : -1) * Math.random() * 0.1;
-                if (dot.light >= 1) {
-                    dot.increaseInLightIntensity = false;
-                    dot.light = 1;
-                } else if (dot.light < 0) {
-                    dot.increaseInLightIntensity = true;
-                    dot.light = 0;
-                }
-                dot.setOpacity(dot.light);
-            }
-            twinkle.playFromStart();
-        });
-        twinkle.play();
-
-        /*
-        Construct current region description box.
-        Since we use binding, the the box automatically updates the information
-        of the current regions the player is at as it travels around.
-         */
-
-        /*
-        currentRegionDescriptionBox = new classes.elements.RegionDescriptionBox(universe.currentRegionProperty());
-        currentRegionDescriptionBox.layoutXProperty().bind(widthProperty.
-                subtract(currentRegionDescriptionBox.widthProperty()));
-        currentRegionDescriptionBox.layoutYProperty().bind(heightProperty.
-                subtract(currentRegionDescriptionBox.heightProperty()));
-        this.getChildren().add(currentRegionDescriptionBox);
-        */
-
-        /*
-        We clip the map so that we only show a portion of the map,
-        preventing it from overflowing on the screen.
-         */
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(mapWidth);
-        clip.heightProperty().bind(mapHeight);
-        this.setClip(clip);
-
-        this.route = new Line();
-        this.spaceShip = new ImageView("file:src/images/ship.png");
-        this.spaceShip.setFitWidth(20);
-        this.spaceShip.setFitHeight(20);
-        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
-        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).subtract(10));
     }
 
+    /**
+     * Set up zooming in and zooming out function.
+     * When the user scrolls the mouse or uses the touch pad,
+     * the scaling coefficient will change,
+     * enabling the user to zoom in or zoom out.
+     */
+    private void setUpZooming() {
+        scaling = new SimpleDoubleProperty(1);
+        this.setOnScroll(event -> {
+            /*
+             * The following codes are equivalent to
+             * scaling.set(scaling.get() * (event.getDeltaY() > 0 ? 1.1 : 0.9));
+             * We use a timeline to make the transition smooth.
+             */
+            Timeline timeline = new Timeline();
+            KeyValue keyValue = new KeyValue(
+                    scaling, scaling.get() * (event.getDeltaY() > 0 ? 1.15 : 0.85));
+            KeyFrame keyFrame = new KeyFrame(new Duration(250), keyValue);
+            timeline.getKeyFrames().addAll(keyFrame);
+            timeline.play();
+        });
+    }
+
+    /**
+     * Adjust the size of the visualized map according to the given size
+     * and making the map responsive.
+     */
+    private void setupMapAutosize(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+        this.mapWidth = new SimpleDoubleProperty();
+        this.mapHeight = new SimpleDoubleProperty();
+        this.mapWidth.bind(widthProperty);
+        this.mapHeight.bind(heightProperty);
+    }
+
+    /**
+     * @param x
+     * @param y
+     * @param isReal
+     * @param region
+     */
     private void visualizeTravelTo(double x, double y, boolean isReal, Region region) {
         double duration = Math.sqrt(Math.pow(centerX.get() - x, 2)
                 + Math.pow(centerY.get() - y, 2)) * 5;
@@ -219,7 +236,7 @@ public class VisualizedUniverseMap extends Pane {
         timeline.play();
     }
 
-    public boolean isIsTraveling() {
+    public boolean isTraveling() {
         return isTraveling.get();
     }
 
@@ -233,6 +250,14 @@ public class VisualizedUniverseMap extends Pane {
         this.mapHeight.bind(heightProperty);
     }
 
+    public String getErrorMessage() {
+        return errorMessage.get();
+    }
+
+    public SimpleStringProperty errorMessageProperty() {
+        return errorMessage;
+    }
+
     private class MapDot extends Circle {
         private VBox infoLabels;
         private Label nameLabel;
@@ -240,7 +265,7 @@ public class VisualizedUniverseMap extends Pane {
         private double light = 1.0;
         private boolean increaseInLightIntensity = true;
 
-        public MapDot(Region region) {
+        public MapDot(Region region){
             super(10, 10, 2, Color.GHOSTWHITE);
 
             this.region = region;
@@ -349,6 +374,11 @@ public class VisualizedUniverseMap extends Pane {
              */
             this.setOnMouseClicked(e -> {
                 if (!isTraveling.get() && !region.equals(universe.getCurrentRegion())) {
+                    if (!universe.getPlayer().ableToTravelTo(region)) {
+                        errorMessage.set("You don't have enough fuel!");
+                        return;
+                    }
+                    errorMessage.set("");
                     isTraveling.set(true);
                     route.startXProperty().bind(centerXProperty());
                     route.startYProperty().bind(centerYProperty());
