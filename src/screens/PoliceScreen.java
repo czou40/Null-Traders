@@ -3,6 +3,7 @@ package screens;
 import cores.Game;
 import cores.NPCEncounters.NPC;
 import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import screens.EncounterScreen;
 
@@ -18,7 +19,7 @@ public class PoliceScreen extends EncounterScreen {
     }
 
     @Override
-    public Parent constructRoot() {
+    public Pane constructRoot() {
         return null;
     }
 }
