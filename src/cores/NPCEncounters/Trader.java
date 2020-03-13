@@ -15,6 +15,7 @@ import screens.Screen;
 import screens.TraderScreen;
 
 import java.util.Map;
+import java.util.Random;
 
 public class Trader implements NPC, ITrade, Robbable {
     private Player player;
@@ -38,18 +39,68 @@ public class Trader implements NPC, ITrade, Robbable {
     }
 
     @Override
-    public boolean handleBuy(Player player, Item item, int quantity) {
-        return false;
+    public boolean handleBuy(Player player) {
+        if (player.getCredits() >= entry.getTotalCost()) {
+            InventoryEntry playerEntry = player.getShip().getItemInventory().get(item);
+            if (playerEntry == null) {
+                playerEntry = new InventoryEntry();
+            }
+            playerEntry.add((int) entry.getAverageBuyingPrice(), entry.getQuantity());
+            player.getShip().getItemInventory().put(item, playerEntry);
+
+            player.travelToRegion(dest, true);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean handleNegotiate(Player player) {
+        final double PRICE_REDUCTION = 0.4;
+        //if this method is used the option should also be greyed out in the UI
 
-        return false;
+        double merchantSkillInfluence = player.calcInfluence(Player.SkillType.MER);
+        Random random = new Random();
+        double succeedNum = random.nextDouble();
+        boolean succeed = succeedNum > 0.5 * (1-merchantSkillInfluence);
+
+        if (succeed) {
+            entry.setTotalCost((int) (PRICE_REDUCTION * entry.getTotalCost()));
+            return true;
+        } else {
+            entry.setTotalCost((int) ((1 + 1 / PRICE_REDUCTION) * entry.getTotalCost()));
+            return false;
+        }
     }
 
     @Override
     public boolean handleRob(Player player) {
-        return false;
+        final int MAX_STRENGTH = 50;
+
+        double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
+        Random random = new Random();
+        double winOrLoseNum = random.nextDouble();
+        boolean win = winOrLoseNum > 0.5 * (1-fightSkillInfluence);
+
+        if(win){
+            InventoryEntry playerEntry = player.getShip().getItemInventory().get(item);
+            if (playerEntry == null) {
+                playerEntry = new InventoryEntry();
+            }
+            playerEntry.add(0, (int) Math.round(Math.random() * entry.getQuantity()));
+            player.getShip().getItemInventory().put(item, playerEntry);
+
+            player.travelToRegion(dest, true);
+            return true;
+        } else {
+            player.getShip().setHealth(
+                    player.getShip().getHealth() -
+                            (int) Math.round(Math.random() * MAX_STRENGTH)
+            );
+
+            player.travelToRegion(dest, true);
+            return false;
+        }
     }
 }
