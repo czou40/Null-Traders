@@ -1,10 +1,17 @@
 package cores.NPCEncounters;
 
+import cores.Game;
 import cores.characters.Player;
+import cores.objects.InventoryEntry;
 import cores.objects.Item;
 import cores.objects.StockEntry;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.stage.Stage;
+import screens.BanditScreen;
+import screens.EncounterScreen;
+import screens.Screen;
+import screens.TraderScreen;
 
 import java.util.Map;
 
@@ -32,8 +39,8 @@ public class Trader implements NPC, ITrade, Robbable {
     }
 
     @Override
-    public void interact() {
-
+    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
+        return new TraderScreen(primaryStage, game, this);
     }
 
     @Override
@@ -43,6 +50,7 @@ public class Trader implements NPC, ITrade, Robbable {
 
     @Override
     public boolean handleNegotiate(Player player) {
+
         return false;
     }
 

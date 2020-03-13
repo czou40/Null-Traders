@@ -1,8 +1,13 @@
 package cores.NPCEncounters;
 
+import cores.Game;
 import cores.NPCEncounters.NPC;
 import cores.characters.Player;
 import cores.objects.Item;
+import javafx.stage.Stage;
+import screens.EncounterScreen;
+import screens.PoliceScreen;
+import screens.Screen;
 
 public class Police implements NPC, Fightable {
     private Player player;
@@ -14,8 +19,8 @@ public class Police implements NPC, Fightable {
     }
 
     @Override
-    public void interact() {
-
+    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
+        return new PoliceScreen(primaryStage, game, this);
     }
 
     @Override

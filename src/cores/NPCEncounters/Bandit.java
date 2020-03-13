@@ -1,6 +1,11 @@
 package cores.NPCEncounters;
 
+import cores.Game;
 import cores.characters.Player;
+import javafx.stage.Stage;
+import screens.BanditScreen;
+import screens.EncounterScreen;
+import screens.Screen;
 
 public class Bandit implements NPC, Fightable {
     private Player player;
@@ -10,8 +15,8 @@ public class Bandit implements NPC, Fightable {
     }
 
     @Override
-    public void interact() {
-
+    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
+        return new BanditScreen(primaryStage, game, this);
     }
 
     @Override

@@ -39,6 +39,9 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
+    private SimpleObjectProperty<NPC> encounter;
+
+
     private static final double MAX_FUEL_EFFICIENCY = 0.4;
     private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
 
@@ -77,6 +80,8 @@ public class Player {
         rawSkills.put(SkillType.ENG, 0);
         rawSkills.put(SkillType.FIG, 0);
         rawSkills.put(SkillType.PIL, 0);
+
+        encounter = new SimpleObjectProperty<>();
     }
 
     /**
@@ -125,10 +130,9 @@ public class Player {
     }
 
     private void handleEncounters() {
-        NPC encounter = EncounterFactory.generateRandomEncounter(this, game.getDifficulty());
-        if (encounter != null) {
-            encounter.interact();
-        }
+        this.encounter.set(
+                EncounterFactory.generateRandomEncounter(this, game.getDifficulty())
+        );
     }
 
     /*
@@ -236,5 +240,17 @@ public class Player {
 
     public SimpleObjectProperty<Upgrade> getUpgradeProperty(SkillType type) {
         return upgrades.get(type);
+    }
+
+    public NPC getEncounter() {
+        return encounter.get();
+    }
+
+    public SimpleObjectProperty<NPC> encounterProperty() {
+        return encounter;
+    }
+
+    public void setEncounter(NPC encounter) {
+        this.encounter.set(encounter);
     }
 }
