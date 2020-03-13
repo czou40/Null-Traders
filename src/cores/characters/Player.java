@@ -39,9 +39,7 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
-
-    private static final double MAX_MERCHANT_INFLUENCE = 0.3; //can get a maximum of 30% off each item
-    private static final double MAX_PILOT_INFLUENCE = 0.4;
+    private static final double MAX_FUEL_EFFICIENCY = 0.4;
     private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
 
     /**
@@ -110,7 +108,9 @@ public class Player {
     Returns whether the travel was successful
      */
     public boolean travelToRegion(Region dest) {
-        int fuelNeeded = (int) (getCurrentRegion().distanceTo(dest) / 10 * calcPilotInfluence());
+        int fuelNeeded = (int)
+                (getCurrentRegion().distanceTo(dest) / 10
+                        * calcInfluence(SkillType.PIL) * MAX_FUEL_EFFICIENCY);
         if (getShip().getFuel() < fuelNeeded) {     //check if the player has enough fuel
             //not enough fuel
             return false;
@@ -125,18 +125,18 @@ public class Player {
     }
 
     private void handleEncounters() {
-        NPC encounter = EncounterFactory.generateRandomEncounter(this);
-        encounter.interact();
+        NPC encounter = EncounterFactory.generateRandomEncounter(this, game.getDifficulty());
+        if (encounter != null) {
+            encounter.interact();
+        }
     }
 
-    public double calcPilotInfluence() {
-        return 1 - MAX_PILOT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
-                * skills.get(SkillType.PIL).get()));
-    }
-
-    public double calcMerchantInfluence() {
-        return MAX_MERCHANT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
-                * skills.get(SkillType.MER).get()));
+    /*
+    Condenses the player's skill points in a type into a number between 0 and 1 using an exponential
+    decay system.
+     */
+    public double calcInfluence(SkillType skill) {
+        return (1 - Math.exp(-1 * DECAY_FACTOR * skills.get(skill).get()));
     }
 
     public void updateUpgrade(Upgrade upgrade) {

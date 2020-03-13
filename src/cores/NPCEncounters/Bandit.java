@@ -3,6 +3,11 @@ package cores.NPCEncounters;
 import cores.characters.Player;
 
 public class Bandit implements NPC, Fightable {
+    private Player player;
+
+    public Bandit(Player player) {
+        this.player = player;
+    }
 
     @Override
     public void interact() {

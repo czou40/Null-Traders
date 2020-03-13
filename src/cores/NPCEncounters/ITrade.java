@@ -5,6 +5,6 @@ import cores.characters.Player;
 import cores.objects.Item;
 
 public interface ITrade {
-    void handleBuy(Player player, Item item, int quantity);
-    void handleNegotiate(Player player);
+    boolean handleBuy(Player player, Item item, int quantity);
+    boolean handleNegotiate(Player player);
 }

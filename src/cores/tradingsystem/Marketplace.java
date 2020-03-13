@@ -30,6 +30,8 @@ public class Marketplace {
     private static final double SELLVARIANCE = 0.2;
     private static final double AVGSELLPERCENT = 0.8;
 
+    private static final double MAX_MERCHANT_INFLUENCE = 0.3;
+
     private static final boolean DEBUG = false;
 
     //upgrade item info
@@ -108,9 +110,11 @@ public class Marketplace {
     public int getBuyingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
         if (DEBUG) {
-            System.out.println("Player merchant influence: " + player.calcMerchantInfluence());
+            System.out.println("Player merchant influence: " + player.calcInfluence(Player.SkillType.MER));
         }
-        return (int) ((1 - player.calcMerchantInfluence()) * marketEntry.getBuyingPrice());
+        return (int) (
+                (1 - player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)
+                        * marketEntry.getBuyingPrice());
     }
 
     /*
@@ -119,9 +123,11 @@ public class Marketplace {
     public int getSellingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
         if (DEBUG) {
-            System.out.println("Player merchant influence: " + player.calcMerchantInfluence());
+            System.out.println("Player merchant influence: " + player.calcInfluence(Player.SkillType.MER));
         }
-        return (int) ((1 + player.calcMerchantInfluence()) * marketEntry.getSellingPrice());
+        return (int) (
+                (1 + player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)
+                        * marketEntry.getSellingPrice());
     }
 
     public Map<Item, StockEntry> getStock() {
