@@ -107,12 +107,12 @@ public class Player {
             if (encounter == null) {
                 currentRegion.get().setIsCurrentRegion(false);
                 setCurrentRegion(dest);
-                getShip().setFuel(getShip().getFuel());
+                getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
                 return true;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public boolean ableToTravelTo(Region dest) {
