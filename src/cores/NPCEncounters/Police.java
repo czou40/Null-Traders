@@ -31,7 +31,6 @@ public class Police implements NPC, Fightable {
 
     @Override
     public boolean handleFlee(Player player) {
-
         return false;
     }
 
