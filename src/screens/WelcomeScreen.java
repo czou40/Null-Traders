@@ -1,5 +1,6 @@
 package screens;
 
+import javafx.scene.layout.Pane;
 import uicomponents.*;
 
 import cores.Game;
@@ -28,7 +29,7 @@ public class WelcomeScreen extends Screen {
     }
 
     @Override
-    public Parent constructRoot() {
+    public Pane constructRoot() {
         Button welcomeButton = new Button("New Game!");
         welcomeButton.setSkin(new ButtonScaleHover(welcomeButton));
         welcomeButton.getStyleClass().add("button-large");

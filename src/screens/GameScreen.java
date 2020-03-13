@@ -20,6 +20,7 @@ public abstract class GameScreen extends Screen {
     private String title;
     private boolean requiresSideBar;
     private Pane contentPane;
+    private MyGridPane root;
 
     public GameScreen(Stage primaryStage, Game game, String title, boolean requiresSideBar) {
         super(primaryStage, game);
@@ -38,7 +39,7 @@ public abstract class GameScreen extends Screen {
     }
 
     @Override
-    public Parent constructRoot() {
+    public Pane constructRoot() {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("h1");
         MyGridPane titlePane = new MyGridPane(HPos.LEFT, VPos.CENTER);
@@ -59,7 +60,7 @@ public abstract class GameScreen extends Screen {
             wrapperPane.addRow(0, contentPane);
             rootColumnConstraints = new double[]{20, 60, 20};
         }
-        MyGridPane root = new MyGridPane(rootRowConstraints, rootColumnConstraints);
+        root = new MyGridPane(rootRowConstraints, rootColumnConstraints);
         root.addColumn(1, null, titlePane, wrapperPane, null);
         root.getStylesheets().addAll("styles/general.css",
                 "styles/blurry-background.css");
@@ -86,7 +87,7 @@ public abstract class GameScreen extends Screen {
                         "SELL CARGO", new MarketScreen(getPrimaryStage(), game, false)),
                 new MyNavigationButton("PROFILE",
                         new CharacterSheetScreen(getPrimaryStage(), game)),
-                new MyNavigationButton("MAP", new MapScreen(getPrimaryStage(), game)),
+                new MyNavigationButton("MAP", new MapScreen(getPrimaryStage(), game, this)),
                 new MyNavigationButton("SHIP", new ShipScreen(getPrimaryStage(), game)));
         sideBarPane.getStyleClass().addAll("transparent-pane-light");
         return sideBarPane;

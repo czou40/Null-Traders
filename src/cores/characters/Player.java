@@ -42,7 +42,6 @@ public class Player {
     private SimpleObjectProperty<NPC> encounter;
 
 
-    private static final double MAX_FUEL_EFFICIENCY = 0.4;
     private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
 
     /**
@@ -64,23 +63,13 @@ public class Player {
         this.currentRegion = new SimpleObjectProperty<>();
         this.ship = new SimpleObjectProperty<>(new Ship(game.getDifficulty()));
         upgrades = new HashMap<>();
-        upgrades.put(SkillType.FIG, new SimpleObjectProperty<>());
-        upgrades.put(SkillType.MER, new SimpleObjectProperty<>());
-        upgrades.put(SkillType.ENG, new SimpleObjectProperty<>());
-        upgrades.put(SkillType.PIL, new SimpleObjectProperty<>());
-
         skills = new HashMap<>();
-        skills.put(SkillType.MER, new SimpleIntegerProperty(0));
-        skills.put(SkillType.ENG, new SimpleIntegerProperty(0));
-        skills.put(SkillType.FIG, new SimpleIntegerProperty(0));
-        skills.put(SkillType.PIL, new SimpleIntegerProperty(0));
-
         rawSkills = new HashMap<>();
-        rawSkills.put(SkillType.MER, 0);
-        rawSkills.put(SkillType.ENG, 0);
-        rawSkills.put(SkillType.FIG, 0);
-        rawSkills.put(SkillType.PIL, 0);
-
+        for (SkillType x : SkillType.values()) {
+            upgrades.put(x, new SimpleObjectProperty<>());
+            skills.put(x, new SimpleIntegerProperty(0));
+            rawSkills.put(x, 0);
+        }
         encounter = new SimpleObjectProperty<>();
     }
 
@@ -113,20 +102,19 @@ public class Player {
     Returns whether the travel was successful
      */
     public boolean travelToRegion(Region dest) {
-        int fuelNeeded = (int)
-                (getCurrentRegion().distanceTo(dest) / 10
-                        * calcInfluence(SkillType.PIL) * MAX_FUEL_EFFICIENCY);
-        if (getShip().getFuel() < fuelNeeded) {     //check if the player has enough fuel
-            //not enough fuel
-            return false;
-        } else {
+        if (ableToTravelTo(dest)) {
             handleEncounters();
             currentRegion.get().setIsCurrentRegion(false);
+            getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
             setCurrentRegion(dest);
-            getShip().setFuel(getShip().getFuel() - fuelNeeded);
-
             return true;
+        } else {
+            return false;
         }
+    }
+
+    public boolean ableToTravelTo(Region dest) {
+        return getShip().ableToTravelTo(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
     }
 
     private void handleEncounters() {
@@ -193,10 +181,11 @@ public class Player {
     }
 
     public int sumOfPoints() {
-        return skills.get(SkillType.MER).get()
-                + skills.get(SkillType.FIG).get()
-                + skills.get(SkillType.PIL).get()
-                + skills.get(SkillType.ENG).get();
+        int sum = 0;
+        for (SkillType x : SkillType.values()) {
+            sum += skills.get(x).get();
+        }
+        return sum;
     }
 
     public Region getCurrentRegion() {
@@ -227,7 +216,6 @@ public class Player {
         rawSkills.put(type, point);
         skills.get(type).set(point
                 + (getUpgrade(type) != null ? getUpgrade(type).getUpgradeLvl() : 0));
-        System.out.println(skills.get(type).get());
     }
 
     public IntegerProperty skillProperty(SkillType type) {

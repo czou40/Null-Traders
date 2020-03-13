@@ -2,8 +2,11 @@ package screens;
 
 import cores.Game;
 import cores.Main;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -13,6 +16,7 @@ public abstract class Screen {
     private Stage primaryStage;
     protected Game game;    //easy access in child class
     private String musicPath;
+    private Pane root;
 
 
     
@@ -50,17 +54,28 @@ public abstract class Screen {
      * Displays the object.
      */
     public void display() {
+        root = constructRoot();
         if (primaryStage.getScene() == null) {
-            primaryStage.setScene(new Scene(constructRoot()));
+            primaryStage.setScene(new Scene(root));
         } else {
-            primaryStage.getScene().setRoot(constructRoot());
+            primaryStage.getScene().setRoot(root);
         }
         primaryStage.show();
         doAfterScreenIsShown();
     }
+    public void addToRoot(Node node) {
+        root.getChildren().add(node);
+    }
 
+    public ReadOnlyDoubleProperty getRootWidth() {
+        return root.widthProperty();
+    }
 
-    public abstract Parent constructRoot();
+    public ReadOnlyDoubleProperty getRootHeight() {
+        return root.heightProperty();
+    }
+
+    public abstract Pane constructRoot();
 
     public void doAfterScreenIsShown() {
         if (musicPath != null) {
