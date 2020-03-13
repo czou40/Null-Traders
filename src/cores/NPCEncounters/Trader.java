@@ -18,24 +18,15 @@ import java.util.Map;
 public class Trader implements NPC, ITrade, Robbable {
     private Player player;
     private Item item;
-    private IntegerProperty quantity;
+    private InventoryEntry entry;
 
     private static final int MAX_QUANTITY = 5;
 
-
-    public Trader(Player player, Item item, int quantity) {
-        this.player = player;
-        this.item = item;
-        this.quantity = new SimpleIntegerProperty(quantity);
-    }
-
     public Trader(Player player) {
-        this(player, getRandomItem(), (int) (Math.random() * MAX_QUANTITY));
-    }
-
-    private static Item getRandomItem() {
-        int randInt = (int) (Math.random() * Item.values().length);
-        return Item.values()[randInt];
+        this.player = player;
+        this.item = Item.values()[(int) (Math.random() * Item.values().length)];
+        this.entry = new InventoryEntry();
+        entry.add(item.getBasePrice(), (int) Math.round(Math.random() * MAX_QUANTITY));
     }
 
     @Override
