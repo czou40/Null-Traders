@@ -36,7 +36,7 @@ public class Police implements NPC, Fightable {
     }
 
     @Override
-    public boolean handleForfeit(Player player) {
-        return false;
+    public void handleForfeit(Player player) {
+        player.getShip().getItemInventory().remove(confiscatedItem);
     }
 }
