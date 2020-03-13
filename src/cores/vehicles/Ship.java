@@ -22,6 +22,8 @@ public class Ship {
     private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
+    private static final double MAX_FUEL_EFFICIENCY = 0.4;
+
 
     public Ship(String name, int cargoCapacity, int fuelCapacity, int health) {
         this.name = new SimpleStringProperty(name);
@@ -139,7 +141,7 @@ public class Ship {
     }
 
     private int calculateFuelCost(Region region1, Region region2, double pilotInfluence) {
-        return (int) (region1.distanceTo(region2) / 10 * pilotInfluence);
+        return (int) (region1.distanceTo(region2) / 10 * pilotInfluence * MAX_FUEL_EFFICIENCY);
     }
 
     public boolean ableToTravelTo(Region region1, Region region2, double pilotInfluence) {
