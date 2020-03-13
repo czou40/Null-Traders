@@ -5,6 +5,7 @@ import cores.characters.Player;
 import cores.objects.InventoryEntry;
 import cores.objects.Item;
 import cores.objects.StockEntry;
+import cores.places.Region;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.stage.Stage;
@@ -19,14 +20,16 @@ public class Trader implements NPC, ITrade, Robbable {
     private Player player;
     private Item item;
     private InventoryEntry entry;
+    private Region dest;
 
     private static final int MAX_QUANTITY = 5;
 
-    public Trader(Player player) {
+    public Trader(Player player, Region dest) {
         this.player = player;
         this.item = Item.values()[(int) (Math.random() * Item.values().length)];
         this.entry = new InventoryEntry();
         entry.add(item.getBasePrice(), (int) Math.round(Math.random() * MAX_QUANTITY));
+        this.dest = dest;
     }
 
     @Override

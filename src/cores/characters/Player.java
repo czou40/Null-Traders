@@ -101,13 +101,19 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
-    public boolean travelToRegion(Region dest) {
+    public boolean travelToRegion(Region dest, boolean afterEncounter) {
         if (ableToTravelTo(dest)) {
-            handleEncounters();
-            if (encounter == null) {
+            if (afterEncounter) {
+                setEncounter(null);
+            } else {
+                setEncounter(
+                        EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest)
+                );
+            }
+            if (getEncounter() == null) {
                 currentRegion.get().setIsCurrentRegion(false);
-                setCurrentRegion(dest);
                 getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+                setCurrentRegion(dest);
                 return true;
             }
         }
@@ -117,12 +123,6 @@ public class Player {
 
     public boolean ableToTravelTo(Region dest) {
         return getShip().ableToTravelTo(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
-    }
-
-    private void handleEncounters() {
-        this.encounter.set(
-                EncounterFactory.generateRandomEncounter(this, game.getDifficulty())
-        );
     }
 
     /*

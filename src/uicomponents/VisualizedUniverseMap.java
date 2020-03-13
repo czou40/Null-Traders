@@ -230,7 +230,7 @@ public class VisualizedUniverseMap extends Pane {
                 VisualizedUniverseMap.this.getChildren().remove(spaceShip);
                 isTraveling.set(false);
             } else {
-                universe.getPlayer().travelToRegion(region);
+                universe.getPlayer().travelToRegion(region, false);
             }
         });
         timeline.play();
