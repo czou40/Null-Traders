@@ -1,26 +1,47 @@
 package cores.settings;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public enum Difficulty {
-    CADET(500, 30, 75, 1000, 500),
-    CAPTAIN(250, 20, 50, 750, 300),
-    ADMIRAL(150, 15, 25, 500, 100);
+    CADET(  500,
+    30,
+   75,
+   1000,
+         500,
+                    0.20
+                    ),
+    CAPTAIN(250,
+    20,
+    50,
+    750,
+        300,
+0.40),
+    ADMIRAL(150,
+    15,
+    25,
+    500,
+        100,
+    0.60);
 
     private IntegerProperty credits;
     private IntegerProperty startingSkillPoints;
     private IntegerProperty startCargoCapacity;
     private IntegerProperty startFuelCapacity;
     private IntegerProperty startHealth;
+    private DoubleProperty encounterChance;
 
     Difficulty(int credits, int startingSkillPoints,
-               int startCargoCapacity, int startFuelCapacity, int startHealth) {
+               int startCargoCapacity, int startFuelCapacity, int startHealth,
+               double encounterChance) {
         this.credits = new SimpleIntegerProperty(credits);
         this.startingSkillPoints = new SimpleIntegerProperty(startingSkillPoints);
         this.startCargoCapacity = new SimpleIntegerProperty(startCargoCapacity);
         this.startFuelCapacity = new SimpleIntegerProperty(startFuelCapacity);
         this.startHealth = new SimpleIntegerProperty(startHealth);
+        this.encounterChance = new SimpleDoubleProperty(encounterChance);
     }
 
     public Integer getCredits() {
@@ -73,5 +94,17 @@ public enum Difficulty {
 
     public void setStartHealth(int startHealth) {
         this.startHealth.set(startHealth);
+    }
+
+    public double getEncounterChance() {
+        return encounterChance.get();
+    }
+
+    public DoubleProperty encounterChanceProperty() {
+        return encounterChance;
+    }
+
+    public void setEncounterChance(double encounterChance) {
+        this.encounterChance.set(encounterChance);
     }
 }

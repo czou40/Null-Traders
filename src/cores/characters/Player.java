@@ -39,9 +39,9 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
+    private SimpleObjectProperty<NPC> encounter;
 
-    private static final double MAX_MERCHANT_INFLUENCE = 0.3; //can get a maximum of 30% off each item
-    private static final double MAX_PILOT_INFLUENCE = 0.4;
+
     private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
 
     /**
@@ -65,12 +65,12 @@ public class Player {
         upgrades = new HashMap<>();
         skills = new HashMap<>();
         rawSkills = new HashMap<>();
-
         for (SkillType x : SkillType.values()) {
             upgrades.put(x, new SimpleObjectProperty<>());
             skills.put(x, new SimpleIntegerProperty(0));
             rawSkills.put(x, 0);
         }
+        encounter = new SimpleObjectProperty<>();
     }
 
     /**
@@ -101,34 +101,34 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
-    public void travelToRegion(Region dest) {
+    public boolean travelToRegion(Region dest) {
         if (ableToTravelTo(dest)) {
             handleEncounters();
             currentRegion.get().setIsCurrentRegion(false);
-            getShip().decrementFuel(getCurrentRegion(), dest, calcPilotInfluence());
+            getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
             setCurrentRegion(dest);
+            return true;
         } else {
-            throw new IllegalArgumentException("There is not enough fuel!");
+            return false;
         }
     }
 
     public boolean ableToTravelTo(Region dest) {
-        return getShip().ableToTravelTo(getCurrentRegion(), dest, calcPilotInfluence());
+        return getShip().ableToTravelTo(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
     }
 
     private void handleEncounters() {
-        NPC encounter = EncounterFactory.generateRandomEncounter(this);
-        encounter.interact();
+        this.encounter.set(
+                EncounterFactory.generateRandomEncounter(this, game.getDifficulty())
+        );
     }
 
-    public double calcPilotInfluence() {
-        return 1 - MAX_PILOT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
-                * skills.get(SkillType.PIL).get()));
-    }
-
-    public double calcMerchantInfluence() {
-        return MAX_MERCHANT_INFLUENCE * (1 - Math.exp(-1 * DECAY_FACTOR
-                * skills.get(SkillType.MER).get()));
+    /*
+    Condenses the player's skill points in a type into a number between 0 and 1 using an exponential
+    decay system.
+     */
+    public double calcInfluence(SkillType skill) {
+        return (1 - Math.exp(-1 * DECAY_FACTOR * skills.get(skill).get()));
     }
 
     public void updateUpgrade(Upgrade upgrade) {
@@ -228,5 +228,17 @@ public class Player {
 
     public SimpleObjectProperty<Upgrade> getUpgradeProperty(SkillType type) {
         return upgrades.get(type);
+    }
+
+    public NPC getEncounter() {
+        return encounter.get();
+    }
+
+    public SimpleObjectProperty<NPC> encounterProperty() {
+        return encounter;
+    }
+
+    public void setEncounter(NPC encounter) {
+        this.encounter.set(encounter);
     }
 }
