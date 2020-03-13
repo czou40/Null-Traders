@@ -12,13 +12,17 @@ public class Bandit implements NPC, Fightable {
     private Player player;
     private IntegerProperty creditsDemanded;
 
-    private static final int MAX_CREDITS_DEMANDED = 1000;
+    private static final int MAX_CREDITS_DEMANDED = 500;
+    private static final int MIN_CREDITS_DEMANDED = 100;
 
     public Bandit(Player player) {
 
         this.player = player;
         this.creditsDemanded =
-                new SimpleIntegerProperty((int) Math.round(Math.random() * MAX_CREDITS_DEMANDED));
+                new SimpleIntegerProperty(
+                (int) Math.round(Math.random() * (MAX_CREDITS_DEMANDED - MIN_CREDITS_DEMANDED)
+                        + MIN_CREDITS_DEMANDED)
+                );
     }
 
     @Override
