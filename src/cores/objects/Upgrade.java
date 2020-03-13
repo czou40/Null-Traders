@@ -17,22 +17,7 @@ public class Upgrade {
 
     public String toString() {
         return upgradeName + " (increases " + upgradeType.getName()
-                +  " skill by " + upgradeLvl + ")";
-    }
-
-    public int getIndex() {
-        switch (upgradeType) {
-        case PIL:
-            return 0;
-        case FIG:
-            return 1;
-        case MER:
-            return 2;
-        case ENG:
-            return 3;
-        default:
-            return -1;
-        }
+                + " skill by " + upgradeLvl + ")";
     }
 
     public int getUpgradeLvl() {
