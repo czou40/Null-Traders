@@ -11,6 +11,13 @@ import javafx.stage.Stage;
 public class MapScreen extends GameScreen {
     public MapScreen(Stage primaryStage, Game game) {
         super(primaryStage, game, "MAP OF UNIVERSE", true);
+
+        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
+                screen.display();
+            }
+        });
     }
 
     @Override

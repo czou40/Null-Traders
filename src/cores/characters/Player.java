@@ -121,11 +121,14 @@ public class Player {
             return false;
         } else {
             handleEncounters();
-            currentRegion.get().setIsCurrentRegion(false);
-            setCurrentRegion(dest);
-            getShip().setFuel(getShip().getFuel() - fuelNeeded);
-
-            return true;
+            if (encounter == null) {
+                currentRegion.get().setIsCurrentRegion(false);
+                setCurrentRegion(dest);
+                getShip().setFuel(getShip().getFuel() - fuelNeeded);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
