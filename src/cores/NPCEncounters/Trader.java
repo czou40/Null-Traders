@@ -4,17 +4,11 @@ import cores.Game;
 import cores.characters.Player;
 import cores.objects.InventoryEntry;
 import cores.objects.Item;
-import cores.objects.StockEntry;
 import cores.places.Region;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.stage.Stage;
-import screens.BanditScreen;
 import screens.EncounterScreen;
-import screens.Screen;
 import screens.TraderScreen;
 
-import java.util.Map;
 import java.util.Random;
 
 public class Trader implements NPC, ITrade, Robbable {
@@ -94,9 +88,8 @@ public class Trader implements NPC, ITrade, Robbable {
             player.travelToRegion(dest, true);
             return true;
         } else {
-            player.getShip().setHealth(
-                    player.getShip().getHealth() -
-                            (int) Math.round(Math.random() * MAX_STRENGTH)
+            player.getShip().damage(
+                    (int) Math.round(Math.random() * MAX_STRENGTH)
             );
 
             player.travelToRegion(dest, true);

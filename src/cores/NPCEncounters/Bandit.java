@@ -49,9 +49,8 @@ public class Bandit implements NPC, Fightable {
             return true;
         } else {
             player.setCredits(0);
-            player.getShip().setHealth(
-                    player.getShip().getHealth() -
-                            (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
+            player.getShip().damage(
+                    (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
             );
             return false;
         }
@@ -70,9 +69,8 @@ public class Bandit implements NPC, Fightable {
             return true;
         } else {
             player.setCredits(0);
-            player.getShip().setHealth(
-                    player.getShip().getHealth() -
-                            (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
+            player.getShip().damage(
+                    (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
             );
             return false;
         }
@@ -85,9 +83,8 @@ public class Bandit implements NPC, Fightable {
 
         if(player.getCredits() < this.creditsDemanded.get()){
             if(ship.getItemInventory().isEmpty()){
-                ship.setHealth(
-                        player.getShip().getHealth() -
-                                (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
+                ship.damage(
+                        (int) Math.round(Math.random() * MAX_BANDIT_STRENGTH)
                 );
             } else {
                 ship.getItemInventory().clear();

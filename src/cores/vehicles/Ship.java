@@ -140,6 +140,10 @@ public class Ship {
         }
     }
 
+    public void damage(int amount) {
+        setHealth(Math.max(getHealth() - amount, 0));
+    }
+
     private int calculateFuelCost(Region region1, Region region2, double pilotInfluence) {
         return (int) (region1.distanceTo(region2) / 10 * pilotInfluence * MAX_FUEL_EFFICIENCY);
     }
@@ -149,6 +153,6 @@ public class Ship {
     }
 
     public void decrementFuel(Region region1, Region region2, double pilotInfluence) {
-        this.setFuel(getFuel() - calculateFuelCost(region1, region2, pilotInfluence));
+        this.setFuel(Math.max(getFuel() - calculateFuelCost(region1, region2, pilotInfluence), 0));
     }
 }
