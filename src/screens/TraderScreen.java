@@ -2,7 +2,6 @@ package screens;
 
 import cores.Game;
 import cores.NPCEncounters.NPC;
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 

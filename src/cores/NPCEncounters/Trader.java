@@ -11,7 +11,7 @@ import screens.TraderScreen;
 
 import java.util.Random;
 
-public class Trader implements NPC, ITrade, Robbable {
+public class Trader implements NPC, ITrade, Robbable, Ignorable {
     private Player player;
     private Item item;
     private InventoryEntry entry;
@@ -39,7 +39,7 @@ public class Trader implements NPC, ITrade, Robbable {
             if (playerEntry == null) {
                 playerEntry = new InventoryEntry();
             }
-            playerEntry.add((int) entry.getAverageBuyingPrice(), entry.getQuantity());
+            playerEntry.add(entry.getBuyingPrice(), entry.getQuantity());
             player.getShip().getItemInventory().put(item, playerEntry);
 
             player.travelToRegion(dest, true);
@@ -95,5 +95,10 @@ public class Trader implements NPC, ITrade, Robbable {
             player.travelToRegion(dest, true);
             return false;
         }
+    }
+
+    @Override
+    public void handleIgnore() {
+
     }
 }

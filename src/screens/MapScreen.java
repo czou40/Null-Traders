@@ -1,16 +1,12 @@
 package screens;
 
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import cores.NPCEncounters.EncounterController;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class MapScreen extends Screen {
     private static VisualizedUniverseMap map;
@@ -18,13 +14,13 @@ public class MapScreen extends Screen {
 
     public MapScreen(Stage primaryStage, Game game, Screen from) {
         super(primaryStage, game);
-        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
-                screen.display();
-            }
-        });
-        this.from = from;
+//        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
+//                screen.display();
+//            }
+//        });
+        EncounterController.setupScreenEnvironment(game, primaryStage);
     }
 
     @Override

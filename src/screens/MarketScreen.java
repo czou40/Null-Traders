@@ -1,5 +1,6 @@
 package screens;
 
+import cores.NPCEncounters.Trader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
@@ -39,9 +40,13 @@ public class MarketScreen extends GameScreen {
     private boolean buyingMode;
 
     public MarketScreen(Stage primaryStage, Game game, boolean buyingMode) {
+        this(primaryStage, game, buyingMode, null);
+    }
+
+    public MarketScreen(Stage primaryStage, Game game, boolean buyingMode, Trader trader) {
         super(primaryStage,
-                game,
-                game.getPlayer().getCurrentRegion().getMarketplace().getName(),
+                game, trader  == null ?
+                        game.getPlayer().getCurrentRegion().getMarketplace().getName() : "Trade with NPC",
                 true);
         this.game = game;
         this.player = game.getPlayer();

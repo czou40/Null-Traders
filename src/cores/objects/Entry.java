@@ -8,4 +8,6 @@ public interface Entry {
     IntegerProperty quantityProperty();
 
     void setQuantity(int quantity);
+
+    int getBuyingPrice();
 }

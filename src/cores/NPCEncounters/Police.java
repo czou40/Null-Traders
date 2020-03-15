@@ -1,7 +1,6 @@
 package cores.NPCEncounters;
 
 import cores.Game;
-import cores.NPCEncounters.NPC;
 import cores.characters.Player;
 import cores.objects.Item;
 import cores.places.Region;
@@ -10,7 +9,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.stage.Stage;
 import screens.EncounterScreen;
 import screens.PoliceScreen;
-import screens.Screen;
 
 import java.util.Random;
 

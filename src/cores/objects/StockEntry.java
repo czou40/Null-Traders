@@ -19,9 +19,11 @@ public class StockEntry implements Entry {
         this.sellingPrice = new SimpleIntegerProperty(sellingPrice);
     }
 
+    @Override
     public int getBuyingPrice() {
         return buyingPrice.get();
     }
+
 
     public IntegerProperty buyingPriceProperty() {
         return buyingPrice;
@@ -34,6 +36,7 @@ public class StockEntry implements Entry {
     public int getSellingPrice() {
         return sellingPrice.get();
     }
+
 
     public IntegerProperty sellingPriceProperty() {
         return sellingPrice;

@@ -37,6 +37,11 @@ public class InventoryEntry implements Entry {
         this.quantity.set(quantity);
     }
 
+    @Override
+    public int getBuyingPrice() {
+        return (int) ((0.0 + getTotalCost()) / getQuantity() + 0.5);
+    }
+
     public int getTotalCost() {
         return totalCost.get();
     }
@@ -47,9 +52,5 @@ public class InventoryEntry implements Entry {
 
     public void setTotalCost(int totalCost) {
         this.totalCost.set(totalCost);
-    }
-
-    public double getAverageBuyingPrice() {
-        return (0.0 + getTotalCost()) / getQuantity();
     }
 }
