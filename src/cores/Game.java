@@ -16,6 +16,8 @@ public class Game {
     private Player player;
     private Universe universe;
 
+    private static final boolean DEBUG = false;
+
     public Game() {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
@@ -46,5 +48,9 @@ public class Game {
         } else {
             return universe;
         }
+    }
+
+    public static boolean getDebug() {
+        return DEBUG;
     }
 }

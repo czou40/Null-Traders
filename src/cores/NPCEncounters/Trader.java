@@ -33,7 +33,7 @@ public class Trader implements NPC, ITrade, Robbable {
     }
 
     @Override
-    public boolean handleBuy(Player player) {
+    public boolean handleBuy() {
         if (player.getCredits() >= entry.getTotalCost()) {
             InventoryEntry playerEntry = player.getShip().getItemInventory().get(item);
             if (playerEntry == null) {
@@ -50,7 +50,7 @@ public class Trader implements NPC, ITrade, Robbable {
     }
 
     @Override
-    public boolean handleNegotiate(Player player) {
+    public boolean handleNegotiate() {
         final double PRICE_REDUCTION = 0.4;
         //if this method is used the option should also be greyed out in the UI
 
@@ -69,7 +69,7 @@ public class Trader implements NPC, ITrade, Robbable {
     }
 
     @Override
-    public boolean handleRob(Player player) {
+    public boolean handleRob() {
         final int MAX_STRENGTH = 50;
 
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
@@ -95,5 +95,21 @@ public class Trader implements NPC, ITrade, Robbable {
             player.travelToRegion(dest, true);
             return false;
         }
+    }
+
+    public void test() {
+
+    }
+
+    private void testForfeit() {
+
+    }
+
+    private void testFight() {
+
+    }
+
+    private void testFlee() {
+
     }
 }

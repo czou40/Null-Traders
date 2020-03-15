@@ -18,13 +18,14 @@ public class MapScreen extends Screen {
 
     public MapScreen(Stage primaryStage, Game game, Screen from) {
         super(primaryStage, game);
+        this.from = from;
+
         game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
-                screen.display();
+                //screen.display();
             }
         });
-        this.from = from;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class MapScreen extends Screen {
         MyNavigationButton back = new MyNavigationButton("Back", from);
         addToRoot(back);
         back.layoutXProperty().bind(getRootWidth().subtract(back.widthProperty()).subtract(50));
-        System.out.println(back.layoutXProperty().get());
+        //System.out.println(back.layoutXProperty().get());
         back.layoutYProperty().set(50);
         Label fuelLabel = new Label();
         fuelLabel.layoutXProperty().set(50);

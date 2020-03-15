@@ -1,8 +1,12 @@
 package cores.characters;
 
+import cores.NPCEncounters.Bandit;
 import cores.NPCEncounters.EncounterFactory;
+import cores.NPCEncounters.EncounterTests;
 import cores.NPCEncounters.NPC;
 import cores.Game;
+import cores.NPCEncounters.Police;
+import cores.NPCEncounters.Trader;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
 import cores.places.Region;
@@ -115,6 +119,8 @@ public class Player {
                 getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
                 setCurrentRegion(dest);
                 return true;
+            } else if (Game.getDebug()) {
+                testEncounters();
             }
         }
 
@@ -242,5 +248,17 @@ public class Player {
 
     public void setEncounter(NPC encounter) {
         this.encounter.set(encounter);
+    }
+
+    //Tests for NPC encounters
+    private void testEncounters() {
+        NPC encounter = getEncounter();
+        if (encounter instanceof Bandit) {
+            ((Bandit) getEncounter()).test();
+        } else if (encounter instanceof Police) {
+            ((Police) getEncounter()).test();
+        } else if (encounter instanceof Trader) {
+            ((Trader) getEncounter()).test();
+        }
     }
 }
