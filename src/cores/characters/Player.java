@@ -1,9 +1,13 @@
 package cores.characters;
 
 import cores.NPCEncounters.EncounterController;
+import cores.NPCEncounters.Bandit;
 import cores.NPCEncounters.EncounterFactory;
+import cores.NPCEncounters.EncounterTests;
 import cores.NPCEncounters.NPC;
 import cores.Game;
+import cores.NPCEncounters.Police;
+import cores.NPCEncounters.Trader;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
 import cores.places.Region;
@@ -103,12 +107,35 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
+//<<<<<<< HEAD
     public void travelToRegion(Region dest, boolean afterEncounter) {
         NPC npc = EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest);
         this.encounterController.handleEncounter(npc, dest);
         currentRegion.get().setIsCurrentRegion(false);
         getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
         setCurrentRegion(dest);
+//=======
+//    public boolean travelToRegion(Region dest, boolean afterEncounter) {
+//        if (ableToTravelTo(dest)) {
+//            if (afterEncounter) {
+//                setEncounter(null);
+//            } else {
+//                setEncounter(
+//                        EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest)
+//                );
+//            }
+//            if (getEncounter() == null) {
+//                currentRegion.get().setIsCurrentRegion(false);
+//                getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+//                setCurrentRegion(dest);
+//                return true;
+//            } else if (Game.getDebug()) {
+//                testEncounters();
+//            }
+//        }
+//
+//        return false;
+//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
 
@@ -222,4 +249,31 @@ public class Player {
     public SimpleObjectProperty<Upgrade> getUpgradeProperty(SkillType type) {
         return upgrades.get(type);
     }
+//<<<<<<< HEAD
+//=======
+//
+//    public NPC getEncounter() {
+//        return encounter.get();
+//    }
+//
+//    public SimpleObjectProperty<NPC> encounterProperty() {
+//        return encounter;
+//    }
+//
+//    public void setEncounter(NPC encounter) {
+//        this.encounter.set(encounter);
+//    }
+//
+//    //Tests for NPC encounters
+//    private void testEncounters() {
+//        NPC encounter = getEncounter();
+//        if (encounter instanceof Bandit) {
+//            ((Bandit) getEncounter()).test();
+//        } else if (encounter instanceof Police) {
+//            ((Police) getEncounter()).test();
+//        } else if (encounter instanceof Trader) {
+//            ((Trader) getEncounter()).test();
+//        }
+//    }
+//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
 }

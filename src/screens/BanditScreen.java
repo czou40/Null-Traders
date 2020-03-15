@@ -17,7 +17,5 @@ public class BanditScreen extends EncounterScreen {
     }
 
     @Override
-    public Pane constructRoot() {
-        return null;
-    }
+    public Pane constructRoot() { return null; }
 }

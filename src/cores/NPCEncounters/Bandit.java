@@ -35,7 +35,7 @@ public class Bandit implements NPC, Fightable {
     }
 
     @Override
-    public boolean handleFight(Player player) {
+    public boolean handleFight() {
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
         double winOrLoseNum = random.nextDouble();
@@ -57,7 +57,7 @@ public class Bandit implements NPC, Fightable {
     }
 
     @Override
-    public boolean handleFlee(Player player) {
+    public boolean handleFlee() {
         double pilotSkillInfluence = player.calcInfluence(Player.SkillType.PIL);
         Random random = new Random();
         double fleeOrFailNum = random.nextDouble();
@@ -78,7 +78,7 @@ public class Bandit implements NPC, Fightable {
     }
 
     @Override
-    public void handleForfeit(Player player) {
+    public void handleForfeit() {
         Ship ship = player.getShip();
 
         if(player.getCredits() < this.creditsDemanded.get()){
@@ -98,5 +98,21 @@ public class Bandit implements NPC, Fightable {
     private int getRandomCredits() {
         return (int) Math.round(Math.random() * (MAX_CREDITS_DEMANDED - MIN_CREDITS_DEMANDED)
                 + MIN_CREDITS_DEMANDED);
+    }
+
+    public void test() {
+
+    }
+
+    private void testForfeit() {
+
+    }
+
+    private void testFight() {
+
+    }
+
+    private void testFlee() {
+
     }
 }
