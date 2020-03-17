@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * this class is the UI element that represents the universe.
@@ -230,7 +229,7 @@ public class VisualizedUniverseMap extends Pane {
                 VisualizedUniverseMap.this.getChildren().remove(spaceShip);
                 isTraveling.set(false);
             } else {
-                universe.getPlayer().travelToRegion(region, false);
+                universe.getPlayer().startTravelToRegion(region, false);
             }
         });
         timeline.play();

@@ -1,31 +1,41 @@
 package screens;
 
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import cores.NPCEncounters.EncounterController;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 public class MapScreen extends Screen {
     private static VisualizedUniverseMap map;
     private Screen from;
 
+    public MapScreen(Stage primaryStage, Game game) {
+        this(primaryStage, game, new CharacterSheetScreen(primaryStage, game));
+    }
+
     public MapScreen(Stage primaryStage, Game game, Screen from) {
         super(primaryStage, game);
+//<<<<<<< HEAD
+//        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
+//                screen.display();
+//            }
+//        });
         this.from = from;
-
-        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
-                //screen.display();
-            }
-        });
+        EncounterController.setupScreenEnvironment(game, primaryStage);
+//=======
+//
+//        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
+//                //screen.display();
+//            }
+//        });
+//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
     @Override

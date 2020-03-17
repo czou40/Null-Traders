@@ -1,7 +1,7 @@
 package cores.characters;
 
+import cores.NPCEncounters.EncounterController;
 import cores.NPCEncounters.Bandit;
-import cores.NPCEncounters.EncounterFactory;
 import cores.NPCEncounters.EncounterTests;
 import cores.NPCEncounters.NPC;
 import cores.Game;
@@ -29,6 +29,7 @@ public class Player {
         public void setName(String name) {
             this.name = name;
         }
+
         public String getName() {
             return name;
         }
@@ -43,7 +44,7 @@ public class Player {
     private IntegerProperty credits;
     private SimpleObjectProperty<Region> currentRegion;
     private SimpleObjectProperty<Ship> ship;
-    private SimpleObjectProperty<NPC> encounter;
+    private EncounterController encounterController;
 
 
     private static final double DECAY_FACTOR = 0.05;  //rate at which influence decays
@@ -51,13 +52,13 @@ public class Player {
     /**
      * Constructs a new instance.
      *
-     * @param      game      The game
-     * @param      name      The name
-     * @param      pilot     The pilot
-     * @param      fighter   The fighter
-     * @param      merchant  The merchant
-     * @param      engineer  The engineer
-     * @param      credits   The credits
+     * @param game     The game
+     * @param name     The name
+     * @param pilot    The pilot
+     * @param fighter  The fighter
+     * @param merchant The merchant
+     * @param engineer The engineer
+     * @param credits  The credits
      */
     public Player(Game game, String name, Integer pilot, Integer fighter,
                   Integer merchant, Integer engineer, Integer credits) {
@@ -74,14 +75,14 @@ public class Player {
             skills.put(x, new SimpleIntegerProperty(0));
             rawSkills.put(x, 0);
         }
-        encounter = new SimpleObjectProperty<>();
+        encounterController = new EncounterController(this);
     }
 
     /**
      * Constructs a new instance.
      *
-     * @param      game  The game
-     * @param      name  The name
+     * @param game The game
+     * @param name The name
      */
     public Player(Game game, String name) {
         this(game, name, 0, 0, 0, 0, game.getDifficulty().getCredits());
@@ -90,7 +91,7 @@ public class Player {
     /**
      * Constructs a new instance.
      *
-     * @param      game  The game
+     * @param game The game
      */
     public Player(Game game) {
         this(game, "", 0, 0, 0, 0, game.getDifficulty().getCredits());
@@ -105,26 +106,38 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
-    public boolean travelToRegion(Region dest, boolean afterEncounter) {
-        if (ableToTravelTo(dest)) {
-            if (afterEncounter) {
-                setEncounter(null);
-            } else {
-                setEncounter(
-                        EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest)
-                );
-            }
-            if (getEncounter() == null) {
-                currentRegion.get().setIsCurrentRegion(false);
-                getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
-                setCurrentRegion(dest);
-                return true;
-            } else if (Game.getDebug()) {
-                testEncounters();
-            }
-        }
+//<<<<<<< HEAD
+    public void startTravelToRegion(Region dest, boolean afterEncounter) {
+        this.encounterController.handleEncounter(dest);
 
-        return false;
+//=======
+//    public boolean travelToRegion(Region dest, boolean afterEncounter) {
+//        if (ableToTravelTo(dest)) {
+//            if (afterEncounter) {
+//                setEncounter(null);
+//            } else {
+//                setEncounter(
+//                        EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest)
+//                );
+//            }
+//            if (getEncounter() == null) {
+//                currentRegion.get().setIsCurrentRegion(false);
+//                getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+//                setCurrentRegion(dest);
+//                return true;
+//            } else if (Game.getDebug()) {
+//                testEncounters();
+//            }
+//        }
+//
+//        return false;
+//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
+    }
+
+    public void resumeTravelAfterEncounter(Region dest) {
+        currentRegion.get().setIsCurrentRegion(false);
+        getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+        setCurrentRegion(dest);
     }
 
     public boolean ableToTravelTo(Region dest) {
@@ -148,7 +161,7 @@ public class Player {
     /**
      * Gets the game.
      *
-     * @return     The game.
+     * @return The game.
      */
     public Game getGame() {
         return game;
@@ -157,7 +170,7 @@ public class Player {
     /**
      * { function_description }
      *
-     * @return     The string property.
+     * @return The string property.
      */
     public StringProperty nameProperty() {
         return name;
@@ -166,7 +179,7 @@ public class Player {
     /**
      * Gets the name.
      *
-     * @return     The name.
+     * @return The name.
      */
     public String getName() {
         return name.getValue();
@@ -237,28 +250,31 @@ public class Player {
     public SimpleObjectProperty<Upgrade> getUpgradeProperty(SkillType type) {
         return upgrades.get(type);
     }
-
-    public NPC getEncounter() {
-        return encounter.get();
-    }
-
-    public SimpleObjectProperty<NPC> encounterProperty() {
-        return encounter;
-    }
-
-    public void setEncounter(NPC encounter) {
-        this.encounter.set(encounter);
-    }
-
-    //Tests for NPC encounters
-    private void testEncounters() {
-        NPC encounter = getEncounter();
-        if (encounter instanceof Bandit) {
-            ((Bandit) getEncounter()).test();
-        } else if (encounter instanceof Police) {
-            ((Police) getEncounter()).test();
-        } else if (encounter instanceof Trader) {
-            ((Trader) getEncounter()).test();
-        }
-    }
+//<<<<<<< HEAD
+//=======
+//
+//    public NPC getEncounter() {
+//        return encounter.get();
+//    }
+//
+//    public SimpleObjectProperty<NPC> encounterProperty() {
+//        return encounter;
+//    }
+//
+//    public void setEncounter(NPC encounter) {
+//        this.encounter.set(encounter);
+//    }
+//
+//    //Tests for NPC encounters
+//    private void testEncounters() {
+//        NPC encounter = getEncounter();
+//        if (encounter instanceof Bandit) {
+//            ((Bandit) getEncounter()).test();
+//        } else if (encounter instanceof Police) {
+//            ((Police) getEncounter()).test();
+//        } else if (encounter instanceof Trader) {
+//            ((Trader) getEncounter()).test();
+//        }
+//    }
+//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
 }

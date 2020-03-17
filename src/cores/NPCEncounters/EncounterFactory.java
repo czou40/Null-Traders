@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class EncounterFactory {
-    private static final boolean ENCOUNTERSALWAYS = false;
+    private static final boolean ENCOUNTERSALWAYS = true;
 
     public static NPC generateRandomEncounter(Player player, Difficulty difficulty, Region dest) {
         double rand = Math.random();
@@ -25,7 +25,7 @@ public class EncounterFactory {
         if (rand < encounterChance / 3) {
             encounter = new Bandit(player, dest);
         } else if (rand < 2 * encounterChance / 3) {
-            encounter = new Trader(player, dest);
+            encounter = new Trader(player);
         } else if (rand < encounterChance) {
             Map<Item, InventoryEntry> itemInventory = player.getShip().getItemInventory();
             for (Item item : itemInventory.keySet()) {

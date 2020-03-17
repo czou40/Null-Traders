@@ -1,18 +1,14 @@
 package cores.NPCEncounters;
 
-import cores.Game;
 import cores.characters.Player;
 import cores.places.Region;
 import cores.vehicles.Ship;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.stage.Stage;
-import screens.BanditScreen;
-import screens.EncounterScreen;
 
 import java.util.Random;
 
-public class Bandit implements NPC, Fightable {
+public class Bandit implements FightableNPC {
     private Player player;
     private IntegerProperty creditsDemanded;
     private Region dest;
@@ -30,11 +26,6 @@ public class Bandit implements NPC, Fightable {
     }
 
     @Override
-    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
-        return new BanditScreen(primaryStage, game, this);
-    }
-
-    @Override
     public boolean handleFight() {
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
@@ -45,7 +36,7 @@ public class Bandit implements NPC, Fightable {
 
         if(win){
             player.setCredits(player.getCredits()+ getRandomCredits());
-            player.travelToRegion(dest, true);
+            player.startTravelToRegion(dest, true);
             return true;
         } else {
             player.setCredits(0);
