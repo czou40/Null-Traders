@@ -1,15 +1,17 @@
 package cores.objects;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class InventoryEntry implements Entry {
     private IntegerProperty quantity;
-    private IntegerProperty totalCost;
+    private DoubleProperty totalCost;
 
     public InventoryEntry() {
         quantity = new SimpleIntegerProperty();
-        totalCost = new SimpleIntegerProperty();
+        totalCost = new SimpleDoubleProperty();
     }
 
 
@@ -19,7 +21,9 @@ public class InventoryEntry implements Entry {
     }
 
     public void remove(int number) {
-        quantity.set(quantity.get() - number);
+        int original = quantity.get();
+        quantity.set(original - number);
+        totalCost.set(totalCost.get() * quantity.get() / original);
     }
 
     @Override
@@ -37,19 +41,19 @@ public class InventoryEntry implements Entry {
         this.quantity.set(quantity);
     }
 
-    @Override
-    public int getBuyingPrice() {
-        return (int) ((0.0 + getTotalCost()) / getQuantity() + 0.5);
+    public double getAverageBuyingPrice() {
+        return (0.0 + getTotalCost()) / getQuantity();
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return totalCost.get();
     }
 
-    public IntegerProperty totalCostProperty() {
+    public DoubleProperty totalCostProperty() {
         return totalCost;
     }
 
+    @Deprecated
     public void setTotalCost(int totalCost) {
         this.totalCost.set(totalCost);
     }

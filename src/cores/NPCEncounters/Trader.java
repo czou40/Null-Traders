@@ -1,52 +1,41 @@
 package cores.NPCEncounters;
 
-import cores.Game;
 import cores.characters.Player;
-import cores.objects.InventoryEntry;
 import cores.objects.Item;
-import cores.places.Region;
-import javafx.stage.Stage;
-import screens.EncounterScreen;
-import screens.TraderScreen;
 
 import java.util.Random;
 
-public class Trader implements NPC, ITrade, Robbable, Ignorable {
+public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
     private Player player;
     private Item item;
-    private InventoryEntry entry;
-    private Region dest;
+    private int price;
+    private int quantity;
 
     private static final int MAX_QUANTITY = 5;
 
-    public Trader(Player player, Region dest) {
+    public Trader(Player player) {
         this.player = player;
         this.item = Item.values()[(int) (Math.random() * Item.values().length)];
-        this.entry = new InventoryEntry();
-        entry.add(item.getBasePrice(), (int) Math.round(Math.random() * MAX_QUANTITY));
-        this.dest = dest;
+        this.price = item.getBasePrice();
+        this.quantity = (int) (Math.random() * MAX_QUANTITY) + 1;
     }
 
-    @Override
-    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
-        return new TraderScreen(primaryStage, game, this);
-    }
+//    @Override
+//    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
+//        return new TradeScreen(primaryStage, game, this);
+//    }
 
     @Override
-    public boolean handleBuy() {
-        if (player.getCredits() >= entry.getTotalCost()) {
-            InventoryEntry playerEntry = player.getShip().getItemInventory().get(item);
-            if (playerEntry == null) {
-                playerEntry = new InventoryEntry();
-            }
-            playerEntry.add(entry.getBuyingPrice(), entry.getQuantity());
-            player.getShip().getItemInventory().put(item, playerEntry);
-
-            player.travelToRegion(dest, true);
-            return true;
-        } else {
-            return false;
+    public void handleBuy() throws Exception {
+        int cost = price * quantity;
+        if (player.getCredits() < cost) {
+            throw new Exception("You don't have enough money!");
         }
+        int remain = player.getShip().getCargoCapacity() - player.getShip().getTotalItems();
+        if(remain < quantity) {
+            throw new Exception("You don't have enough space in your ship!");
+        }
+        player.getShip().load(item,  price, quantity);
     }
 
     @Override
@@ -58,46 +47,57 @@ public class Trader implements NPC, ITrade, Robbable, Ignorable {
         Random random = new Random();
         double succeedNum = random.nextDouble();
         boolean succeed = succeedNum > 0.5 * (1-merchantSkillInfluence);
-
         if (succeed) {
-            entry.setTotalCost((int) (PRICE_REDUCTION * entry.getTotalCost()));
+            price = (int) (PRICE_REDUCTION * price);
             return true;
         } else {
-            entry.setTotalCost((int) ((1 + 1 / PRICE_REDUCTION) * entry.getTotalCost()));
+            price = (int) ((1 + 1 / PRICE_REDUCTION) * price);
             return false;
         }
     }
 
     @Override
     public boolean handleRob() {
+        boolean alwaysWin = false;
+        boolean alwaysLose = false;
         final int MAX_STRENGTH = 50;
 
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
         double winOrLoseNum = random.nextDouble();
-        boolean win = winOrLoseNum > 0.5 * (1-fightSkillInfluence);
-
-        if(win){
-            InventoryEntry playerEntry = player.getShip().getItemInventory().get(item);
-            if (playerEntry == null) {
-                playerEntry = new InventoryEntry();
-            }
-            playerEntry.add(0, (int) Math.round(Math.random() * entry.getQuantity()));
-            player.getShip().getItemInventory().put(item, playerEntry);
-
-            player.travelToRegion(dest, true);
+        boolean win = winOrLoseNum > 0.5 * (1 - fightSkillInfluence);
+        if (alwaysWin) {
+            win = true;
+        } else if (alwaysLose) {
+            win = false;
+        }
+        if(win) {
+            player.getShip().load(item, 0, (int) (Math.random() * quantity) + 1);
             return true;
         } else {
             player.getShip().damage(
                     (int) Math.round(Math.random() * MAX_STRENGTH)
             );
-
-            player.travelToRegion(dest, true);
             return false;
         }
     }
 
-//<<<<<<< HEAD
+    @Override
+    public Item getItem() {
+        return item;
+    }
+
+    @Override
+    public int getPrice() {
+        return price;
+    }
+
+    @Override
+    public int getQuantity() {
+        return quantity;
+    }
+
+    //<<<<<<< HEAD
     @Override
     public void handleIgnore() {
 //=======

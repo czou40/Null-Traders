@@ -12,6 +12,10 @@ public class MapScreen extends Screen {
     private static VisualizedUniverseMap map;
     private Screen from;
 
+    public MapScreen(Stage primaryStage, Game game) {
+        this(primaryStage, game, new CharacterSheetScreen(primaryStage, game));
+    }
+
     public MapScreen(Stage primaryStage, Game game, Screen from) {
         super(primaryStage, game);
 //<<<<<<< HEAD

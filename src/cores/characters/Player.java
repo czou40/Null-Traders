@@ -2,7 +2,6 @@ package cores.characters;
 
 import cores.NPCEncounters.EncounterController;
 import cores.NPCEncounters.Bandit;
-import cores.NPCEncounters.EncounterFactory;
 import cores.NPCEncounters.EncounterTests;
 import cores.NPCEncounters.NPC;
 import cores.Game;
@@ -108,12 +107,9 @@ public class Player {
     Returns whether the travel was successful
      */
 //<<<<<<< HEAD
-    public void travelToRegion(Region dest, boolean afterEncounter) {
-        NPC npc = EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest);
-        this.encounterController.handleEncounter(npc, dest);
-        currentRegion.get().setIsCurrentRegion(false);
-        getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
-        setCurrentRegion(dest);
+    public void startTravelToRegion(Region dest, boolean afterEncounter) {
+        this.encounterController.handleEncounter(dest);
+
 //=======
 //    public boolean travelToRegion(Region dest, boolean afterEncounter) {
 //        if (ableToTravelTo(dest)) {
@@ -138,6 +134,11 @@ public class Player {
 //>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
+    public void resumeTravelAfterEncounter(Region dest) {
+        currentRegion.get().setIsCurrentRegion(false);
+        getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+        setCurrentRegion(dest);
+    }
 
     public boolean ableToTravelTo(Region dest) {
         return getShip().ableToTravelTo(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));

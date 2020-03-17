@@ -1,18 +1,14 @@
 package cores.NPCEncounters;
 
-import cores.Game;
 import cores.characters.Player;
 import cores.objects.Item;
 import cores.places.Region;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.stage.Stage;
-import screens.EncounterScreen;
-import screens.PoliceScreen;
 
 import java.util.Random;
 
-public class Police implements NPC, Fightable {
+public class Police implements FightableNPC {
     private Player player;
     private Item confiscatedItem;
     private Region dest;
@@ -29,10 +25,10 @@ public class Police implements NPC, Fightable {
         this.evasionFine = new SimpleIntegerProperty(getRandomCredits());
     }
 
-    @Override
-    public EncounterScreen getEncounterScreen(Game game, Stage primaryStage) {
-        return new PoliceScreen(primaryStage, game, this);
-    }
+//    @Override
+//    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
+//        return new PoliceScreen(primaryStage, game, this);
+//    }
 
     @Override
     public boolean handleFight() {
@@ -44,7 +40,7 @@ public class Police implements NPC, Fightable {
         // and then this number is reduced by whatever fightSkillInfluence ends up being
 
         if(win){
-            player.travelToRegion(dest, true);
+            player.startTravelToRegion(dest, true);
             return true;
         } else {
             player.getShip().getItemInventory().remove(confiscatedItem);
@@ -52,7 +48,7 @@ public class Police implements NPC, Fightable {
                     (int) Math.round(Math.random() * MAX_POLICE_STRENGTH)
             );
             player.setCredits(Math.max(player.getCredits() - getEvasionFine(), 0));
-            player.travelToRegion(dest, true);
+            player.startTravelToRegion(dest, true);
             return false;
         }
     }
@@ -83,7 +79,7 @@ public class Police implements NPC, Fightable {
     @Override
     public void handleForfeit() {
         player.getShip().getItemInventory().remove(confiscatedItem);
-        player.travelToRegion(dest, true);
+        player.startTravelToRegion(dest, true);
     }
 
     public int getEvasionFine() {

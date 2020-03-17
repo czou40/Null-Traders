@@ -51,6 +51,7 @@ public class Ship {
         return totalItems;
     }
 
+    @Deprecated
     public void setTotalItems(int totalItems) {
         this.totalItems.set(totalItems);
     }
@@ -63,6 +64,7 @@ public class Ship {
         return cargoCapacity;
     }
 
+    @Deprecated
     public void setCargoCapacity(int cargoCapacity) {
         this.cargoCapacity.set(cargoCapacity);
     }
@@ -75,6 +77,7 @@ public class Ship {
         return itemInventory;
     }
 
+    @Deprecated
     public void setItemInventory(Map<Item, InventoryEntry> itemInventory) {
         this.itemInventory.set(itemInventory);
     }
@@ -99,6 +102,7 @@ public class Ship {
         return fuel;
     }
 
+    @Deprecated
     public void setFuel(int fuel) {
         this.fuel.set(fuel);
     }
@@ -123,6 +127,7 @@ public class Ship {
         return health;
     }
 
+    @Deprecated
     public void setHealth(int health) {
         this.health.set(health);
     }
@@ -154,5 +159,25 @@ public class Ship {
 
     public void decrementFuel(Region region1, Region region2, double pilotInfluence) {
         this.setFuel(Math.max(getFuel() - calculateFuelCost(region1, region2, pilotInfluence), 0));
+    }
+
+    public void load(Item item, int price, int quantity) {
+        InventoryEntry playerEntry = itemInventory.get().get(item);
+        //update ship inventory
+        if (playerEntry == null) {
+            playerEntry = new InventoryEntry();
+        }
+        playerEntry.add(price, quantity);
+        this.itemInventory.get().put(item, playerEntry);
+        this.totalItems.set(this.totalItems.get() + quantity);
+    }
+
+    public void unload(Item item, int quantity) {
+        InventoryEntry playerEntry = itemInventory.get().get(item);
+        playerEntry.remove(quantity);
+        if (playerEntry.getQuantity() <= 0) {
+            this.itemInventory.get().remove(item);
+        }
+        this.totalItems.set(this.totalItems.get() - quantity);
     }
 }

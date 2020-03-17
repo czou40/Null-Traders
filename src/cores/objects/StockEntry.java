@@ -19,7 +19,6 @@ public class StockEntry implements Entry {
         this.sellingPrice = new SimpleIntegerProperty(sellingPrice);
     }
 
-    @Override
     public int getBuyingPrice() {
         return buyingPrice.get();
     }
