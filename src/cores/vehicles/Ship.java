@@ -22,7 +22,7 @@ public class Ship {
     private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
-    private String image = "file:src/images/spaceships/1.png";
+    private String image = "file:src/images/spaceships/0.png";
     private static final double MAX_FUEL_EFFICIENCY = 0.4;
 
 

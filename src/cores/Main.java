@@ -1,5 +1,10 @@
 package cores;
 
+import cores.NPCEncounters.Bandit;
+import cores.NPCEncounters.EncounterController;
+import cores.NPCEncounters.Police;
+import cores.NPCEncounters.Screens.FightScreen;
+import cores.objects.Item;
 import cores.utilities.NameGenerator;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -46,6 +51,7 @@ public class Main extends Application {
         primaryStage.setHeight(720);
         primaryStage.setMaximized(true);
         startNewGame(primaryStage);
+
         //new classes.screens.MapScreen(primaryStage, game).display();
     }
 
