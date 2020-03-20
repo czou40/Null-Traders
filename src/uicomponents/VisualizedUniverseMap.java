@@ -2,9 +2,11 @@ package uicomponents;
 
 import cores.places.Region;
 import cores.places.Universe;
+import cores.vehicles.Ship;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
@@ -46,7 +48,8 @@ public class VisualizedUniverseMap extends Pane {
 
     public VisualizedUniverseMap(Universe universe,
                                  ReadOnlyDoubleProperty widthProperty,
-                                 ReadOnlyDoubleProperty heightProperty, Stage primaryStage) {
+                                 ReadOnlyDoubleProperty heightProperty,
+                                 Stage primaryStage, String spaceshipImage) {
         super();
 
         this.isTraveling = new SimpleBooleanProperty(false);
@@ -77,7 +80,7 @@ public class VisualizedUniverseMap extends Pane {
         clipMapToHideOverflow();
 
         this.route = new Line();
-        this.spaceShip = new ImageView("file:src/images/ship.png");
+        this.spaceShip = new ImageView(spaceshipImage);
         this.spaceShip.setFitWidth(20);
         this.spaceShip.setFitHeight(20);
         this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
@@ -247,6 +250,10 @@ public class VisualizedUniverseMap extends Pane {
                                              ReadOnlyDoubleProperty heightProperty) {
         this.mapWidth.bind(widthProperty);
         this.mapHeight.bind(heightProperty);
+    }
+
+    public void updateSpaceshipImage(String image) {
+        this.spaceShip.setImage(new Image(image));
     }
 
     public String getErrorMessage() {

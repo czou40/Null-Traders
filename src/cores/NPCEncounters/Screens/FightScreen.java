@@ -8,12 +8,18 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import screens.Screen;
 import javafx.scene.control.Button;
+import uicomponents.MyGridPane;
+import uicomponents.MyProgressBar;
 
+import javax.swing.text.html.ImageView;
 import java.awt.*;
 
 public class FightScreen extends Screen {
     private FightableNPC npc;
     private EncounterController controller;
+    private MyGridPane root;
+    private MyGridPane animationPane;
+
 
     public FightScreen(Stage primaryStage, Game game, FightableNPC npc, EncounterController controller) {
         super(primaryStage, game);
@@ -23,11 +29,9 @@ public class FightScreen extends Screen {
 
     @Override
     public Pane constructRoot() {
-        Button button = new Button("This feature is not implemented."
-                + " Click to go back.");
-        button.setOnAction(event -> {
-            controller.handleResumeTravel("");
-        });
-        return new StackPane(button);
+        animationPane = new MyGridPane(null, MyGridPane.getSpan(2));
+
+        root = new MyGridPane();
+        return root;
     }
 }

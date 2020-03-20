@@ -36,7 +36,6 @@ public class Bandit implements FightableNPC {
 
         if(win){
             player.setCredits(player.getCredits()+ getRandomCredits());
-            player.startTravelToRegion(dest, true);
             return true;
         } else {
             player.setCredits(0);

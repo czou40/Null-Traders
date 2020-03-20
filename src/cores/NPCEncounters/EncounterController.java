@@ -1,6 +1,7 @@
 package cores.NPCEncounters;
 
 import cores.Game;
+import cores.GameOverException;
 import cores.NPCEncounters.Screens.*;
 import cores.characters.Player;
 import cores.places.Region;
@@ -33,8 +34,12 @@ public class EncounterController {
     }
 
     public void handleResumeTravel(String message) {
-        player.resumeTravelAfterEncounter(dest);
-        displayWillArriveScreen(message);
+        try {
+            player.resumeTravelAfterEncounter(dest);
+            displayWillArriveScreen(message);
+        } catch (GameOverException e) {
+            new GameOverScreen(primaryStage, game).display();
+        }
     }
 
     public void displayEncounterOptionsScreen(NPC npc) {
@@ -69,6 +74,16 @@ public class EncounterController {
             screen.displayTransactionComplete();
         } catch (Exception e) {
             screen.displayTransactionFailed(e.getMessage());
+        }
+    }
+
+    public void handleNegotiateEvent(TradeScreen screen, TradableNPC npc) {
+        boolean result = npc.handleNegotiate();
+        screen.updateTradeScreen();
+        if (result) {
+            screen.displayNegotiationSuccessful();
+        } else {
+            screen.displayNegotiationFailed();
         }
     }
 

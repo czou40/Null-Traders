@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class Main extends Application {
-    private Game game;
     private static String musicPathname;
     private static MediaPlayer musicPlayer;
     private static boolean hasStartedMusic;
@@ -35,16 +34,18 @@ public class Main extends Application {
         }
     }
 
-
+    public static void startNewGame(Stage primaryStage) {
+        Game newGame = new Game();
+        new WelcomeScreen(primaryStage, newGame).display();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        game = new Game();
         primaryStage.setTitle("Welcome to Null Traders!");
         primaryStage.setWidth(1280);
         primaryStage.setHeight(720);
         primaryStage.setMaximized(true);
-        new WelcomeScreen(primaryStage, game).display();
+        startNewGame(primaryStage);
         //new classes.screens.MapScreen(primaryStage, game).display();
     }
 

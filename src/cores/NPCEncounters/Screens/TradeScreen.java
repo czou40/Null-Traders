@@ -93,10 +93,12 @@ public class TradeScreen extends Screen {
     }
 
     public void displayTransactionFailed(String reason) {
+        negotiateButton.setDisable(true);
         transactionInfoLabel.setText("Transaction failed! " + reason);
     }
 
     public void displayNegotiationSuccessful() {
+        negotiateButton.setDisable(true);
         transactionInfoLabel.setText("All right... Maybe I can lower the price a little bit.");
     }
 

@@ -22,6 +22,7 @@ public class Ship {
     private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
+    private String image = "file:src/images/spaceships/1.png";
     private static final double MAX_FUEL_EFFICIENCY = 0.4;
 
 
@@ -146,7 +147,7 @@ public class Ship {
     }
 
     public void damage(int amount) {
-        setHealth(Math.max(getHealth() - amount, 0));
+        health.set(Math.max(health.get() - amount, 0));
     }
 
     private int calculateFuelCost(Region region1, Region region2, double pilotInfluence) {
@@ -179,5 +180,13 @@ public class Ship {
             this.itemInventory.get().remove(item);
         }
         this.totalItems.set(this.totalItems.get() - quantity);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
