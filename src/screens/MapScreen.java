@@ -48,10 +48,12 @@ public class MapScreen extends Screen {
 
     @Override
     public void doAfterScreenIsShown() {
+        String spaceshipImage = game.getPlayer().getShip().getImage();
         if (map == null) {
             map = new VisualizedUniverseMap(game.getUniverse(),
-                    getRootWidth(), getRootHeight(), getPrimaryStage());
+                    getRootWidth(), getRootHeight(), getPrimaryStage(), spaceshipImage);
         } else {
+            map.updateSpaceshipImage(spaceshipImage);
             map.errorMessageProperty().set("");
             map.updateWidthAndHeightProperty(getRootWidth(), getRootHeight());
         }

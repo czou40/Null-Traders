@@ -4,6 +4,7 @@ import cores.characters.Player;
 import cores.places.Universe;
 import cores.settings.Difficulty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.NoSuchElementException;
@@ -15,6 +16,7 @@ public class Game {
     private ObjectProperty<Difficulty> difficulty;
     private Player player;
     private Universe universe;
+    private SimpleBooleanProperty isOver;
 
     private static final boolean DEBUG = false;
 
@@ -22,9 +24,21 @@ public class Game {
         this.difficulty = new SimpleObjectProperty<>(Difficulty.CADET);
         this.player = new Player(this);
         this.universe = new Universe(player);
+        this.isOver = new SimpleBooleanProperty(false);
         player.setCurrentRegion(universe.getRandomRegion());
     }
 
+    public boolean isIsOver() {
+        return isOver.get();
+    }
+
+    public SimpleBooleanProperty isOverProperty() {
+        return isOver;
+    }
+
+    public void setIsOver(boolean isOver) {
+        this.isOver.set(isOver);
+    }
 
     public Difficulty getDifficulty() {
         return difficulty.getValue();

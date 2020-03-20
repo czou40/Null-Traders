@@ -12,7 +12,7 @@ public class TransactionSystem {
     private Marketplace market;
 
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     //UI elements so can display messages and stuff
 
@@ -58,18 +58,19 @@ public class TransactionSystem {
             //update ship and market inventories accordingly; decrement player credits
 
             //update ship inventory
-            if (playerEntry == null) {
-                playerEntry = new InventoryEntry();
-            }
-            playerEntry.add(price, number);
-            ship.getItemInventory().put(item, playerEntry);
+//            if (playerEntry == null) {
+//                playerEntry = new InventoryEntry();
+//            }
+//            playerEntry.add(price, number);
+//            ship.getItemInventory().put(item, playerEntry);
 
             //update market inventory
             marketEntry.setQuantity(marketEntry.getQuantity() - number); //decrement quantity
 
             //decrement player credits/update item count
             player.setCredits(player.getCredits() - price * number);
-            ship.setTotalItems(ship.getTotalItems() + number);
+//            ship.setTotalItems(ship.getTotalItems() + number);
+            ship.load(item, price, number);
 
             if (DEBUG) {
                 market.printStock();
@@ -105,11 +106,11 @@ public class TransactionSystem {
             throw new IllegalArgumentException("You don't have that many "
                     + item.getName() + " for sale!");
         }
-        //update ship inventory
-        playerEntry.remove(number);
-        if (playerEntry.getQuantity() <= 0) {
-            ship.getItemInventory().remove(item);
-        }
+//        //update ship inventory
+//        playerEntry.remove(number);
+//        if (playerEntry.getQuantity() <= 0) {
+//            ship.getItemInventory().remove(item);
+//        }
 
         //update market inventory
         if (marketEntry == null) {
@@ -122,7 +123,8 @@ public class TransactionSystem {
 
         //increment player credits
         player.setCredits(player.getCredits() + price * number);
-        ship.setTotalItems(ship.getTotalItems() - number);
+        ship.unload(item, number);
+//        ship.setTotalItems(ship.getTotalItems() - number);
     }
 
     public void buyUpgrade(Upgrade upgrade) throws IllegalAccessException {
