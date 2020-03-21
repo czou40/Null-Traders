@@ -59,8 +59,8 @@ public class FightAnimationPane extends Pane {
         this.laser.setPreserveRatio(false);
         this.laser.setFitHeight(IMAGE_SIZE);
         this.laser.setVisible(false);
-        this.getChildren().addAll(
-                laser, myImage, npcImage, explosionOnMe, explosionOnNPC, bulletFromMe, bulletFromNPC);
+        this.getChildren().addAll(laser, myImage, npcImage, explosionOnMe, explosionOnNPC,
+                bulletFromMe, bulletFromNPC);
         this.getStylesheets().add("styles/test.css");
     }
 

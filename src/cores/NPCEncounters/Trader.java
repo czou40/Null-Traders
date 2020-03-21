@@ -104,25 +104,4 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
     public int getQuantity() {
         return quantity;
     }
-
-    //<<<<<<< HEAD
-    @Override
-    public void handleIgnore() {
-//=======
-//    public void test() {
-//
-//    }
-//
-//    private void testForfeit() {
-//
-//    }
-//
-//    private void testFight() {
-//
-//    }
-//
-//    private void testFlee() {
-//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
-
-    }
 }

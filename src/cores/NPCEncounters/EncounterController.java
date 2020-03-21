@@ -2,9 +2,11 @@ package cores.NPCEncounters;
 
 import cores.Game;
 import cores.GameOverException;
+import cores.MyEvent;
 import cores.NPCEncounters.screens.*;
 import cores.characters.Player;
 import cores.places.Region;
+import javafx.event.Event;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import screens.*;
@@ -38,6 +40,7 @@ public class EncounterController {
         try {
             player.resumeTravelAfterEncounter(dest);
             displayAfterEncounterScreen(message, true);
+            fireEncounterFinishedEvent();
         } catch (GameOverException e) {
             new GameOverScreen(primaryStage, game).display();
         }
@@ -47,6 +50,7 @@ public class EncounterController {
         try {
             player.checkGameOver();
             displayAfterEncounterScreen(message, false);
+            fireEncounterFinishedEvent();
         } catch (GameOverException e) {
             new GameOverScreen(primaryStage, game).display();
         }
@@ -111,7 +115,8 @@ public class EncounterController {
     }
 
     public void handleRobEvent(RobbableNPC npc) {
-
+        Pair<Boolean, String> result = npc.handleRob();
+        handleResumeTravelToDest(result.getValue());
     }
 
     public static void setupScreenEnvironment(Game game, Stage primaryStage) {
@@ -122,5 +127,9 @@ public class EncounterController {
 
     public void goBackToMapScreen() {
         new MapScreen(primaryStage, game).display();
+    }
+
+    public void fireEncounterFinishedEvent() {
+        Event.fireEvent(primaryStage, new MyEvent(MyEvent.ENCOUNTER_FINISHED));
     }
 }

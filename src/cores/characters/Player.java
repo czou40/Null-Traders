@@ -2,12 +2,7 @@ package cores.characters;
 
 import cores.GameOverException;
 import cores.NPCEncounters.EncounterController;
-import cores.NPCEncounters.Bandit;
-import cores.NPCEncounters.EncounterTests;
-import cores.NPCEncounters.NPC;
 import cores.Game;
-import cores.NPCEncounters.Police;
-import cores.NPCEncounters.Trader;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
 import cores.places.Region;
@@ -19,6 +14,7 @@ import java.util.HashMap;
  * This class describes a player.
  */
 public class Player {
+
     public enum SkillType {
         PIL("Pilot"), FIG("Fighter"), MER("Merchant"), ENG("Engineer");
         private String name;
@@ -108,7 +104,7 @@ public class Player {
     Returns whether the travel was successful
      */
 //<<<<<<< HEAD
-    public void startTravelToRegion(Region dest, boolean afterEncounter) {
+    public void startTravelToRegion(Region dest) {
         this.encounterController.handleEncounter(dest);
 
 //=======
