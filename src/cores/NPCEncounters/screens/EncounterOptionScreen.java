@@ -1,4 +1,4 @@
-package cores.NPCEncounters.Screens;
+package cores.NPCEncounters.screens;
 
 import cores.Game;
 import cores.NPCEncounters.*;
@@ -44,11 +44,11 @@ public class EncounterOptionScreen extends Screen {
             });
             this.fleeButton = new Button("Flee");
             fleeButton.setOnAction(event -> {
-                controller.handleResumeTravel("You fled!");
+                controller.handleFleeEvent((FightableNPC) npc);
             });
             this.forfeitButton = new Button("Forfeit");
             forfeitButton.setOnAction(event -> {
-                controller.handleResumeTravel("This is not implemented.");
+                controller.handleForfeitEvent((FightableNPC) npc);
             });
             myGridPane.addRow(0, fightButton, fleeButton, forfeitButton);
         }
@@ -66,7 +66,7 @@ public class EncounterOptionScreen extends Screen {
             count++;
             this.robButton = new Button("Rob");
             robButton.setOnAction(event -> {
-                controller.displayRobScreen((RobbableNPC) npc);
+                controller.handleRobEvent((RobbableNPC) npc);
             });
             myGridPane.addRow(0, robButton);
         }
@@ -76,12 +76,11 @@ public class EncounterOptionScreen extends Screen {
             count++;
             this.ignoreButton = new Button("Ignore");
             ignoreButton.setOnAction(e -> {
-                controller.handleResumeTravel("");
+                controller.handleResumeTravelToDest("");
             });
             myGridPane.addRow(0, ignoreButton);
         }
-        infoLabel = new Label("You encountered a " + npc.getClass().getSimpleName()
-                + "!\n" + "what would you like to do?");
+        infoLabel = new Label(npc.getDescription() + " What would you like to do?");
         this.npcDisplay = new ImageView();
         root.getChildren().addAll(infoLabel, myGridPane);
         return root;

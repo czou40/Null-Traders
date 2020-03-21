@@ -32,7 +32,7 @@ public class GameOverScreen extends Screen {
         });
         Label gameOverLabel = new Label("Game Over");
         gameOverLabel.getStyleClass().add("h0"); // Apply CSS styles
-        Label loseTitle = new Label("You are killed in the battle.");
+        Label loseTitle = new Label("Your ship is completely destroyed!");
         loseTitle.getStyleClass().add("h1"); // Apply CSS styles
         // Demonstration of how to use classes.elements.MyGridPane
         double[] rowConstraints = {25, 15, 15, 15, 30};

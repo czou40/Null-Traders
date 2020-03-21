@@ -2,7 +2,6 @@ package uicomponents;
 
 import cores.places.Region;
 import cores.places.Universe;
-import cores.vehicles.Ship;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
@@ -81,10 +80,21 @@ public class VisualizedUniverseMap extends Pane {
 
         this.route = new Line();
         this.spaceShip = new ImageView(spaceshipImage);
+        this.spaceShip.setPreserveRatio(true);
         this.spaceShip.setFitWidth(20);
-        this.spaceShip.setFitHeight(20);
-        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
-        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).subtract(10));
+        this.scaling.addListener((observable, oldValue, newValue) -> {
+            double val = newValue.doubleValue();
+            if (val > 1) {
+                this.spaceShip.setFitWidth(20 * val);
+            } else {
+                this.spaceShip.setFitWidth(20);
+            }
+        });
+        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(
+                this.spaceShip.fitWidthProperty().divide(2)));
+        double ratio = this.spaceShip.getImage().getWidth() / this.spaceShip.getImage().getHeight();
+        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).
+                subtract(this.spaceShip.fitWidthProperty().divide(ratio * 2)));
     }
 
     /**

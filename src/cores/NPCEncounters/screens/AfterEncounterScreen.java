@@ -1,25 +1,20 @@
-package cores.NPCEncounters.Screens;
+package cores.NPCEncounters.screens;
 
 import cores.Game;
 import cores.NPCEncounters.EncounterController;
-import cores.places.Region;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screens.Screen;
-import uicomponents.MyGridPane;
-import uicomponents.MyNavigationButton;
 
-import java.util.Stack;
-
-public class WillArriveScreen extends Screen {
+public class AfterEncounterScreen extends Screen {
     private String destination;
     private Label label;
     private Button okButton;
     private String message;
+    private String whatWillHappenLater;
     private EncounterController controller;
 
 
@@ -29,9 +24,10 @@ public class WillArriveScreen extends Screen {
      * @param primaryStage The primary stage
      * @param game         The game
      */
-    public WillArriveScreen(Stage primaryStage, Game game, EncounterController controller) {
+    public AfterEncounterScreen(Stage primaryStage, Game game, EncounterController controller) {
         super(primaryStage, game);
         this.controller = controller;
+        whatWillHappenLater = "\nYou will return to your place of departure.";
         label = new Label();
         okButton = new Button("OK");
         okButton.setOnAction(event -> {
@@ -41,6 +37,9 @@ public class WillArriveScreen extends Screen {
 
     public void setDestination(String destination) {
         this.destination = destination;
+        whatWillHappenLater = destination == null ?
+                "\nYou will return to your place of departure."
+                : "\nYou will soon arrive at " + destination + ".";
     }
 
     public void setMessage(String message) {
@@ -49,7 +48,7 @@ public class WillArriveScreen extends Screen {
 
     @Override
     public Pane constructRoot() {
-        label.setText(message + "\nYou will soon arrived at " + destination + ".");
+        label.setText(message + whatWillHappenLater);
         return new VBox(label, okButton);
     }
 }

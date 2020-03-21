@@ -1,11 +1,5 @@
 package cores;
 
-import cores.NPCEncounters.Bandit;
-import cores.NPCEncounters.EncounterController;
-import cores.NPCEncounters.Police;
-import cores.NPCEncounters.Screens.FightScreen;
-import cores.objects.Item;
-import cores.utilities.NameGenerator;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import screens.*;
@@ -40,6 +34,7 @@ public class Main extends Application {
     }
 
     public static void startNewGame(Stage primaryStage) {
+        MapScreen.clearCache();
         Game newGame = new Game();
         new WelcomeScreen(primaryStage, newGame).display();
     }

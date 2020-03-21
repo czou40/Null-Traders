@@ -1,6 +1,7 @@
 package screens;
 
 import cores.NPCEncounters.Trader;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
@@ -151,7 +152,7 @@ public class MarketScreen extends GameScreen {
         buyUpgradeButton.setOnAction(e -> {
             try {
                 transactionSystem.buyUpgrade(marketplace.getUpgrade());
-            } catch (IllegalAccessException ex) {
+            } catch (Exception ex) {
                 messageLabel.setText(ex.getMessage());
             }
         });
@@ -184,7 +185,7 @@ public class MarketScreen extends GameScreen {
             slider.setMaxWidth(9999);
             slider.setSnapToTicks(true);
 
-            ObjectProperty<Map<Item, InventoryEntry>> inventory =
+            ReadOnlyObjectProperty<Map<Item, InventoryEntry>> inventory =
                     player.getShip().itemInventoryProperty();
             InventoryEntry shipEntry = inventory.get().get(entry.getKey());
             shipStockLabel = new Label(

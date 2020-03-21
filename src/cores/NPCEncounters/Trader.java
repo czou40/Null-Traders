@@ -2,6 +2,7 @@ package cores.NPCEncounters;
 
 import cores.characters.Player;
 import cores.objects.Item;
+import javafx.util.Pair;
 
 import java.util.Random;
 
@@ -57,7 +58,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
     }
 
     @Override
-    public boolean handleRob() {
+    public Pair<Boolean, String> handleRob() {
         boolean alwaysWin = false;
         boolean alwaysLose = false;
         final int MAX_STRENGTH = 50;
@@ -72,14 +73,21 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
             win = false;
         }
         if(win) {
-            player.getShip().load(item, 0, (int) (Math.random() * quantity) + 1);
-            return true;
+            int quantityRobbed = (int) (Math.random() * quantity) + 1;
+            player.getShip().load(item, 0, quantityRobbed);
+            return new Pair<>(true, "You successfully robbed " + quantityRobbed + " "
+            + item.getName() + "(s) from the Trader.");
         } else {
-            player.getShip().damage(
-                    (int) Math.round(Math.random() * MAX_STRENGTH)
-            );
-            return false;
+            int damage = (int) Math.round(Math.random() * MAX_STRENGTH);
+            player.getShip().damage(damage);
+            return new Pair<>(false, "Unfortunately, the Trader fought you off and damaged "
+            + "your ship by " + damage + " points.");
         }
+    }
+
+    @Override
+    public String getDescription() {
+        return "A trader hopes to sell some " + item.getName() + "(s) to you.";
     }
 
     @Override
