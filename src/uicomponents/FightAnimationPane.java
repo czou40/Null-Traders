@@ -19,6 +19,7 @@ public class FightAnimationPane extends Pane {
     private ImageView laser;
     private ImageView bulletFromMe;
     private ImageView bulletFromNPC;
+    private PauseTransition finishTimer;
     private static final int IMAGE_SIZE = 350;
     private static final int BORDER_SIZE = 150;
     private static final double BULLET_SPEED = 0.5;
@@ -58,13 +59,13 @@ public class FightAnimationPane extends Pane {
         this.laser.setPreserveRatio(false);
         this.laser.setFitHeight(IMAGE_SIZE);
         this.laser.setVisible(false);
-        this.getChildren().addAll(
-                laser, myImage, npcImage, explosionOnMe, explosionOnNPC, bulletFromMe, bulletFromNPC);
+        this.getChildren().addAll(laser, myImage, npcImage, explosionOnMe, explosionOnNPC,
+                bulletFromMe, bulletFromNPC);
         this.getStylesheets().add("styles/test.css");
     }
 
     public void loopAnimation() {
-        PauseTransition finishTimer = new PauseTransition(Duration.millis(ATTACK_INTERVAL));
+        finishTimer = new PauseTransition(Duration.millis(ATTACK_INTERVAL));
         finishTimer.setOnFinished(event -> {
             int rand = (int) (Math.random() * 2);
             if (rand == 0) {
@@ -74,6 +75,17 @@ public class FightAnimationPane extends Pane {
             }
         });
         generateMyAttack(finishTimer);
+    }
+
+    public void stopAnimation() {
+        finishTimer.setOnFinished(event -> {
+
+        });
+        explosionOnMe.setVisible(false);
+        explosionOnNPC.setVisible(false);
+        bulletFromNPC.setVisible(false);
+        bulletFromMe.setVisible(false);
+        laser.setVisible(false);
     }
 
     private void generateMyAttack(PauseTransition finishTimer) {

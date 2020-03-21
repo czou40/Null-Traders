@@ -2,10 +2,13 @@ package cores.NPCEncounters;
 
 import cores.Game;
 import cores.GameOverException;
-import cores.NPCEncounters.Screens.*;
+import cores.MyEvent;
+import cores.NPCEncounters.screens.*;
 import cores.characters.Player;
 import cores.places.Region;
+import javafx.event.Event;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import screens.*;
 
 public class EncounterController {
@@ -29,14 +32,25 @@ public class EncounterController {
         if (npc != null) {
             displayEncounterOptionsScreen(npc);
         } else {
-            handleResumeTravel("Nothing happened during the journey.");
+            handleResumeTravelToDest("Nothing happened during the journey.");
         }
     }
 
-    public void handleResumeTravel(String message) {
+    public void handleResumeTravelToDest(String message) {
         try {
             player.resumeTravelAfterEncounter(dest);
-            displayWillArriveScreen(message);
+            displayAfterEncounterScreen(message, true);
+            fireEncounterFinishedEvent();
+        } catch (GameOverException e) {
+            new GameOverScreen(primaryStage, game).display();
+        }
+    }
+
+    public void handleReturnToPlaceOfDeparture(String message) {
+        try {
+            player.checkGameOver();
+            displayAfterEncounterScreen(message, false);
+            fireEncounterFinishedEvent();
         } catch (GameOverException e) {
             new GameOverScreen(primaryStage, game).display();
         }
@@ -47,10 +61,12 @@ public class EncounterController {
         screen.display();
     }
 
-    private void displayWillArriveScreen(String message) {
-        WillArriveScreen screen =
-                new WillArriveScreen(primaryStage, game, this);
-        screen.setDestination(dest.getName());
+    private void displayAfterEncounterScreen(String message, boolean willTravelToDestination) {
+        AfterEncounterScreen screen =
+                new AfterEncounterScreen(primaryStage, game, this);
+        if (willTravelToDestination) {
+            screen.setDestination(dest.getName());
+        }
         screen.setMessage(message);
         screen.display();
     }
@@ -63,14 +79,10 @@ public class EncounterController {
         new TradeScreen(primaryStage, game, npc, this).display();
     }
 
-    public void displayRobScreen(RobbableNPC npc) {
-        new RobScreen(primaryStage, game, npc, this).display();
-    }
-
     public void handleBuyEvent(TradeScreen screen, TradableNPC npc) {
         try {
             npc.handleBuy();
-            screen.updateTradeScreen();
+            screen.update();
             screen.displayTransactionComplete();
         } catch (Exception e) {
             screen.displayTransactionFailed(e.getMessage());
@@ -79,12 +91,32 @@ public class EncounterController {
 
     public void handleNegotiateEvent(TradeScreen screen, TradableNPC npc) {
         boolean result = npc.handleNegotiate();
-        screen.updateTradeScreen();
+        screen.update();
         if (result) {
             screen.displayNegotiationSuccessful();
         } else {
             screen.displayNegotiationFailed();
         }
+    }
+
+    public void handleFightEvent(FightScreen screen, FightableNPC npc) {
+        Pair<Boolean, String> result = npc.handleFight();
+        screen.update(result.getValue());
+    }
+
+    public void handleFleeEvent(FightableNPC npc) {
+        Pair<Boolean, String> result = npc.handleFlee();
+        handleReturnToPlaceOfDeparture(result.getValue());
+    }
+
+    public void handleForfeitEvent(FightableNPC npc) {
+        String result = npc.handleForfeit();
+        handleResumeTravelToDest(result);
+    }
+
+    public void handleRobEvent(RobbableNPC npc) {
+        Pair<Boolean, String> result = npc.handleRob();
+        handleResumeTravelToDest(result.getValue());
     }
 
     public static void setupScreenEnvironment(Game game, Stage primaryStage) {
@@ -95,5 +127,9 @@ public class EncounterController {
 
     public void goBackToMapScreen() {
         new MapScreen(primaryStage, game).display();
+    }
+
+    public void fireEncounterFinishedEvent() {
+        Event.fireEvent(primaryStage, new MyEvent(MyEvent.ENCOUNTER_FINISHED));
     }
 }

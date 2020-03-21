@@ -31,7 +31,7 @@ public class Universe {
         }
 
         RegionData[] regionData = RegionData.values();
-        final int numRows = (int) (HEIGHT / Math.sqrt(WIDTH * HEIGHT * 1.0 / REGION_NUMBER));
+        final int numRows = (int) (HEIGHT / Math.sqrt(1.0 * WIDTH / REGION_NUMBER * HEIGHT));
         for (RegionData r : regionData) {
             int spot = spotsLeft.remove((int) (Math.random() * spotsLeft.size()));
             int spotX = spot % (REGION_NUMBER / numRows); //0 to number of regions / 2

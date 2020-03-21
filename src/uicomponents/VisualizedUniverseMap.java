@@ -2,7 +2,6 @@ package uicomponents;
 
 import cores.places.Region;
 import cores.places.Universe;
-import cores.vehicles.Ship;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
@@ -25,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.sql.Time;
 import java.util.HashMap;
 
 /**
@@ -45,13 +45,14 @@ public class VisualizedUniverseMap extends Pane {
     private SimpleBooleanProperty isTraveling;
     private ImageView spaceShip;
     private SimpleStringProperty errorMessage;
+    private UniverseMapController controller;
 
     public VisualizedUniverseMap(Universe universe,
                                  ReadOnlyDoubleProperty widthProperty,
                                  ReadOnlyDoubleProperty heightProperty,
                                  Stage primaryStage, String spaceshipImage) {
         super();
-
+        this.controller = new UniverseMapController(universe, this, primaryStage);
         this.isTraveling = new SimpleBooleanProperty(false);
         this.errorMessage = new SimpleStringProperty();
         /*
@@ -60,7 +61,6 @@ public class VisualizedUniverseMap extends Pane {
          */
         this.setPrefWidth(9999);
         this.setPrefHeight(9999);
-
         /*
         Set up the universe.
          */
@@ -68,23 +68,35 @@ public class VisualizedUniverseMap extends Pane {
         setupMapAutosize(widthProperty, heightProperty);
         setUpZooming();
         setUpMapAutoCenteredAtCurrentRegion();
-
         /*
         Get the primary stage, which allows us to show the region characteristics screen
          */
         this.primaryStage = primaryStage;
-
         addBorderToMap();
         addDotsToMap();
         makeDotsTwinkle();
         clipMapToHideOverflow();
-
         this.route = new Line();
+        setUpSpaceShipImage(spaceshipImage);
+    }
+
+    private void setUpSpaceShipImage(String spaceshipImage) {
         this.spaceShip = new ImageView(spaceshipImage);
+        this.spaceShip.setPreserveRatio(true);
         this.spaceShip.setFitWidth(20);
-        this.spaceShip.setFitHeight(20);
-        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(10));
-        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).subtract(10));
+        this.scaling.addListener((observable, oldValue, newValue) -> {
+            double val = newValue.doubleValue();
+            if (val > 1) {
+                this.spaceShip.setFitWidth(20 * val);
+            } else {
+                this.spaceShip.setFitWidth(20);
+            }
+        });
+        this.spaceShip.xProperty().bind(this.mapWidth.divide(2).subtract(
+                this.spaceShip.fitWidthProperty().divide(2)));
+        double ratio = this.spaceShip.getImage().getWidth() / this.spaceShip.getImage().getHeight();
+        this.spaceShip.yProperty().bind(this.mapHeight.divide(2).
+                subtract(this.spaceShip.fitWidthProperty().divide(ratio * 2)));
     }
 
     /**
@@ -163,18 +175,19 @@ public class VisualizedUniverseMap extends Pane {
         offsetY = new SimpleDoubleProperty();
         offsetX.bind(mapWidth.divide(2).subtract(centerX));
         offsetY.bind(mapHeight.divide(2).subtract(centerY));
-        universe.currentRegionProperty().addListener((observableValue, oldValue, newValue) -> {
-            /*
-            Update centerX and centerY information.
-            The following codes are equivalent to:
-            centerX.set(universe.getCurrentRegion().getX());
-            centerY.set(universe.getCurrentRegion().getY());
-            We used timeline to make the transition smooth.
-             */
-            visualizeTravelTo(universe.getCurrentRegion().getX(),
-                    universe.getCurrentRegion().getY(),
-                    true, newValue);
-        });
+//        universe.currentRegionProperty().addListener((observableValue, oldValue, newValue) -> {
+//            /*
+//            Update centerX and centerY information.
+//            The following codes are equivalent to:
+//            centerX.set(universe.getCurrentRegion().getX());
+//            centerY.set(universe.getCurrentRegion().getY());
+//            We used timeline to make the transition smooth.
+//             */
+////            visualizeTravelTo(universe.getCurrentRegion().getX(),
+////                    universe.getCurrentRegion().getY(),
+////                    true, newValue);
+//
+//        });
     }
 
     /**
@@ -211,31 +224,38 @@ public class VisualizedUniverseMap extends Pane {
         this.mapHeight.bind(heightProperty);
     }
 
-    /**
-     * @param x
-     * @param y
-     * @param isReal
-     * @param region
-     */
-    private void visualizeTravelTo(double x, double y, boolean isReal, Region region) {
+    void visualizeTravelTo(double x, double y, Timeline timeline) {
         double duration = Math.sqrt(Math.pow(centerX.get() - x, 2)
                 + Math.pow(centerY.get() - y, 2)) * 5;
-        Timeline timeline = new Timeline();
         KeyValue keyValueX = new KeyValue(centerX, x);
         KeyFrame keyFrameX = new KeyFrame(new Duration(duration), keyValueX);
         KeyValue keyValueY = new KeyValue(centerY, y);
         KeyFrame keyFrameY = new KeyFrame(new Duration(duration), keyValueY);
-        timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
-        timeline.setOnFinished(event -> {
-            if (isReal) {
-                VisualizedUniverseMap.this.getChildren().remove(route);
-                VisualizedUniverseMap.this.getChildren().remove(spaceShip);
-                isTraveling.set(false);
-            } else {
-                universe.getPlayer().startTravelToRegion(region, false);
-            }
-        });
+        timeline.getKeyFrames().setAll(keyFrameX, keyFrameY);
         timeline.play();
+    }
+
+//    void visualizeTravelBack() {
+//        double duration = Math.sqrt(Math.pow(centerX.get() - universe.getCurrentRegion().getX(), 2)
+//                + Math.pow(centerY.get() - universe.getCurrentRegion().getY(), 2)) * 5;
+//        Timeline timeline = new Timeline();
+//        KeyValue keyValueX = new KeyValue(centerX, universe.getCurrentRegion().getX());
+//        KeyFrame keyFrameX = new KeyFrame(new Duration(duration), keyValueX);
+//        KeyValue keyValueY = new KeyValue(centerY, universe.getCurrentRegion().getY());
+//        KeyFrame keyFrameY = new KeyFrame(new Duration(duration), keyValueY);
+//        timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
+//        timeline.setOnFinished(event -> {
+//            VisualizedUniverseMap.this.getChildren().remove(route);
+//            VisualizedUniverseMap.this.getChildren().remove(spaceShip);
+//            isTraveling.set(false);
+//        });
+//        timeline.play();
+//    }
+
+    public void stopTravelVisualization() {
+        this.getChildren().remove(route);
+        this.getChildren().remove(spaceShip);
+        isTraveling.set(false);
     }
 
     public boolean isTraveling() {
@@ -264,6 +284,32 @@ public class VisualizedUniverseMap extends Pane {
         return errorMessage;
     }
 
+    private void displayRouteAndSpaceShip(DoubleProperty startX, DoubleProperty startY) {
+        route.startXProperty().bind(startX);
+        route.startYProperty().bind(startY);
+        route.endXProperty().bind(dots.get(universe.getCurrentRegion()).centerXProperty());
+        route.endYProperty().bind(dots.get(universe.getCurrentRegion()).centerYProperty());
+        route.setStroke(Color.GOLD);
+        route.setOpacity(0.5);
+        route.setStrokeWidth(1);
+        double diffY = route.getStartY() - route.getEndY();
+        double diffX = route.getStartX() - route.getEndX();
+        double angle;
+        if (diffX == 0) {
+            angle = diffY > 0 ? 90 : -90;
+        } else {
+            angle = Math.atan(diffY / diffX) / Math.PI * 180;
+        }
+        spaceShip.setRotate(angle + (diffX < 0 ? 90 : -90));
+        //System.out.println(angle);
+        VisualizedUniverseMap.this.getChildren().add(route);
+        VisualizedUniverseMap.this.getChildren().add(spaceShip);
+    }
+
+    public void reverseSpaceshipDirection() {
+        spaceShip.setRotate(spaceShip.getRotate() + 180);
+    }
+
     private class MapDot extends Circle {
         private VBox infoLabels;
         private Label nameLabel;
@@ -271,109 +317,19 @@ public class VisualizedUniverseMap extends Pane {
         private double light = 1.0;
         private boolean increaseInLightIntensity = true;
 
-        public MapDot(Region region){
+        public MapDot(Region region) {
             super(10, 10, 2, Color.GHOSTWHITE);
-
             this.region = region;
-            /*
-            Positioning the Dot in the correct place on the map.
-            The position of the dot depends on where the player is currently at
-            and the scaling coefficient.
-             */
-            SimpleDoubleProperty distanceFromCenterX = new SimpleDoubleProperty();
-            SimpleDoubleProperty distanceFromCenterY = new SimpleDoubleProperty();
-            distanceFromCenterX.bind(centerX.multiply(-1).add(region.getX()).multiply(scaling));
-            distanceFromCenterY.bind(centerY.multiply(-1).add(region.getY()).multiply(scaling));
-            this.centerXProperty().bind(distanceFromCenterX.add(offsetX).add(centerX));
-            this.centerYProperty().bind(distanceFromCenterY.add(offsetY).add(centerY));
-
-            /*
-            Set up the name label.
-            The name label automatically changes when the found property changes.
-             */
-            nameLabel = new Label(region.isFound() ? region.getName() : "???");
-            region.foundProperty().addListener(e -> {
-                nameLabel.setText(region.isFound() ? region.getName() : "???");
-                nameLabel.setVisible(region.isFound());
-            });
-            nameLabel.setStyle("-fx-font-size: 16px;");
-            nameLabel.layoutXProperty().bind(centerXProperty().add(15));
-            nameLabel.layoutYProperty().bind(centerYProperty().subtract(12));
-            nameLabel.setVisible(region.isFound());
-            nameLabel.setMouseTransparent(true);
-
-            /*
-            Set up the coordinates label
-             */
-            Label coordinatesLabel = new Label(region.getX() + ", " + region.getY());
-            coordinatesLabel.setStyle("-fx-font-size: 16px;");
-
-
-            /*
-            Set up the distance label.
-            The distance is automatically calculated.
-             */
-            SimpleDoubleProperty distance = new SimpleDoubleProperty(
-                    region.distanceTo(universe.getCurrentRegion()));
-            universe.currentRegionProperty().addListener((observable, oldRegion, newRegion) -> {
-                distance.set(region.distanceTo(newRegion));
-            });
-            Label distanceLabel = new Label();
-            distanceLabel.setStyle("-fx-font-size: 16px;");
-            distanceLabel.textProperty().bind(Bindings.format("Distance: %.2f", distance));
-
-            /*
-            Wrap the labels in a VBox.
-             */
-            MyNavigationButton goToRegionChar = new MyNavigationButton("See Characteristics",
-                    new RegionCharacteristicsScreen(
-                            primaryStage, universe.getPlayer().getGame(), region));
-            goToRegionChar.setStyle("-fx-font-size: 16px;");
-            infoLabels = new VBox();
-            infoLabels.getChildren().addAll(distanceLabel, coordinatesLabel, goToRegionChar);
-            infoLabels.layoutXProperty().bind(centerXProperty().add(15));
-            infoLabels.layoutYProperty().bind(centerYProperty().add(12));
-            infoLabels.setVisible(false);
-
-            /*
-            Assign the correct color to the dots.
-            This is done automatically.
-             */
-            updateColor();
-            region.foundProperty().addListener(e -> {
-                updateColor();
-            });
-            region.isCurrentRegionProperty().addListener(e -> {
-                updateColor();
-            });
-
+            positionDotOnMap();
+            setUpNameLabel();
+            setUpInfoLabels();
+            enableAutoAdjustColorBasedOnWhetherRegionIsFound();
+            adjustDotSizeAndLabelOpacityBasedOnScaling();
             /*
             When the user hovers over a dot, the cursor becomes a hand.
              */
             this.setCursor(Cursor.HAND);
-
-            EventHandler<MouseEvent> display = event -> {
-                nameLabel.setOpacity(1);
-                nameLabel.setVisible(true);
-                infoLabels.setVisible(true);
-            };
-
-            EventHandler<MouseEvent> hide = event -> {
-                nameLabel.setVisible(region.isFound());
-                infoLabels.setVisible(false);
-            };
-
-            /*
-            When the user hovers over a dot or the corresponding description box,
-            the information is displayed
-             */
-            this.setOnMouseEntered(display);
-            infoLabels.setOnMouseEntered(display);
-
-            this.setOnMouseExited(hide);
-            infoLabels.setOnMouseExited(hide);
-            nameLabel.setOnMouseExited(hide);
-
+            setUpOnMouseHoverAction();
             /*
             When the player clicks the dots,
             it travels to the region associated with the dots.
@@ -386,31 +342,108 @@ public class VisualizedUniverseMap extends Pane {
                     }
                     errorMessage.set("");
                     isTraveling.set(true);
-                    route.startXProperty().bind(centerXProperty());
-                    route.startYProperty().bind(centerYProperty());
-                    route.endXProperty().bind(dots.get(universe.getCurrentRegion()).centerXProperty());
-                    route.endYProperty().bind(dots.get(universe.getCurrentRegion()).centerYProperty());
-                    route.setStroke(Color.GOLD);
-                    route.setOpacity(0.5);
-                    route.setStrokeWidth(1);
-                    double diffY = route.getStartY() - route.getEndY();
-                    double diffX = route.getStartX() - route.getEndX();
-                    double angle;
-                    if (diffX == 0) {
-                        angle = diffY > 0 ? 90 : -90;
-                    } else {
-                        angle = Math.atan(diffY / diffX) / Math.PI * 180;
-                    }
-                    spaceShip.setRotate(angle + (diffX < 0 ? 90 : -90));
-                    //System.out.println(angle);
-                    VisualizedUniverseMap.this.getChildren().add(route);
-                    VisualizedUniverseMap.this.getChildren().add(spaceShip);
-                    visualizeTravelTo(
-                            (universe.getCurrentRegion().getX() + region.getX()) / 2,
-                            (universe.getCurrentRegion().getY() + region.getY()) / 2, false, region);
+                    displayRouteAndSpaceShip(centerXProperty(), centerYProperty());
+                    controller.handleTravelEvent(universe.getCurrentRegion(), region);
+//                    visualizeTravelTo(
+//                            (universe.getCurrentRegion().getX() + region.getX()) / 2,
+//                            (universe.getCurrentRegion().getY() + region.getY()) / 2, false, region);
+
                 }
             });
+        }
 
+        private void setUpInfoLabels() {
+            /*
+            Set up the coordinates label
+            */
+            Label coordinatesLabel = new Label(region.getX() + ", " + region.getY());
+            coordinatesLabel.setStyle("-fx-font-size: 16px;");
+            /*
+            Set up the distance label.
+            The distance is automatically calculated.
+             */
+            SimpleDoubleProperty distance = new SimpleDoubleProperty(
+                    region.distanceTo(universe.getCurrentRegion()));
+            universe.currentRegionProperty().addListener((observable, oldRegion, newRegion) -> {
+                distance.set(region.distanceTo(newRegion));
+            });
+            Label distanceLabel = new Label();
+            distanceLabel.setStyle("-fx-font-size: 16px;");
+            distanceLabel.textProperty().bind(Bindings.format("Distance: %.2f", distance));
+            /*
+            Set up MyNavigationButton
+             */
+            MyNavigationButton goToRegionChar = new MyNavigationButton("See Characteristics",
+                    new RegionCharacteristicsScreen(
+                            primaryStage, universe.getPlayer().getGame(), region));
+            goToRegionChar.setStyle("-fx-font-size: 16px;");
+            /*
+            Wrap the labels in a VBox.
+             */
+            infoLabels = new VBox();
+            infoLabels.getChildren().addAll(distanceLabel, coordinatesLabel, goToRegionChar);
+            infoLabels.layoutXProperty().bind(centerXProperty().add(15));
+            infoLabels.layoutYProperty().bind(centerYProperty().add(12));
+            infoLabels.setVisible(false);
+        }
+
+        /**
+         Set up the name label.
+         The name label automatically changes when the found property changes.
+         */
+        private void setUpNameLabel() {
+            nameLabel = new Label(region.isFound() ? region.getName() : "???");
+            region.foundProperty().addListener(e -> {
+                nameLabel.setText(region.isFound() ? region.getName() : "???");
+                nameLabel.setVisible(region.isFound());
+            });
+            nameLabel.setStyle("-fx-font-size: 16px;");
+            nameLabel.layoutXProperty().bind(centerXProperty().add(15));
+            nameLabel.layoutYProperty().bind(centerYProperty().subtract(12));
+            nameLabel.setVisible(region.isFound());
+            nameLabel.setMouseTransparent(true);
+        }
+
+        /**
+         * Assign the correct color to the dots.
+         * This is done automatically.
+         */
+        private void enableAutoAdjustColorBasedOnWhetherRegionIsFound() {
+            updateColor();
+            region.foundProperty().addListener(e -> {
+                updateColor();
+            });
+            region.isCurrentRegionProperty().addListener(e -> {
+                updateColor();
+            });
+        }
+
+        /**
+         * When the user hovers over a dot or the corresponding description box,
+         * the information is displayed
+         */
+        private void setUpOnMouseHoverAction() {
+            EventHandler<MouseEvent> display = event -> {
+                nameLabel.setOpacity(1);
+                nameLabel.setVisible(true);
+                infoLabels.setVisible(true);
+            };
+
+            EventHandler<MouseEvent> hide = event -> {
+                nameLabel.setVisible(region.isFound());
+                infoLabels.setVisible(false);
+            };
+
+
+            this.setOnMouseEntered(display);
+            infoLabels.setOnMouseEntered(display);
+
+            this.setOnMouseExited(hide);
+            infoLabels.setOnMouseExited(hide);
+            nameLabel.setOnMouseExited(hide);
+        }
+
+        private void adjustDotSizeAndLabelOpacityBasedOnScaling() {
             scaling.addListener(((observable, oldValue, newValue) -> {
                 double s = newValue.doubleValue();
                 if (s > 1.0 / 3) {
@@ -422,6 +455,20 @@ public class VisualizedUniverseMap extends Pane {
                     nameLabel.setOpacity(Math.max(s * 10 - 1.5, 0));
                 }
             }));
+        }
+
+        /**
+         * Positioning the Dot in the correct place on the map.
+         * The position of the dot depends on where the player is currently at
+         * and the scaling coefficient.
+         */
+        private void positionDotOnMap() {
+            SimpleDoubleProperty distanceFromCenterX = new SimpleDoubleProperty();
+            SimpleDoubleProperty distanceFromCenterY = new SimpleDoubleProperty();
+            distanceFromCenterX.bind(centerX.multiply(-1).add(region.getX()).multiply(scaling));
+            distanceFromCenterY.bind(centerY.multiply(-1).add(region.getY()).multiply(scaling));
+            this.centerXProperty().bind(distanceFromCenterX.add(offsetX).add(centerX));
+            this.centerYProperty().bind(distanceFromCenterY.add(offsetY).add(centerY));
         }
 
         private void updateColor() {

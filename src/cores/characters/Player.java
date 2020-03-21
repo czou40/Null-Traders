@@ -2,12 +2,7 @@ package cores.characters;
 
 import cores.GameOverException;
 import cores.NPCEncounters.EncounterController;
-import cores.NPCEncounters.Bandit;
-import cores.NPCEncounters.EncounterTests;
-import cores.NPCEncounters.NPC;
 import cores.Game;
-import cores.NPCEncounters.Police;
-import cores.NPCEncounters.Trader;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
 import cores.places.Region;
@@ -19,6 +14,7 @@ import java.util.HashMap;
  * This class describes a player.
  */
 public class Player {
+
     public enum SkillType {
         PIL("Pilot"), FIG("Fighter"), MER("Merchant"), ENG("Engineer");
         private String name;
@@ -108,7 +104,7 @@ public class Player {
     Returns whether the travel was successful
      */
 //<<<<<<< HEAD
-    public void startTravelToRegion(Region dest, boolean afterEncounter) {
+    public void startTravelToRegion(Region dest) {
         this.encounterController.handleEncounter(dest);
 
 //=======
@@ -135,18 +131,29 @@ public class Player {
 //>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
-    public void resumeTravelAfterEncounter(Region dest) throws GameOverException {
+    public void checkGameOver() throws GameOverException {
         if (this.ship.get().getHealth() <= 0) {
             throw new GameOverException();
         }
-        currentRegion.get().setIsCurrentRegion(false);
+    }
+
+    public void resumeTravelAfterEncounter(Region dest) throws GameOverException {
+        checkGameOver();
         getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
+        currentRegion.get().setIsCurrentRegion(false);
         setCurrentRegion(dest);
     }
 
     public boolean ableToTravelTo(Region dest) {
         return getShip().ableToTravelTo(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
     }
+
+    public void refuelShip() throws Exception {
+        int cost = ship.get().getRefuelCost();
+        spend(cost);
+        ship.get().refillFuel();
+    }
+
 
     /*
     Condenses the player's skill points in a type into a number between 0 and 1 using an exponential
@@ -205,6 +212,25 @@ public class Player {
         this.credits.setValue(credits);
     }
 
+    public void loseAllCredits() {
+        credits.set(0);
+    }
+
+    public void loseCredits(int credit) {
+        credits.set(Math.max(credits.get() - credit, 0));
+    }
+
+    public void earn(int credit) {
+        credits.set(credits.get() + credit);
+    }
+
+    public void spend(int credit) throws Exception {
+        if (credit > credits.get()) {
+            throw new Exception("You do not have enough money!");
+        }
+        credits.set(credits.get() - credit);
+    }
+
     public int sumOfPoints() {
         int sum = 0;
         for (SkillType x : SkillType.values()) {
@@ -254,31 +280,4 @@ public class Player {
     public SimpleObjectProperty<Upgrade> getUpgradeProperty(SkillType type) {
         return upgrades.get(type);
     }
-//<<<<<<< HEAD
-//=======
-//
-//    public NPC getEncounter() {
-//        return encounter.get();
-//    }
-//
-//    public SimpleObjectProperty<NPC> encounterProperty() {
-//        return encounter;
-//    }
-//
-//    public void setEncounter(NPC encounter) {
-//        this.encounter.set(encounter);
-//    }
-//
-//    //Tests for NPC encounters
-//    private void testEncounters() {
-//        NPC encounter = getEncounter();
-//        if (encounter instanceof Bandit) {
-//            ((Bandit) getEncounter()).test();
-//        } else if (encounter instanceof Police) {
-//            ((Police) getEncounter()).test();
-//        } else if (encounter instanceof Trader) {
-//            ((Trader) getEncounter()).test();
-//        }
-//    }
-//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
 }

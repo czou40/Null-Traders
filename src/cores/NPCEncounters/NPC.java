@@ -6,4 +6,6 @@ public interface NPC {
         int rand = (int) (Math.random() * 13);
         return "file:src/images/spaceships/" + rand + ".png";
     }
+
+    String getDescription();
 }

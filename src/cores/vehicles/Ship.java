@@ -4,12 +4,7 @@ import cores.places.Region;
 import cores.settings.Difficulty;
 import cores.objects.InventoryEntry;
 import cores.objects.Item;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,46 +43,31 @@ public class Ship {
         return totalItems.get();
     }
 
-    public IntegerProperty totalItemsProperty() {
+    public ReadOnlyIntegerProperty totalItemsProperty() {
         return totalItems;
-    }
-
-    @Deprecated
-    public void setTotalItems(int totalItems) {
-        this.totalItems.set(totalItems);
     }
 
     public int getCargoCapacity() {
         return cargoCapacity.get();
     }
 
-    public IntegerProperty cargoCapacityProperty() {
+    public ReadOnlyIntegerProperty cargoCapacityProperty() {
         return cargoCapacity;
-    }
-
-    @Deprecated
-    public void setCargoCapacity(int cargoCapacity) {
-        this.cargoCapacity.set(cargoCapacity);
     }
 
     public Map<Item, InventoryEntry> getItemInventory() {
         return itemInventory.get();
     }
 
-    public ObjectProperty<Map<Item, InventoryEntry>> itemInventoryProperty() {
+    public ReadOnlyObjectProperty<Map<Item, InventoryEntry>> itemInventoryProperty() {
         return itemInventory;
-    }
-
-    @Deprecated
-    public void setItemInventory(Map<Item, InventoryEntry> itemInventory) {
-        this.itemInventory.set(itemInventory);
     }
 
     public String getName() {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
+    public ReadOnlyStringProperty nameProperty() {
         return name;
     }
 
@@ -99,20 +79,15 @@ public class Ship {
         return fuel.get();
     }
 
-    public IntegerProperty fuelProperty() {
+    public ReadOnlyIntegerProperty fuelProperty() {
         return fuel;
-    }
-
-    @Deprecated
-    public void setFuel(int fuel) {
-        this.fuel.set(fuel);
     }
 
     public int getFuelCapacity() {
         return fuelCapacity.get();
     }
 
-    public IntegerProperty fuelCapacityProperty() {
+    public ReadOnlyIntegerProperty fuelCapacityProperty() {
         return fuelCapacity;
     }
 
@@ -124,14 +99,10 @@ public class Ship {
         return health.get();
     }
 
-    public IntegerProperty healthProperty() {
+    public ReadOnlyIntegerProperty healthProperty() {
         return health;
     }
 
-    @Deprecated
-    public void setHealth(int health) {
-        this.health.set(health);
-    }
 
     public void printInventory() {
         //USE FOR TESTING ONLY
@@ -150,16 +121,25 @@ public class Ship {
         health.set(Math.max(health.get() - amount, 0));
     }
 
-    private int calculateFuelCost(Region region1, Region region2, double pilotInfluence) {
+    private int calculateFuelNeeded(Region region1, Region region2, double pilotInfluence) {
         return (int) (region1.distanceTo(region2) / 10 * pilotInfluence * MAX_FUEL_EFFICIENCY);
     }
 
     public boolean ableToTravelTo(Region region1, Region region2, double pilotInfluence) {
-        return getFuel() >= calculateFuelCost(region1, region2, pilotInfluence);
+        return getFuel() >= calculateFuelNeeded(region1, region2, pilotInfluence);
     }
 
     public void decrementFuel(Region region1, Region region2, double pilotInfluence) {
-        this.setFuel(Math.max(getFuel() - calculateFuelCost(region1, region2, pilotInfluence), 0));
+        this.fuel.set(
+                Math.max(getFuel() - calculateFuelNeeded(region1, region2, pilotInfluence), 0));
+    }
+
+    public void refillFuel() {
+        this.fuel.set(fuelCapacity.get());
+    }
+
+    public int getRefuelCost() {
+        return (int) Math.round((fuelCapacity.get() - fuel.get()) * 0.4);
     }
 
     public void load(Item item, int price, int quantity) {

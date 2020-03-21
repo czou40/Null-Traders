@@ -1,4 +1,4 @@
-package cores.NPCEncounters.Screens;
+package cores.NPCEncounters.screens;
 
 import cores.Game;
 import cores.NPCEncounters.EncounterController;
@@ -55,13 +55,16 @@ public class TradeScreen extends Screen {
             controller.handleBuyEvent(this, npc);
         });
         negotiateButton = new Button("Negotiate");
+        negotiateButton.setOnAction(event -> {
+            controller.handleNegotiateEvent(this, npc);
+        });
         continueButton = new Button("Continue");
         continueButton.setOnAction(e -> {
-            controller.handleResumeTravel("You had a wonderful experience with the trader.");
+            controller.handleResumeTravelToDest("You had a wonderful experience with the trader.");
         });
         giveUpButton = new Button("Give Up");
         giveUpButton.setOnAction(event -> {
-            controller.handleResumeTravel("You chose not to trade with the trader.");
+            controller.handleResumeTravelToDest("You chose not to trade with the trader.");
         });
         buttonsPane.addRow(0, dealButton, negotiateButton, giveUpButton);
         InventoryEntry playerEntry =
@@ -76,7 +79,7 @@ public class TradeScreen extends Screen {
         return root;
     }
 
-    public void updateTradeScreen() {
+    public void update() {
         quantityLabel.setText(String.valueOf(npc.getQuantity()));
         priceLabel.setText(String.valueOf(npc.getPrice()));
     }
