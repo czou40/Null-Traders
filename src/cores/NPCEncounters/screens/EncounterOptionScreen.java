@@ -36,7 +36,6 @@ public class EncounterOptionScreen extends Screen {
         MyGridPane myGridPane = new MyGridPane(null, MyGridPane.getSpan(6));
         int count = 0;
         if (npc instanceof FightableNPC) {
-            System.out.println("It is fightable!");
             count += 2;
             this.fightButton = new Button("Fight");
             fightButton.setOnAction(event -> {
@@ -53,7 +52,6 @@ public class EncounterOptionScreen extends Screen {
             myGridPane.addRow(0, fightButton, fleeButton, forfeitButton);
         }
         if (npc instanceof TradableNPC) {
-            System.out.println("It is tradable!");
             count++;
             this.tradeButton = new Button("Trade");
             tradeButton.setOnAction(event -> {
@@ -62,7 +60,6 @@ public class EncounterOptionScreen extends Screen {
             myGridPane.addRow(0, tradeButton);
         }
         if (npc instanceof RobbableNPC) {
-            System.out.println("It is robbable!");
             count++;
             this.robButton = new Button("Rob");
             robButton.setOnAction(event -> {
@@ -72,7 +69,6 @@ public class EncounterOptionScreen extends Screen {
         }
 
         if (npc instanceof IgnorableNPC) {
-            System.out.println("It is ignorable!");
             count++;
             this.ignoreButton = new Button("Ignore");
             ignoreButton.setOnAction(e -> {
