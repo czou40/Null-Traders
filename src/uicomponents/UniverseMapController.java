@@ -10,6 +10,7 @@ public class UniverseMapController {
     VisualizedUniverseMap map;
     Universe universe;
     Stage primaryStage;
+    private boolean hasAddedEventHandler;
 
     public UniverseMapController(Universe universe, VisualizedUniverseMap map, Stage primaryStage) {
         this.universe = universe;
@@ -25,16 +26,24 @@ public class UniverseMapController {
         timeline.setOnFinished(event -> {
             universe.getPlayer().startTravelToRegion(dest);
         });
-        primaryStage.addEventHandler(MyEvent.ENCOUNTER_FINISHED, event -> {
-            double currentX = universe.getCurrentRegion().getX();
-            double currentY = universe.getCurrentRegion().getY();
-            if (universe.getCurrentRegion().equals(departure)) {
-                map.reverseSpaceshipDirection();
-            }
-            map.visualizeTravelTo(currentX, currentY, timeline);
-            timeline.setOnFinished(event1 -> {
-                map.stopTravelVisualization();
+        if (!hasAddedEventHandler) {
+            primaryStage.addEventHandler(MyEvent.ENCOUNTER_FINISHED, event -> {
+                handleTravelAfterEncounterFinished(dest);
             });
+            hasAddedEventHandler = true;
+        }
+    }
+
+    private void handleTravelAfterEncounterFinished(Region dest) {
+        double currentX = universe.getCurrentRegion().getX();
+        double currentY = universe.getCurrentRegion().getY();
+        if (!universe.getCurrentRegion().equals(dest)) {
+            map.reverseSpaceshipDirection();
+        }
+        Timeline timeline = new Timeline();
+        map.visualizeTravelTo(currentX, currentY, timeline);
+        timeline.setOnFinished(event -> {
+            map.stopTravelVisualization();
         });
     }
 }
