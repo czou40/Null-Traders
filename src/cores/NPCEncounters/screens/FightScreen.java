@@ -32,19 +32,22 @@ public class FightScreen extends Screen {
     public Pane constructRoot() {
         animationPane = new FightAnimationPane(getGame().getPlayer().getShip().getImage(), NPC.getImage());
         messageLabel = new Label();
+        messageLabel.setVisible(false);
         continueButton = new Button("OK");
+        continueButton.setVisible(false);
         continueButton.setOnAction(event -> {
             controller.handleResumeTravelToDest("");
         });
         root = new MyGridPane(null, MyGridPane.getSpan(1));
-        root.addColumn(0, animationPane);
+        root.addColumn(0, animationPane, messageLabel, continueButton);
         return root;
     }
 
     @Override
     public void doAfterScreenIsShown() {
         super.doAfterScreenIsShown();
-        animationPane.adjustImagePosition(getRootWidth(), getRootHeight());
+        animationPane.setTranslateX(-50);
+        animationPane.adjustImagePosition(getRootWidth());
         animationPane.loopAnimation();
         PauseTransition transition = new PauseTransition(Duration.seconds(4));
         transition.setOnFinished(event -> {
@@ -56,6 +59,7 @@ public class FightScreen extends Screen {
 
     public void update(String message) {
         messageLabel.setText(message);
-        root.addColumn(0, messageLabel, continueButton);
+        continueButton.setVisible(true);
+        messageLabel.setVisible(true);
     }
 }

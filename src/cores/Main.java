@@ -45,6 +45,9 @@ public class Main extends Application {
         primaryStage.setWidth(1280);
         primaryStage.setHeight(720);
         primaryStage.setMaximized(true);
+        primaryStage.setOnHidden(event -> {
+            System.exit(0);
+        });
         startNewGame(primaryStage);
 
         //new classes.screens.MapScreen(primaryStage, game).display();

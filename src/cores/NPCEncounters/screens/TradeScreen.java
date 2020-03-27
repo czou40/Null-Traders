@@ -6,7 +6,9 @@ import cores.NPCEncounters.TradableNPC;
 import cores.objects.InventoryEntry;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screens.Screen;
 import uicomponents.MyGridPane;
@@ -16,7 +18,7 @@ public class TradeScreen extends Screen {
     private TradableNPC npc;
     private EncounterController controller;
 
-    private MyGridPane root;
+    private MyGridPane gridPane;
     private Button dealButton;
     private Label nameLeftLabel;
     private Label nameLabel;
@@ -28,16 +30,17 @@ public class TradeScreen extends Screen {
     private Label transactionInfoLabel;
     private Button continueButton;
     private Button giveUpButton;
-    private MyGridPane buttonsPane;
+    private HBox buttonsPane;
 
     public TradeScreen(Stage primaryStage, Game game, TradableNPC npc, EncounterController controller) {
         super(primaryStage, game);
         this.npc = npc;
         this.controller = controller;
     }
+
     @Override
     public Pane constructRoot() {
-        root = new MyGridPane(null, MyGridPane.getSpan(1));
+        gridPane = new MyGridPane(null, MyGridPane.getSpan(1));
 
         MyGridPane labelsPane = new MyGridPane(null, new double[]{30, 70});
         nameLeftLabel = new Label("NAME");
@@ -49,7 +52,7 @@ public class TradeScreen extends Screen {
         labelsPane.addColumn(0, nameLeftLabel, quantityLeftLabel, priceLeftLabel);
         labelsPane.addColumn(1, nameLabel, quantityLabel, priceLabel);
 
-        buttonsPane = new MyGridPane(null, MyGridPane.getSpan(3));
+        buttonsPane = new HBox(20);
         dealButton = new Button("Deal");
         dealButton.setOnAction(event -> {
             controller.handleBuyEvent(this, npc);
@@ -66,7 +69,7 @@ public class TradeScreen extends Screen {
         giveUpButton.setOnAction(event -> {
             controller.handleResumeTravelToDest("You chose not to trade with the trader.");
         });
-        buttonsPane.addRow(0, dealButton, negotiateButton, giveUpButton);
+        buttonsPane.getChildren().addAll(dealButton, negotiateButton, giveUpButton);
         InventoryEntry playerEntry =
                 game.getPlayer().getShip().getItemInventory().get(npc.getItem());
         int playerHas = playerEntry == null ? 0 : playerEntry.getQuantity();
@@ -75,8 +78,8 @@ public class TradeScreen extends Screen {
         transactionInfoLabel = new Label(String.format(
                 "You currently have %d %s(s), which cost you %.1f credits each.",
                 playerHas, npc.getItem().getName(), averageCost));
-        root.addColumn(0, labelsPane, transactionInfoLabel, buttonsPane);
-        return root;
+        gridPane.addColumn(0, labelsPane, transactionInfoLabel, buttonsPane);
+        return gridPane;
     }
 
     public void update() {
@@ -91,8 +94,8 @@ public class TradeScreen extends Screen {
         transactionInfoLabel.setText(String.format(
                 "Transaction successful! Now you have %d %s(s)",
                 playerHas, npc.getItem().getName()));
-        root.getChildren().remove(buttonsPane);
-        root.addColumn(0, continueButton);
+        gridPane.getChildren().remove(buttonsPane);
+        gridPane.addColumn(0, continueButton);
     }
 
     public void displayTransactionFailed(String reason) {

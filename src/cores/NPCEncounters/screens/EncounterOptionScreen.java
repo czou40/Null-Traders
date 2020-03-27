@@ -5,6 +5,7 @@ import cores.NPCEncounters.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -32,11 +33,9 @@ public class EncounterOptionScreen extends Screen {
 
     @Override
     public Pane constructRoot() {
-        VBox root = new VBox();
-        MyGridPane myGridPane = new MyGridPane(null, MyGridPane.getSpan(6));
-        int count = 0;
+        VBox root = new VBox(20);
+        HBox buttonsPane = new HBox(20);
         if (npc instanceof FightableNPC) {
-            count += 2;
             this.fightButton = new Button("Fight");
             fightButton.setOnAction(event -> {
                 controller.displayFightScreen((FightableNPC) npc);
@@ -49,36 +48,33 @@ public class EncounterOptionScreen extends Screen {
             forfeitButton.setOnAction(event -> {
                 controller.handleForfeitEvent((FightableNPC) npc);
             });
-            myGridPane.addRow(0, fightButton, fleeButton, forfeitButton);
+            buttonsPane.getChildren().addAll(fightButton, fleeButton, forfeitButton);
         }
         if (npc instanceof TradableNPC) {
-            count++;
             this.tradeButton = new Button("Trade");
             tradeButton.setOnAction(event -> {
                 controller.displayTradeScreen((TradableNPC) npc);
             });
-            myGridPane.addRow(0, tradeButton);
+            buttonsPane.getChildren().addAll(tradeButton);
         }
         if (npc instanceof RobbableNPC) {
-            count++;
             this.robButton = new Button("Rob");
             robButton.setOnAction(event -> {
                 controller.handleRobEvent((RobbableNPC) npc);
             });
-            myGridPane.addRow(0, robButton);
+            buttonsPane.getChildren().addAll(robButton);
         }
 
         if (npc instanceof IgnorableNPC) {
-            count++;
             this.ignoreButton = new Button("Ignore");
             ignoreButton.setOnAction(e -> {
-                controller.handleResumeTravelToDest("");
+                controller.handleResumeTravelToDest("Nothing Happened in the journey.");
             });
-            myGridPane.addRow(0, ignoreButton);
+            buttonsPane.getChildren().addAll(ignoreButton);
         }
         infoLabel = new Label(npc.getDescription() + " What would you like to do?");
         this.npcDisplay = new ImageView();
-        root.getChildren().addAll(infoLabel, myGridPane);
+        root.getChildren().addAll(infoLabel, buttonsPane);
         return root;
     }
 }
