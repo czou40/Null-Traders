@@ -301,7 +301,7 @@ public class VisualizedUniverseMap extends Pane {
             angle = Math.atan(diffY / diffX) / Math.PI * 180;
         }
         spaceShip.setRotate(angle + (diffX < 0 ? 90 : -90));
-        //System.out.println(angle);
+        //System.out.println(angle + (diffX < 0 ? 90 : -90));
         VisualizedUniverseMap.this.getChildren().add(route);
         VisualizedUniverseMap.this.getChildren().add(spaceShip);
     }
