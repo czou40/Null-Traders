@@ -52,7 +52,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
             price = (int) (PRICE_REDUCTION * price);
             return true;
         } else {
-            price = (int) ((1 + 1 / PRICE_REDUCTION) * price);
+            price = (int) ((1 + PRICE_REDUCTION) * price);
             return false;
         }
     }

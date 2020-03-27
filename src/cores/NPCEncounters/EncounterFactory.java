@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Random;
 
 public class EncounterFactory {
-    private static final boolean ENCOUNTERSALWAYS = true;
+    private static final boolean ENCOUNTERSALWAYS = true; //true only for testing
 
     public static NPC generateRandomEncounter(Player player, Difficulty difficulty, Region dest) {
-        double rand = 0.1;
+        double rand = Math.random(); //0.1 for bandit, 0.4 for trade, 0.9 for police
         double encounterChance;
         if (ENCOUNTERSALWAYS) {
             encounterChance = 1;

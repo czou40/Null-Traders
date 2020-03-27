@@ -106,6 +106,7 @@ public class TradeScreen extends Screen {
     }
 
     public void displayNegotiationFailed() {
-        transactionInfoLabel.setText("Fuck you! You are such a tight-ass!");
+        negotiateButton.setDisable(true); //chunhao i did this so you can't renegotiate -jared
+        transactionInfoLabel.setText("Screw you! No deal!");
     }
 }
