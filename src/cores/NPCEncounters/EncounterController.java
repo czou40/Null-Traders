@@ -2,19 +2,19 @@ package cores.NPCEncounters;
 
 import cores.Game;
 import cores.GameOverException;
-import cores.MyEvent;
 import cores.NPCEncounters.screens.*;
 import cores.characters.Player;
 import cores.places.Region;
-import javafx.event.Event;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import screens.*;
+import uicomponents.UniverseMapController;
 
 public class EncounterController {
     private Player player;
     private static Game game;
     private static Stage primaryStage;
+    private static UniverseMapController mapController;
     private Region dest;
 
     public EncounterController(Player player) {
@@ -40,7 +40,6 @@ public class EncounterController {
         try {
             player.resumeTravelAfterEncounter(dest);
             displayAfterEncounterScreen(message, true);
-            fireEncounterFinishedEvent();
         } catch (GameOverException e) {
             new GameOverScreen(primaryStage, game).display();
         }
@@ -50,7 +49,6 @@ public class EncounterController {
         try {
             player.checkGameOver();
             displayAfterEncounterScreen(message, false);
-            fireEncounterFinishedEvent();
         } catch (GameOverException e) {
             new GameOverScreen(primaryStage, game).display();
         }
@@ -58,7 +56,7 @@ public class EncounterController {
 
     public void displayEncounterOptionsScreen(NPC npc) {
         EncounterOptionScreen screen = new EncounterOptionScreen(primaryStage, game, npc, this);
-        screen.display();
+        screen.displayAsMessageBox();
     }
 
     private void displayAfterEncounterScreen(String message, boolean willTravelToDestination) {
@@ -68,15 +66,15 @@ public class EncounterController {
             screen.setDestination(dest.getName());
         }
         screen.setMessage(message);
-        screen.display();
+        screen.displayAsMessageBox();
     }
 
     public void displayFightScreen(FightableNPC npc) {
-        new FightScreen(primaryStage, game, npc, this).display();
+        new FightScreen(primaryStage, game, npc, this).displayAsMessageBox();
     }
 
     public void displayTradeScreen(TradableNPC npc) {
-        new TradeScreen(primaryStage, game, npc, this).display();
+        new TradeScreen(primaryStage, game, npc, this).displayAsMessageBox();
     }
 
     public void handleBuyEvent(TradeScreen screen, TradableNPC npc) {
@@ -124,12 +122,17 @@ public class EncounterController {
         EncounterController.primaryStage = primaryStage;
     }
 
+    public static void setMapController(UniverseMapController controller) {
+        EncounterController.mapController = controller;
+    }
+
+
 
     public void goBackToMapScreen() {
         new MapScreen(primaryStage, game).display();
     }
 
-    public void fireEncounterFinishedEvent() {
-        Event.fireEvent(primaryStage, new MyEvent(MyEvent.ENCOUNTER_FINISHED));
+    public void notifyMapController() {
+        mapController.handleTravelAfterEncounterFinished(dest);
     }
 }

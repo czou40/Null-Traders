@@ -1,6 +1,6 @@
 package uicomponents;
 
-import cores.MyEvent;
+import cores.NPCEncounters.EncounterController;
 import cores.places.Region;
 import cores.places.Universe;
 import javafx.animation.Timeline;
@@ -10,12 +10,12 @@ public class UniverseMapController {
     VisualizedUniverseMap map;
     Universe universe;
     Stage primaryStage;
-    private boolean hasAddedEventHandler;
 
     public UniverseMapController(Universe universe, VisualizedUniverseMap map, Stage primaryStage) {
         this.universe = universe;
         this.map = map;
         this.primaryStage = primaryStage;
+        EncounterController.setMapController(this);
     }
 
     public void handleTravelEvent(Region departure, Region dest) {
@@ -26,15 +26,9 @@ public class UniverseMapController {
         timeline.setOnFinished(event -> {
             universe.getPlayer().startTravelToRegion(dest);
         });
-        if (!hasAddedEventHandler) {
-            primaryStage.addEventHandler(MyEvent.ENCOUNTER_FINISHED, event -> {
-                handleTravelAfterEncounterFinished(dest);
-            });
-            hasAddedEventHandler = true;
-        }
     }
 
-    private void handleTravelAfterEncounterFinished(Region dest) {
+    public void handleTravelAfterEncounterFinished(Region dest) {
         double currentX = universe.getCurrentRegion().getX();
         double currentY = universe.getCurrentRegion().getY();
         if (!universe.getCurrentRegion().equals(dest)) {

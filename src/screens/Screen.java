@@ -2,12 +2,17 @@ package screens;
 
 import cores.Game;
 import cores.Main;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * This class describes a screen.
@@ -17,9 +22,9 @@ public abstract class Screen {
     protected Game game;    //easy access in child class
     private String musicPath;
     private Pane root;
+    private static Stage messageStage;
 
 
-    
     /**
      * Constructs a new instance.
      *
@@ -63,6 +68,31 @@ public abstract class Screen {
         primaryStage.show();
         doAfterScreenIsShown();
     }
+
+    public void displayAsMessageBox() {
+        root = constructRoot();
+        root.getStylesheets().addAll("styles/general.css", "styles/message-box.css");
+        if (messageStage == null) {
+            messageStage = new Stage();
+            messageStage.initStyle(StageStyle.UTILITY);
+            messageStage.initStyle(StageStyle.TRANSPARENT);
+            messageStage.setTitle("Message");
+            messageStage.setAlwaysOnTop(true);
+            messageStage.setScene(new Scene(root));
+            messageStage.getScene().setFill(Color.TRANSPARENT);
+        } else  {
+            messageStage.close();
+            messageStage.getScene().setRoot(root);
+        }
+        messageStage.show();
+        doAfterScreenIsShown();
+    }
+
+
+    public void close() {
+        root.getScene().getWindow().hide();
+    }
+
     public void addToRoot(Node node) {
         root.getChildren().add(node);
     }
@@ -80,6 +110,15 @@ public abstract class Screen {
     public void doAfterScreenIsShown() {
         if (musicPath != null) {
             Main.setMusic(musicPath);
+        }
+        if (messageStage != null) {
+            double x = primaryStage.getX() + primaryStage.getScene().getX();
+            double y = primaryStage.getY() + primaryStage.getScene().getY();
+            double height = primaryStage.getScene().getHeight();
+            double width = primaryStage.getScene().getWidth();
+            messageStage.setX(x);
+            messageStage.setY(y + height - messageStage.getHeight());
+            messageStage.setWidth(width);
         }
         /*
         Sometimes, you need to adjust UI after the screen is shown.
