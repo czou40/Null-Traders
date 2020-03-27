@@ -8,9 +8,12 @@ import cores.vehicles.Ship;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import uicomponents.ButtonScaleHover;
 import uicomponents.MyGridPane;
 import uicomponents.MyProgressBar;
 
@@ -63,14 +66,40 @@ public class ShipScreen extends GameScreen {
         }
         inventoryRightLabel.textProperty().bind(Bindings.format("%s", inventoryRightLabelText));
 
+        Label refuelCostLabel = new Label("Refueling costs " + ship.getRefuelCost() + " credits.");
+        Button refuelButton = new Button("Refuel");
+        refuelButton.setSkin(new ButtonScaleHover(refuelButton));
+        refuelButton.setOnAction(event -> {
+            try {
+                player.refuelShip();
+            } catch (Exception e) {
+                refuelCostLabel.setText(e.getMessage());
+            }
+        });
+        HBox refuelWrapper = new HBox(20);
+        refuelWrapper.getChildren().addAll(refuelCostLabel, refuelButton);
+
+//        Label repairCostLabel = new Label("Repair costs " + ship.getRepairCost() + " credits.");
+//        Button repairButton = new Button("Repair");
+//        repairButton.setSkin(new ButtonScaleHover(repairButton));
+//        repairButton.setOnAction(event -> {
+//            try {
+//                player.repairShip();
+//            } catch (Exception e) {
+//                repairCostLabel.setText(e.getMessage());
+//            }
+//        });
+//        HBox repairWrapper = new HBox(20);
+//        repairWrapper.getChildren().addAll(repairCostLabel, repairButton);
 
         contentGridPane.addColumn(0, difficultyLeftLabel, nameLeftLabel,
-                cargoCapacityLeftLabel, totalItemsLeftLabel, fuelLeftLabel, fuelCapacityLeftLabel, healthLeftLabel,
-                inventoryLeftLabel);
+                cargoCapacityLeftLabel, totalItemsLeftLabel, inventoryLeftLabel,
+                fuelLeftLabel, fuelCapacityLeftLabel, null, healthLeftLabel);
 
         contentGridPane.addColumn(1, difficultyRightLabel, nameRightLabel,
-                cargoCapacityRightLabel, totalItemsRightLabel, fuelRightLabel, fuelCapacityRightLabel, healthRightLabel,
-                inventoryRightLabel);
+                cargoCapacityRightLabel, totalItemsRightLabel,
+                inventoryRightLabel, fuelRightLabel, fuelCapacityRightLabel,
+                refuelWrapper, healthRightLabel);
         return contentGridPane;
     }
 }

@@ -1,31 +1,27 @@
 package screens;
 
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import cores.NPCEncounters.EncounterController;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.awt.*;
 
 public class MapScreen extends Screen {
     private static VisualizedUniverseMap map;
     private Screen from;
 
+    public MapScreen(Stage primaryStage, Game game) {
+        this(primaryStage, game, new CharacterSheetScreen(primaryStage, game));
+    }
+
     public MapScreen(Stage primaryStage, Game game, Screen from) {
         super(primaryStage, game);
         this.from = from;
-
-        game.getPlayer().encounterProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                EncounterScreen screen = newValue.getEncounterScreen(game, primaryStage);
-                //screen.display();
-            }
-        });
+        EncounterController.setupScreenEnvironment(game, primaryStage);
     }
 
     @Override
@@ -38,16 +34,17 @@ public class MapScreen extends Screen {
 
     @Override
     public void doAfterScreenIsShown() {
+        String spaceshipImage = game.getPlayer().getShip().getImage();
         if (map == null) {
             map = new VisualizedUniverseMap(game.getUniverse(),
-                    getRootWidth(), getRootHeight(), getPrimaryStage());
+                    getRootWidth(), getRootHeight(), getPrimaryStage(), spaceshipImage);
         } else {
+            map.updateSpaceshipImage(spaceshipImage);
             map.errorMessageProperty().set("");
             map.updateWidthAndHeightProperty(getRootWidth(), getRootHeight());
         }
         addToRoot(map);
         MyNavigationButton back = new MyNavigationButton("Back", from);
-        addToRoot(back);
         back.layoutXProperty().bind(getRootWidth().subtract(back.widthProperty()).subtract(50));
         //System.out.println(back.layoutXProperty().get());
         back.layoutYProperty().set(50);
@@ -71,12 +68,22 @@ public class MapScreen extends Screen {
                 errorLabel.setVisible(true);
             }
         }));
+
         map.isTravelingProperty().addListener((observable, oldValue, newValue) -> {
             back.setVisible(!newValue);
             fuelLabel.setVisible(!newValue);
             errorLabel.setVisible(false);
         });
+
+        back.setVisible(!map.isTraveling());
+        fuelLabel.setVisible(!map.isTraveling());
+        errorLabel.setVisible(false);
+        addToRoot(back);
         addToRoot(fuelLabel);
         addToRoot(errorLabel);
+    }
+
+    public static void clearCache() {
+        MapScreen.map = null;
     }
 }

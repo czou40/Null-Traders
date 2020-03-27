@@ -12,7 +12,7 @@ public class TransactionSystem {
     private Marketplace market;
 
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     //UI elements so can display messages and stuff
 
@@ -24,7 +24,8 @@ public class TransactionSystem {
     /**
      * Removes an item from the market stock and places it inside the player's inventory
      * Updates the player's credits as a result of the exchange
-     * @param item item to buy
+     *
+     * @param item   item to buy
      * @param market market to buy from
      * @param number number of items to buy
      * @throws Exception if input is invalid
@@ -58,18 +59,19 @@ public class TransactionSystem {
             //update ship and market inventories accordingly; decrement player credits
 
             //update ship inventory
-            if (playerEntry == null) {
-                playerEntry = new InventoryEntry();
-            }
-            playerEntry.add(price, number);
-            ship.getItemInventory().put(item, playerEntry);
+//            if (playerEntry == null) {
+//                playerEntry = new InventoryEntry();
+//            }
+//            playerEntry.add(price, number);
+//            ship.getItemInventory().put(item, playerEntry);
 
             //update market inventory
             marketEntry.setQuantity(marketEntry.getQuantity() - number); //decrement quantity
 
             //decrement player credits/update item count
-            player.setCredits(player.getCredits() - price * number);
-            ship.setTotalItems(ship.getTotalItems() + number);
+            player.spend(price * number);
+//            ship.setTotalItems(ship.getTotalItems() + number);
+            ship.load(item, price, number);
 
             if (DEBUG) {
                 market.printStock();
@@ -82,7 +84,7 @@ public class TransactionSystem {
      * Removes an item from the player's inventory and places it in the market stock
      * Updates the player's credits as a result
      *
-     * @param item  item to sell
+     * @param item   item to sell
      * @param market market to sell to
      * @param number number of items to sell
      */
@@ -105,11 +107,11 @@ public class TransactionSystem {
             throw new IllegalArgumentException("You don't have that many "
                     + item.getName() + " for sale!");
         }
-        //update ship inventory
-        playerEntry.remove(number);
-        if (playerEntry.getQuantity() <= 0) {
-            ship.getItemInventory().remove(item);
-        }
+//        //update ship inventory
+//        playerEntry.remove(number);
+//        if (playerEntry.getQuantity() <= 0) {
+//            ship.getItemInventory().remove(item);
+//        }
 
         //update market inventory
         if (marketEntry == null) {
@@ -121,16 +123,18 @@ public class TransactionSystem {
 
 
         //increment player credits
-        player.setCredits(player.getCredits() + price * number);
-        ship.setTotalItems(ship.getTotalItems() - number);
+        player.earn(price * number);
+        ship.unload(item, number);
+//        ship.setTotalItems(ship.getTotalItems() - number);
     }
 
-    public void buyUpgrade(Upgrade upgrade) throws IllegalAccessException {
-        if (upgrade.getPrice() > player.getCredits()) {
+    public void buyUpgrade(Upgrade upgrade) throws Exception {
+        int price = upgrade.getPrice();
+        if (price > player.getCredits()) {
             throw new IllegalAccessException("You don't have enough money!");
         }
         market.setBoughtUpgrade(true);
-        player.setCredits(player.getCredits() - upgrade.getPrice());
+        player.spend(price);
         player.updateUpgrade(upgrade);
     }
 }

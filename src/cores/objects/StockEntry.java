@@ -23,6 +23,7 @@ public class StockEntry implements Entry {
         return buyingPrice.get();
     }
 
+
     public IntegerProperty buyingPriceProperty() {
         return buyingPrice;
     }
@@ -34,6 +35,7 @@ public class StockEntry implements Entry {
     public int getSellingPrice() {
         return sellingPrice.get();
     }
+
 
     public IntegerProperty sellingPriceProperty() {
         return sellingPrice;

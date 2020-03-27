@@ -4,12 +4,7 @@ import cores.places.Region;
 import cores.settings.Difficulty;
 import cores.objects.InventoryEntry;
 import cores.objects.Item;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +17,7 @@ public class Ship {
     private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
+    private String image = "file:src/images/spaceships/0.png";
     private static final double MAX_FUEL_EFFICIENCY = 0.4;
 
 
@@ -47,43 +43,31 @@ public class Ship {
         return totalItems.get();
     }
 
-    public IntegerProperty totalItemsProperty() {
+    public ReadOnlyIntegerProperty totalItemsProperty() {
         return totalItems;
-    }
-
-    public void setTotalItems(int totalItems) {
-        this.totalItems.set(totalItems);
     }
 
     public int getCargoCapacity() {
         return cargoCapacity.get();
     }
 
-    public IntegerProperty cargoCapacityProperty() {
+    public ReadOnlyIntegerProperty cargoCapacityProperty() {
         return cargoCapacity;
-    }
-
-    public void setCargoCapacity(int cargoCapacity) {
-        this.cargoCapacity.set(cargoCapacity);
     }
 
     public Map<Item, InventoryEntry> getItemInventory() {
         return itemInventory.get();
     }
 
-    public ObjectProperty<Map<Item, InventoryEntry>> itemInventoryProperty() {
+    public ReadOnlyObjectProperty<Map<Item, InventoryEntry>> itemInventoryProperty() {
         return itemInventory;
-    }
-
-    public void setItemInventory(Map<Item, InventoryEntry> itemInventory) {
-        this.itemInventory.set(itemInventory);
     }
 
     public String getName() {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
+    public ReadOnlyStringProperty nameProperty() {
         return name;
     }
 
@@ -95,19 +79,15 @@ public class Ship {
         return fuel.get();
     }
 
-    public IntegerProperty fuelProperty() {
+    public ReadOnlyIntegerProperty fuelProperty() {
         return fuel;
-    }
-
-    public void setFuel(int fuel) {
-        this.fuel.set(fuel);
     }
 
     public int getFuelCapacity() {
         return fuelCapacity.get();
     }
 
-    public IntegerProperty fuelCapacityProperty() {
+    public ReadOnlyIntegerProperty fuelCapacityProperty() {
         return fuelCapacity;
     }
 
@@ -119,13 +99,10 @@ public class Ship {
         return health.get();
     }
 
-    public IntegerProperty healthProperty() {
+    public ReadOnlyIntegerProperty healthProperty() {
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health.set(health);
-    }
 
     public void printInventory() {
         //USE FOR TESTING ONLY
@@ -135,24 +112,61 @@ public class Ship {
 
             System.out.println(item + ": ");
             System.out.println("Quantity: " + entry.getQuantity());
-            System.out.println("Average Price: " + entry.getAverageBuyingPrice());
+            System.out.println("Average Price: " + entry.getTotalCost() / entry.getQuantity());
             System.out.println();
         }
     }
 
     public void damage(int amount) {
-        setHealth(Math.max(getHealth() - amount, 0));
+        health.set(Math.max(health.get() - amount, 0));
     }
 
-    private int calculateFuelCost(Region region1, Region region2, double pilotInfluence) {
-        return (int) (region1.distanceTo(region2) / 10 * pilotInfluence * MAX_FUEL_EFFICIENCY);
+    private int calculateFuelNeeded(Region region1, Region region2, double pilotInfluence) {
+        return (int) (region1.distanceTo(region2) / 10 * (1 + pilotInfluence * MAX_FUEL_EFFICIENCY));
     }
 
     public boolean ableToTravelTo(Region region1, Region region2, double pilotInfluence) {
-        return getFuel() >= calculateFuelCost(region1, region2, pilotInfluence);
+        return getFuel() >= calculateFuelNeeded(region1, region2, pilotInfluence);
     }
 
     public void decrementFuel(Region region1, Region region2, double pilotInfluence) {
-        this.setFuel(Math.max(getFuel() - calculateFuelCost(region1, region2, pilotInfluence), 0));
+        this.fuel.set(
+                Math.max(getFuel() - calculateFuelNeeded(region1, region2, pilotInfluence), 0));
+    }
+
+    public void refillFuel() {
+        this.fuel.set(fuelCapacity.get());
+    }
+
+    public int getRefuelCost() {
+        return (int) Math.round((fuelCapacity.get() - fuel.get()) * 0.4);
+    }
+
+    public void load(Item item, int price, int quantity) {
+        InventoryEntry playerEntry = itemInventory.get().get(item);
+        //update ship inventory
+        if (playerEntry == null) {
+            playerEntry = new InventoryEntry();
+        }
+        playerEntry.add(price, quantity);
+        this.itemInventory.get().put(item, playerEntry);
+        this.totalItems.set(this.totalItems.get() + quantity);
+    }
+
+    public void unload(Item item, int quantity) {
+        InventoryEntry playerEntry = itemInventory.get().get(item);
+        playerEntry.remove(quantity);
+        if (playerEntry.getQuantity() <= 0) {
+            this.itemInventory.get().remove(item);
+        }
+        this.totalItems.set(this.totalItems.get() - quantity);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
