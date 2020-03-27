@@ -61,7 +61,7 @@ public class FightAnimationPane extends Pane {
         this.laser.setVisible(false);
         this.getChildren().addAll(laser, myImage, npcImage, explosionOnMe, explosionOnNPC,
                 bulletFromMe, bulletFromNPC);
-        this.getStylesheets().add("styles/test.css");
+        this.setPrefHeight(IMAGE_SIZE);
     }
 
     public void loopAnimation() {
@@ -185,20 +185,12 @@ public class FightAnimationPane extends Pane {
         return "file:src/images/animation/cannon" + i + ".gif";
     }
 
-    public void adjustImagePosition(ReadOnlyDoubleProperty widthProperty,
-                                    ReadOnlyDoubleProperty heightProperty) {
+    public void adjustImagePosition(ReadOnlyDoubleProperty widthProperty) {
         this.npcImage.layoutXProperty().bind(widthProperty.subtract(BORDER_SIZE + IMAGE_SIZE));
-        this.npcImage.layoutYProperty().bind(heightProperty.divide(2).subtract(IMAGE_SIZE / 2));
         this.myImage.setLayoutX(BORDER_SIZE);
-        this.myImage.layoutYProperty().bind(heightProperty.divide(2).subtract(IMAGE_SIZE / 2));
         this.explosionOnNPC.layoutXProperty().bind(npcImage.layoutXProperty());
         this.explosionOnNPC.layoutYProperty().bind(npcImage.layoutYProperty());
         this.explosionOnMe.setLayoutX(BORDER_SIZE);
         this.explosionOnMe.layoutYProperty().bind(myImage.layoutYProperty());
-        this.laser.layoutYProperty().bind(heightProperty.divide(2).subtract(IMAGE_SIZE / 2));
-        this.bulletFromMe.layoutYProperty().
-                bind(heightProperty.divide(2).subtract(IMAGE_SIZE / 2));
-        this.bulletFromNPC.layoutYProperty().
-                bind(heightProperty.divide(2).subtract(IMAGE_SIZE / 2));
     }
 }

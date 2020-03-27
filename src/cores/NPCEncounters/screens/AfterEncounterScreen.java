@@ -27,12 +27,7 @@ public class AfterEncounterScreen extends Screen {
     public AfterEncounterScreen(Stage primaryStage, Game game, EncounterController controller) {
         super(primaryStage, game);
         this.controller = controller;
-        whatWillHappenLater = "\nYou will return to your place of departure.";
-        label = new Label();
-        okButton = new Button("OK");
-        okButton.setOnAction(event -> {
-            controller.goBackToMapScreen();
-        });
+        whatWillHappenLater = "You will return to your place of departure.";
     }
 
     public void setDestination(String destination) {
@@ -48,7 +43,14 @@ public class AfterEncounterScreen extends Screen {
 
     @Override
     public Pane constructRoot() {
-        label.setText(message + whatWillHappenLater);
-        return new VBox(label, okButton);
+        label = new Label();
+        okButton = new Button("OK");
+        okButton.setOnAction(event -> {
+            controller.notifyMapController();
+            this.close();
+        });
+        label.setText((message == null || message.equals("") ? "" : message + "\n")
+                + whatWillHappenLater);
+        return new VBox(20, label, okButton);
     }
 }

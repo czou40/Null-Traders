@@ -1,0 +1,8 @@
+.button {
+    -fx-min-width: 75px;
+}
+
+.root {
+    -fx-padding: 50px;
+    -fx-background-color:rgba(96,96,96,0.5);
+}
