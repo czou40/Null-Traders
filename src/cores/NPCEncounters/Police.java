@@ -27,21 +27,21 @@ public class Police implements FightableNPC {
         this.evasionFine = new SimpleIntegerProperty(getRandomCredits());
     }
 
-//    @Override
-//    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
-//        return new PoliceScreen(primaryStage, game, this);
-//    }
+    //    @Override
+    //    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
+    //return new PoliceScreen(primaryStage, game, this);
+    //    }
 
     @Override
     public Pair<Boolean, String> handleFight() {
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
         double winOrLoseNum = random.nextDouble();
-        boolean win = winOrLoseNum > 0.5 * (1-fightSkillInfluence);
+        boolean win = winOrLoseNum > 0.5 * (1 - fightSkillInfluence);
         //This assumes that player had a 50/50 chance to begin with,
         // and then this number is reduced by whatever fightSkillInfluence ends up being
 
-        if(win){
+        if (win) {
             return new Pair<>(true, "You fought off the Police!");
         } else {
             player.getShip().getItemInventory().remove(confiscatedItem);

@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screens.Screen;
 import uicomponents.MyGridPane;
@@ -32,7 +31,8 @@ public class TradeScreen extends Screen {
     private Button giveUpButton;
     private HBox buttonsPane;
 
-    public TradeScreen(Stage primaryStage, Game game, TradableNPC npc, EncounterController controller) {
+    public TradeScreen(Stage primaryStage, Game game, TradableNPC npc,
+                       EncounterController controller) {
         super(primaryStage, game);
         this.npc = npc;
         this.controller = controller;

@@ -110,7 +110,8 @@ public class Marketplace {
     public int getBuyingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
         if (DEBUG) {
-            System.out.println("Player merchant influence: " + player.calcInfluence(Player.SkillType.MER));
+            System.out.println("Player merchant influence: "
+                    + player.calcInfluence(Player.SkillType.MER));
         }
         return (int) (
                 (1 - player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)
@@ -123,7 +124,8 @@ public class Marketplace {
     public int getSellingPrice(Item item) {
         StockEntry marketEntry = this.getStock().get(item);
         if (DEBUG) {
-            System.out.println("Player merchant influence: " + player.calcInfluence(Player.SkillType.MER));
+            System.out.println("Player merchant influence: "
+                    + player.calcInfluence(Player.SkillType.MER));
         }
         return (int) (
                 (1 + player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)

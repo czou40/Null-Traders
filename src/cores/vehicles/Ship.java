@@ -122,7 +122,8 @@ public class Ship {
     }
 
     private int calculateFuelNeeded(Region region1, Region region2, double pilotInfluence) {
-        return (int) (region1.distanceTo(region2) / 10 * (1 + pilotInfluence * MAX_FUEL_EFFICIENCY));
+        return (int) (region1.distanceTo(region2) / 10 * (1 + pilotInfluence
+                * MAX_FUEL_EFFICIENCY));
     }
 
     public boolean ableToTravelTo(Region region1, Region region2, double pilotInfluence) {

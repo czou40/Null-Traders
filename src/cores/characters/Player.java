@@ -103,32 +103,34 @@ public class Player {
     /*
     Returns whether the travel was successful
      */
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     public void startTravelToRegion(Region dest) {
         this.encounterController.handleEncounter(dest);
 
-//=======
-//    public boolean travelToRegion(Region dest, boolean afterEncounter) {
-//        if (ableToTravelTo(dest)) {
-//            if (afterEncounter) {
-//                setEncounter(null);
-//            } else {
-//                setEncounter(
-//                        EncounterFactory.generateRandomEncounter(this, game.getDifficulty(), dest)
-//                );
-//            }
-//            if (getEncounter() == null) {
-//                currentRegion.get().setIsCurrentRegion(false);
-//                getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
-//                setCurrentRegion(dest);
-//                return true;
-//            } else if (Game.getDebug()) {
-//                testEncounters();
-//            }
-//        }
-//
-//        return false;
-//>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
+        //=======
+        //    public boolean travelToRegion(Region dest, boolean afterEncounter) {
+        //        if (ableToTravelTo(dest)) {
+        //            if (afterEncounter) {
+        //                setEncounter(null);
+        //            } else {
+        //                setEncounter(
+        //                        EncounterFactory.generateRandomEncounter(
+        //                        this, game.getDifficulty(), dest)
+        //                );
+        //            }
+        //            if (getEncounter() == null) {
+        //                currentRegion.get().setIsCurrentRegion(false);
+        //                getShip().decrementFuel(getCurrentRegion(), dest,
+        //                calcInfluence(SkillType.PIL));
+        //                setCurrentRegion(dest);
+        //                return true;
+        //            } else if (Game.getDebug()) {
+        //                testEncounters();
+        //            }
+        //        }
+        //
+        //return false;
+        //>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
     public void checkGameOver() throws GameOverException {

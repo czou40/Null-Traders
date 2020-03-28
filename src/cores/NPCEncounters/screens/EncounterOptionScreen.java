@@ -10,7 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screens.Screen;
-import uicomponents.MyGridPane;
 
 public class EncounterOptionScreen extends Screen {
     private NPC npc;
@@ -24,7 +23,8 @@ public class EncounterOptionScreen extends Screen {
     private Label infoLabel;
     private EncounterController controller;
 
-    public EncounterOptionScreen(Stage primaryStage, Game game, NPC npc, EncounterController controller) {
+    public EncounterOptionScreen(Stage primaryStage, Game game,
+                                 NPC npc, EncounterController controller) {
         super(primaryStage, game);
         int count = 0;
         this.npc = npc;

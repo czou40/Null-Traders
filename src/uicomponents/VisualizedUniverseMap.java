@@ -24,7 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.sql.Time;
+
 import java.util.HashMap;
 
 /**
@@ -175,19 +175,19 @@ public class VisualizedUniverseMap extends Pane {
         offsetY = new SimpleDoubleProperty();
         offsetX.bind(mapWidth.divide(2).subtract(centerX));
         offsetY.bind(mapHeight.divide(2).subtract(centerY));
-//        universe.currentRegionProperty().addListener((observableValue, oldValue, newValue) -> {
-//            /*
-//            Update centerX and centerY information.
-//            The following codes are equivalent to:
-//            centerX.set(universe.getCurrentRegion().getX());
-//            centerY.set(universe.getCurrentRegion().getY());
-//            We used timeline to make the transition smooth.
-//             */
-////            visualizeTravelTo(universe.getCurrentRegion().getX(),
-////                    universe.getCurrentRegion().getY(),
-////                    true, newValue);
-//
-//        });
+        //  universe.currentRegionProperty().addListener((observableValue, oldValue, newValue) -> {
+        //            /*
+        //            Update centerX and centerY information.
+        //            The following codes are equivalent to:
+        //            centerX.set(universe.getCurrentRegion().getX());
+        //            centerY.set(universe.getCurrentRegion().getY());
+        //            We used timeline to make the transition smooth.
+        //             */
+        ////            visualizeTravelTo(universe.getCurrentRegion().getX(),
+        ////                    universe.getCurrentRegion().getY(),
+        ////                    true, newValue);
+        //
+        //        });
     }
 
     /**
@@ -217,7 +217,14 @@ public class VisualizedUniverseMap extends Pane {
      * Adjust the size of the visualized map according to the given size
      * and making the map responsive.
      */
-    private void setupMapAutosize(ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
+
+    /**
+     *
+     * @param widthProperty width property
+     * @param heightProperty height property
+     */
+    private void setupMapAutosize(
+            ReadOnlyDoubleProperty widthProperty, ReadOnlyDoubleProperty heightProperty) {
         this.mapWidth = new SimpleDoubleProperty();
         this.mapHeight = new SimpleDoubleProperty();
         this.mapWidth.bind(widthProperty);
@@ -235,22 +242,22 @@ public class VisualizedUniverseMap extends Pane {
         timeline.play();
     }
 
-//    void visualizeTravelBack() {
-//        double duration = Math.sqrt(Math.pow(centerX.get() - universe.getCurrentRegion().getX(), 2)
-//                + Math.pow(centerY.get() - universe.getCurrentRegion().getY(), 2)) * 5;
-//        Timeline timeline = new Timeline();
-//        KeyValue keyValueX = new KeyValue(centerX, universe.getCurrentRegion().getX());
-//        KeyFrame keyFrameX = new KeyFrame(new Duration(duration), keyValueX);
-//        KeyValue keyValueY = new KeyValue(centerY, universe.getCurrentRegion().getY());
-//        KeyFrame keyFrameY = new KeyFrame(new Duration(duration), keyValueY);
-//        timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
-//        timeline.setOnFinished(event -> {
-//            VisualizedUniverseMap.this.getChildren().remove(route);
-//            VisualizedUniverseMap.this.getChildren().remove(spaceShip);
-//            isTraveling.set(false);
-//        });
-//        timeline.play();
-//    }
+    //    void visualizeTravelBack() {
+    //  double duration = Math.sqrt(Math.pow(centerX.get() - universe.getCurrentRegion().getX(), 2)
+    //                + Math.pow(centerY.get() - universe.getCurrentRegion().getY(), 2)) * 5;
+    //        Timeline timeline = new Timeline();
+    //        KeyValue keyValueX = new KeyValue(centerX, universe.getCurrentRegion().getX());
+    //        KeyFrame keyFrameX = new KeyFrame(new Duration(duration), keyValueX);
+    //        KeyValue keyValueY = new KeyValue(centerY, universe.getCurrentRegion().getY());
+    //        KeyFrame keyFrameY = new KeyFrame(new Duration(duration), keyValueY);
+    //        timeline.getKeyFrames().addAll(keyFrameX, keyFrameY);
+    //        timeline.setOnFinished(event -> {
+    //            VisualizedUniverseMap.this.getChildren().remove(route);
+    //            VisualizedUniverseMap.this.getChildren().remove(spaceShip);
+    //            isTraveling.set(false);
+    //        });
+    //        timeline.play();
+    //    }
 
     public void stopTravelVisualization() {
         this.getChildren().remove(route);
@@ -344,9 +351,9 @@ public class VisualizedUniverseMap extends Pane {
                     isTraveling.set(true);
                     displayRouteAndSpaceShip(centerXProperty(), centerYProperty());
                     controller.handleTravelEvent(universe.getCurrentRegion(), region);
-//                    visualizeTravelTo(
-//                            (universe.getCurrentRegion().getX() + region.getX()) / 2,
-//                            (universe.getCurrentRegion().getY() + region.getY()) / 2, false, region);
+                    //  visualizeTravelTo(
+                    // (universe.getCurrentRegion().getX() + region.getX()) / 2,
+                    // (universe.getCurrentRegion().getY() + region.getY()) / 2, false, region);
 
                 }
             });

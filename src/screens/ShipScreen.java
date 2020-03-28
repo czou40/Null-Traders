@@ -6,8 +6,6 @@ import cores.objects.InventoryEntry;
 import cores.objects.Item;
 import cores.vehicles.Ship;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -15,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import uicomponents.ButtonScaleHover;
 import uicomponents.MyGridPane;
-import uicomponents.MyProgressBar;
 
 public class ShipScreen extends GameScreen {
 
@@ -39,7 +36,8 @@ public class ShipScreen extends GameScreen {
 
         Label cargoCapacityLeftLabel = new Label("CARGO CAPACITY");
         Label cargoCapacityRightLabel = new Label();
-        cargoCapacityRightLabel.textProperty().bind(Bindings.format("%d", ship.cargoCapacityProperty()));
+        cargoCapacityRightLabel.textProperty().bind(Bindings.format("%d",
+                ship.cargoCapacityProperty()));
 
         Label totalItemsLeftLabel = new Label("TOTAL ITEMS");
         Label totalItemsRightLabel = new Label();
@@ -51,7 +49,8 @@ public class ShipScreen extends GameScreen {
 
         Label fuelCapacityLeftLabel = new Label("FUEL CAPACITY");
         Label fuelCapacityRightLabel = new Label();
-        fuelCapacityRightLabel.textProperty().bind(Bindings.format("%d", ship.fuelCapacityProperty()));
+        fuelCapacityRightLabel.textProperty().bind(Bindings.format("%d",
+                ship.fuelCapacityProperty()));
 
         Label healthLeftLabel = new Label("HEALTH");
         Label healthRightLabel = new Label();
@@ -60,13 +59,14 @@ public class ShipScreen extends GameScreen {
         Label inventoryLeftLabel = new Label("INVENTORY");
         Label inventoryRightLabel = new Label();
         String inventoryRightLabelText = "";
-        for (Item item: ship.getItemInventory().keySet()){
+        for (Item item: ship.getItemInventory().keySet()) {
             InventoryEntry entry = ship.getItemInventory().get(item);
             inventoryRightLabelText += "" + item  + " (" + entry.getQuantity() + ")  ";
         }
         inventoryRightLabel.textProperty().bind(Bindings.format("%s", inventoryRightLabelText));
 
-        Label refuelCostLabel = new Label("Refueling costs " + ship.getRefuelCost() + " credits.");
+        Label refuelCostLabel = new Label("Refueling costs "
+                + ship.getRefuelCost() + " credits.");
         Button refuelButton = new Button("Refuel");
         refuelButton.setSkin(new ButtonScaleHover(refuelButton));
         refuelButton.setOnAction(event -> {
@@ -79,18 +79,19 @@ public class ShipScreen extends GameScreen {
         HBox refuelWrapper = new HBox(20);
         refuelWrapper.getChildren().addAll(refuelCostLabel, refuelButton);
 
-//        Label repairCostLabel = new Label("Repair costs " + ship.getRepairCost() + " credits.");
-//        Button repairButton = new Button("Repair");
-//        repairButton.setSkin(new ButtonScaleHover(repairButton));
-//        repairButton.setOnAction(event -> {
-//            try {
-//                player.repairShip();
-//            } catch (Exception e) {
-//                repairCostLabel.setText(e.getMessage());
-//            }
-//        });
-//        HBox repairWrapper = new HBox(20);
-//        repairWrapper.getChildren().addAll(repairCostLabel, repairButton);
+        //        Label repairCostLabel =
+        //        new Label("Repair costs " + ship.getRepairCost() + " credits.");
+        //        Button repairButton = new Button("Repair");
+        //        repairButton.setSkin(new ButtonScaleHover(repairButton));
+        //        repairButton.setOnAction(event -> {
+        //            try {
+        //                player.repairShip();
+        //            } catch (Exception e) {
+        //                repairCostLabel.setText(e.getMessage());
+        //            }
+        //        });
+        //        HBox repairWrapper = new HBox(20);
+        //        repairWrapper.getChildren().addAll(repairCostLabel, repairButton);
 
         contentGridPane.addColumn(0, difficultyLeftLabel, nameLeftLabel,
                 cargoCapacityLeftLabel, totalItemsLeftLabel, inventoryLeftLabel,

@@ -21,10 +21,10 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
         this.quantity = (int) (Math.random() * MAX_QUANTITY) + 1;
     }
 
-//    @Override
-//    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
-//        return new TradeScreen(primaryStage, game, this);
-//    }
+    //    @Override
+    //    public EncounterOptionScreen getEncounterScreen(Game game, Stage primaryStage) {
+    //        return new TradeScreen(primaryStage, game, this);
+    //    }
 
     @Override
     public void handleBuy() throws Exception {
@@ -33,7 +33,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
             throw new Exception("You don't have enough money!");
         }
         int remain = player.getShip().getCargoCapacity() - player.getShip().getTotalItems();
-        if(remain < quantity) {
+        if (remain < quantity) {
             throw new Exception("You don't have enough space in your ship!");
         }
         player.getShip().load(item,  price, quantity);
@@ -41,13 +41,13 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
 
     @Override
     public boolean handleNegotiate() {
-        final double PRICE_REDUCTION = 0.4;
+        final double priceReduction = 0.4;
         //if this method is used the option should also be greyed out in the UI
 
         double merchantSkillInfluence = player.calcInfluence(Player.SkillType.MER);
         Random random = new Random();
         double succeedNum = random.nextDouble();
-        boolean succeed = succeedNum > 0.5 * (1-merchantSkillInfluence);
+        boolean succeed = succeedNum > 0.5 * (1 - merchantSkillInfluence);
         if (succeed) {
             price = (int) (PRICE_REDUCTION * price);
             return true;
@@ -61,7 +61,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
     public Pair<Boolean, String> handleRob() {
         boolean alwaysWin = false;
         boolean alwaysLose = false;
-        final int MAX_STRENGTH = 50;
+        final int maxStrength = 50;
 
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
@@ -72,7 +72,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
         } else if (alwaysLose) {
             win = false;
         }
-        if(win) {
+        if (win) {
             int quantityRobbed = (int) (Math.random() * quantity) + 1;
             player.getShip().load(item, 0, quantityRobbed);
             return new Pair<>(true, "You successfully robbed " + quantityRobbed + " "

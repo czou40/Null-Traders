@@ -40,5 +40,6 @@ public enum Item {
         return basePrice;
     }
 
-    public boolean isIllegal() { return illegal; }
+    public boolean isIllegal() {
+        return illegal; }
 }

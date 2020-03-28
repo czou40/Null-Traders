@@ -5,10 +5,10 @@ import cores.objects.InventoryEntry;
 import cores.objects.Item;
 import cores.places.Region;
 import cores.settings.Difficulty;
-import javafx.util.Pair;
+
 
 import java.util.Map;
-import java.util.Random;
+
 
 public class EncounterFactory {
     private static final boolean ENCOUNTERSALWAYS = true; //true only for testing

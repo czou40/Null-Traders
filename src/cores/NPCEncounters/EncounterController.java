@@ -55,7 +55,8 @@ public class EncounterController {
     }
 
     public void displayEncounterOptionsScreen(NPC npc) {
-        EncounterOptionScreen screen = new EncounterOptionScreen(primaryStage, game, npc, this);
+        EncounterOptionScreen screen = new EncounterOptionScreen(primaryStage, game,
+                npc, this);
         screen.displayAsMessageBox();
     }
 

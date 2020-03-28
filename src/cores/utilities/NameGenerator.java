@@ -55,6 +55,7 @@ public class NameGenerator {
     }
 
     public static int getRandom(int upperBound) {
-        return upperBound - 1 - (int) (Math.pow(Math.random() * upperBound * upperBound * upperBound, 1.0 / 3));
+        return upperBound - 1 - (int) (Math.pow(Math.random()
+                * upperBound * upperBound * upperBound, 1.0 / 3));
     }
 }
