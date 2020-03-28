@@ -16,8 +16,9 @@ public class Police implements FightableNPC {
     private IntegerProperty evasionFine;
 
     private static final int MAX_POLICE_STRENGTH = 100; //how much health is lost if you lose
-    private static final int MAX_FINE = 300;
-    private static final int MIN_FINE = 100;
+    private static final int MAX_FINE = 100;
+    private static final int MIN_FINE = 50;
+
 
     public Police(Player player, Item confiscatedItem, Region dest) {
         this.player = player;
@@ -74,8 +75,8 @@ public class Police implements FightableNPC {
             int fine = getEvasionFine();
             player.loseCredits(fine);
             player.getShip().decrementFuel(player.getCurrentRegion(), dest, pilotSkillInfluence);
-            return new Pair<>(false, "You failed to flee your ship got damaged by"
-                    + damage + "point(s). You had to confiscate "
+            return new Pair<>(false, "You failed to flee. Your ship got damaged by "
+                    + damage + " point(s). You had to confiscate "
                     + "all your " + confiscatedItem.getName() + "(s) and pay a fine of "
                     + fine + " credit(s).");
         }
@@ -103,7 +104,7 @@ public class Police implements FightableNPC {
     @Override
     public String getDescription() {
         return "The Police suspects that you are conducting illegal transactions "
-                + "and wants to search your ship.";
+                + "and wants to search your ship for " + confiscatedItem.getName() + "(s)";
     }
 
     public void test() {
