@@ -7,9 +7,34 @@ import javafx.animation.Timeline;
 import javafx.stage.Stage;
 
 public class UniverseMapController {
-    VisualizedUniverseMap map;
-    Universe universe;
-    Stage primaryStage;
+    private VisualizedUniverseMap map;
+    private Universe universe;
+
+    public VisualizedUniverseMap getMap() {
+        return map;
+    }
+
+    public void setMap(VisualizedUniverseMap map) {
+        this.map = map;
+    }
+
+    public Universe getUniverse() {
+        return universe;
+    }
+
+    public void setUniverse(Universe universe) {
+        this.universe = universe;
+    }
+
+    private Stage primaryStage;
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 
     public UniverseMapController(Universe universe, VisualizedUniverseMap map, Stage primaryStage) {
         this.universe = universe;

@@ -1,4 +1,4 @@
 package cores.NPCEncounters;
 
-public interface IgnorableNPC extends NPC{
+public interface IgnorableNPC extends NPC {
 }

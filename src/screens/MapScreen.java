@@ -3,7 +3,6 @@ package screens;
 import cores.NPCEncounters.EncounterController;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import uicomponents.*;
 import cores.Game;
 import javafx.scene.layout.Pane;

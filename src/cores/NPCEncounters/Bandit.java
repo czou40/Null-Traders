@@ -35,7 +35,7 @@ public class Bandit implements FightableNPC {
         //This assumes that player had a 50/50 chance to begin with,
         // and then this number is reduced by whatever fightSkillInfluence ends up being
 
-        if(win){
+        if (win) {
             int credit = getRandomCredits();
             player.earn(credit);
             String message = "You won the battle and earned " + credit + " credit(s).";
@@ -46,7 +46,7 @@ public class Bandit implements FightableNPC {
             player.getShip().damage(damage);
             return new Pair<>(false, "Unfortunately, you lost the battle. The "
                     + "Bandit robbed all your credits and damaged your ship by "
-                    + damage + " points." );
+                    + damage + " points.");
         }
     }
 

@@ -2,9 +2,6 @@ package screens;
 
 import cores.NPCEncounters.Trader;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.GridPane;
 import uicomponents.*;
 import cores.characters.Player;
 import cores.Game;
@@ -15,7 +12,6 @@ import cores.objects.InventoryEntry;
 import cores.objects.Item;
 import cores.objects.StockEntry;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -46,8 +42,9 @@ public class MarketScreen extends GameScreen {
 
     public MarketScreen(Stage primaryStage, Game game, boolean buyingMode, Trader trader) {
         super(primaryStage,
-                game, trader  == null ?
-                        game.getPlayer().getCurrentRegion().getMarketplace().getName() : "Trade with NPC",
+                game, trader  == null
+                        ? game.getPlayer().getCurrentRegion().getMarketplace().getName()
+                        : "Trade with NPC",
                 true);
         this.game = game;
         this.player = game.getPlayer();
@@ -120,7 +117,8 @@ public class MarketScreen extends GameScreen {
     }
 
     private MyGridPane constructHeaderPane() {
-        MyGridPane headerPane = new MyGridPane(MyGridPane.getSpan(1), new double[]{15, 15, 20, 40, 10});
+        MyGridPane headerPane = new MyGridPane(MyGridPane.getSpan(1),
+                new double[]{15, 15, 20, 40, 10});
         Label nameHeader = new Label("NAME");
         nameHeader.getStyleClass().add("h2");
         Label priceHeader = new Label("PRICE");
@@ -223,7 +221,8 @@ public class MarketScreen extends GameScreen {
             } else {
                 button.setOnAction(e -> {
                     try {
-                        transactionSystem.sell(entry.getKey(), marketplace, (int) slider.getValue());
+                        transactionSystem.sell(entry.getKey(),
+                                marketplace, (int) slider.getValue());
                         itemsPane = constructSellItemBoxesPane();
                         scrollPane.setContent(itemsPane);
                     } catch (Exception exception) {

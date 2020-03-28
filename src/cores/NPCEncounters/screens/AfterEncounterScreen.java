@@ -23,6 +23,7 @@ public class AfterEncounterScreen extends Screen {
      *
      * @param primaryStage The primary stage
      * @param game         The game
+     * @param controller   The controller
      */
     public AfterEncounterScreen(Stage primaryStage, Game game, EncounterController controller) {
         super(primaryStage, game);
@@ -32,8 +33,8 @@ public class AfterEncounterScreen extends Screen {
 
     public void setDestination(String destination) {
         this.destination = destination;
-        whatWillHappenLater = destination == null ?
-                "\nYou will return to your place of departure."
+        whatWillHappenLater = destination == null
+                ? "\nYou will return to your place of departure."
                 : "\nYou will soon arrive at " + destination + ".";
     }
 

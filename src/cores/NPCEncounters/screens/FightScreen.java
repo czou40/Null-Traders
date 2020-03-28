@@ -22,7 +22,8 @@ public class FightScreen extends Screen {
     private Label messageLabel;
     private Button continueButton;
 
-    public FightScreen(Stage primaryStage, Game game, FightableNPC npc, EncounterController controller) {
+    public FightScreen(Stage primaryStage, Game game, FightableNPC npc,
+                       EncounterController controller) {
         super(primaryStage, game);
         this.npc = npc;
         this.controller = controller;
@@ -30,7 +31,8 @@ public class FightScreen extends Screen {
 
     @Override
     public Pane constructRoot() {
-        animationPane = new FightAnimationPane(getGame().getPlayer().getShip().getImage(), NPC.getImage());
+        animationPane = new FightAnimationPane(getGame().getPlayer().getShip().getImage(),
+                NPC.getImage());
         messageLabel = new Label();
         messageLabel.setVisible(false);
         continueButton = new Button("OK");

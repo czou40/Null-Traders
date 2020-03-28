@@ -4,10 +4,8 @@ import javafx.scene.layout.Pane;
 import uicomponents.*;
 
 import cores.Game;
-import cores.Main;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;

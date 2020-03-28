@@ -80,7 +80,16 @@ public class CharacterSheetScreen extends GameScreen {
     }
 
     private class UpgradeLabel extends Label {
-        Player.SkillType type;
+        private Player.SkillType type;
+
+        public Player.SkillType getType() {
+            return type;
+        }
+
+        public void setType(Player.SkillType type) {
+            this.type = type;
+        }
+
         private UpgradeLabel(Player.SkillType type) {
             super();
             this.type = type;
