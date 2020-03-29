@@ -1,7 +1,6 @@
 package cores.NPCEncounters;
 
 import cores.Game;
-import cores.GameOverException;
 import cores.NPCEncounters.screens.*;
 import cores.characters.Player;
 import cores.places.Region;
@@ -22,7 +21,6 @@ public class EncounterController {
     }
 
 
-
     public void handleEncounter(Region dest) {
         NPC npc = EncounterFactory.generateRandomEncounter(player, game.getDifficulty(), dest);
         if (game == null || primaryStage == null) {
@@ -37,21 +35,17 @@ public class EncounterController {
     }
 
     public void handleResumeTravelToDest(String message) {
-        try {
-            player.resumeTravelAfterEncounter(dest);
-            displayAfterEncounterScreen(message, true);
-        } catch (GameOverException e) {
-            new GameOverScreen(primaryStage, game).display();
-        }
+        player.resumeTravelAfterEncounter(dest);
+        displayAfterEncounterScreen(message, true);
     }
 
     public void handleReturnToPlaceOfDeparture(String message) {
-        try {
-            player.checkGameOver();
-            displayAfterEncounterScreen(message, false);
-        } catch (GameOverException e) {
-            new GameOverScreen(primaryStage, game).display();
-        }
+        displayAfterEncounterScreen(message, false);
+    }
+
+    public void handleGameOver() {
+        Screen.closeMessageBox();
+        new GameOverScreen(primaryStage, game).display();
     }
 
     public void displayEncounterOptionsScreen(NPC npc) {
@@ -65,6 +59,9 @@ public class EncounterController {
                 new AfterEncounterScreen(primaryStage, game, this);
         if (willTravelToDestination) {
             screen.setDestination(dest.getName());
+        }
+        if (player.isDead()) {
+            screen.setGameOver(true);
         }
         screen.setMessage(message);
         screen.displayAsMessageBox();
@@ -126,7 +123,6 @@ public class EncounterController {
     public static void setMapController(UniverseMapController controller) {
         EncounterController.mapController = controller;
     }
-
 
 
     public void goBackToMapScreen() {

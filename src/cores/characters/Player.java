@@ -1,6 +1,5 @@
 package cores.characters;
 
-import cores.GameOverException;
 import cores.NPCEncounters.EncounterController;
 import cores.Game;
 import cores.vehicles.Ship;
@@ -133,14 +132,11 @@ public class Player {
         //>>>>>>> 5ed09473fc430f44f580041a06d2eb71703c3d39
     }
 
-    public void checkGameOver() throws GameOverException {
-        if (this.ship.get().getHealth() <= 0) {
-            throw new GameOverException();
-        }
+    public boolean isDead() {
+        return ship.get().getHealth() <= 0;
     }
 
-    public void resumeTravelAfterEncounter(Region dest) throws GameOverException {
-        checkGameOver();
+    public void resumeTravelAfterEncounter(Region dest)  {
         getShip().decrementFuel(getCurrentRegion(), dest, calcInfluence(SkillType.PIL));
         currentRegion.get().setIsCurrentRegion(false);
         setCurrentRegion(dest);
