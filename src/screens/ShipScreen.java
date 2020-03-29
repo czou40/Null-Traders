@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import uicomponents.ButtonScaleHover;
 import uicomponents.MyGridPane;
+import uicomponents.MyProgressBar;
 
 public class ShipScreen extends GameScreen {
 
@@ -44,17 +45,16 @@ public class ShipScreen extends GameScreen {
         totalItemsRightLabel.textProperty().bind(Bindings.format("%d", ship.totalItemsProperty()));
 
         Label fuelLeftLabel = new Label("FUEL");
-        Label fuelRightLabel = new Label();
-        fuelRightLabel.textProperty().bind(Bindings.format("%d", ship.fuelProperty()));
-
-        Label fuelCapacityLeftLabel = new Label("FUEL CAPACITY");
-        Label fuelCapacityRightLabel = new Label();
-        fuelCapacityRightLabel.textProperty().bind(Bindings.format("%d",
-                ship.fuelCapacityProperty()));
+        MyProgressBar fuelBar = new MyProgressBar(ship.getFuel(), ship.getFuelCapacity());
+        fuelBar.setMaxWidth(9999);
+        fuelBar.pointProperty().bind(ship.fuelProperty());
+        fuelBar.maxPointProperty().bind(ship.fuelCapacityProperty());
 
         Label healthLeftLabel = new Label("HEALTH");
-        Label healthRightLabel = new Label();
-        healthRightLabel.textProperty().bind(Bindings.format("%d", ship.healthProperty()));
+        MyProgressBar healthBar = new MyProgressBar(ship.getHealth(), ship.getMaxHealth());
+        healthBar.setMaxWidth(9999);
+        healthBar.pointProperty().bind(ship.healthProperty());
+        healthBar.maxPointProperty().bind(ship.maxHealthProperty());
 
         Label inventoryLeftLabel = new Label("INVENTORY");
         Label inventoryRightLabel = new Label();
@@ -72,6 +72,7 @@ public class ShipScreen extends GameScreen {
         refuelButton.setOnAction(event -> {
             try {
                 player.refuelShip();
+                refuelCostLabel.setText("Refueling costs " + ship.getRefuelCost() + " credits.");
             } catch (Exception e) {
                 refuelCostLabel.setText(e.getMessage());
             }
@@ -79,28 +80,30 @@ public class ShipScreen extends GameScreen {
         HBox refuelWrapper = new HBox(20);
         refuelWrapper.getChildren().addAll(refuelCostLabel, refuelButton);
 
-        //        Label repairCostLabel =
-        //        new Label("Repair costs " + ship.getRepairCost() + " credits.");
-        //        Button repairButton = new Button("Repair");
-        //        repairButton.setSkin(new ButtonScaleHover(repairButton));
-        //        repairButton.setOnAction(event -> {
-        //            try {
-        //                player.repairShip();
-        //            } catch (Exception e) {
-        //                repairCostLabel.setText(e.getMessage());
-        //            }
-        //        });
-        //        HBox repairWrapper = new HBox(20);
-        //        repairWrapper.getChildren().addAll(repairCostLabel, repairButton);
+        Label repairCostLabel =
+                new Label("Repair costs " + player.calcRepairShipCost() + " credits.");
+        Button repairButton = new Button("Repair");
+        repairButton.setSkin(new ButtonScaleHover(repairButton));
+        repairButton.setOnAction(event -> {
+            try {
+                player.repairShip();
+                repairCostLabel.setText("Repair costs "
+                        + player.calcRepairShipCost() + " credits.");
+            } catch (Exception e) {
+                repairCostLabel.setText(e.getMessage());
+            }
+        });
+        HBox repairWrapper = new HBox(20);
+        repairWrapper.getChildren().addAll(repairCostLabel, repairButton);
 
         contentGridPane.addColumn(0, difficultyLeftLabel, nameLeftLabel,
                 cargoCapacityLeftLabel, totalItemsLeftLabel, inventoryLeftLabel,
-                fuelLeftLabel, fuelCapacityLeftLabel, null, healthLeftLabel);
+                fuelLeftLabel, null, healthLeftLabel);
 
         contentGridPane.addColumn(1, difficultyRightLabel, nameRightLabel,
                 cargoCapacityRightLabel, totalItemsRightLabel,
-                inventoryRightLabel, fuelRightLabel, fuelCapacityRightLabel,
-                refuelWrapper, healthRightLabel);
+                inventoryRightLabel, fuelBar.withLabel(),
+                refuelWrapper, healthBar.withLabel(), repairWrapper);
         return contentGridPane;
     }
 }

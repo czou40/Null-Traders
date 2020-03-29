@@ -37,7 +37,7 @@ public class Police implements FightableNPC {
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
         double winOrLoseNum = random.nextDouble();
-        boolean win = winOrLoseNum > 0.5 * (1 - fightSkillInfluence);
+        boolean win = winOrLoseNum > 0.8 * (1 - fightSkillInfluence);
         //This assumes that player had a 50/50 chance to begin with,
         // and then this number is reduced by whatever fightSkillInfluence ends up being
 
@@ -63,7 +63,7 @@ public class Police implements FightableNPC {
         double pilotSkillInfluence = player.calcInfluence(Player.SkillType.PIL);
         Random random = new Random();
         double fleeOrFailNum = random.nextDouble();
-        boolean flee = fleeOrFailNum > 0.4 * (1 - pilotSkillInfluence);
+        boolean flee = fleeOrFailNum > 0.7 * (1 - pilotSkillInfluence);
 
         if (flee) {
             player.getShip().decrementFuel(player.getCurrentRegion(), dest, pilotSkillInfluence);

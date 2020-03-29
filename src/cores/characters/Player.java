@@ -156,6 +156,16 @@ public class Player {
         ship.get().refillFuel();
     }
 
+    public void repairShip() throws Exception {
+        int cost = ship.get().getRepairCost(calcInfluence(SkillType.ENG));
+        spend(cost);
+        ship.get().repair();
+    }
+
+    public int calcRepairShipCost() {
+        return ship.get().getRepairCost(calcInfluence(SkillType.ENG));
+    }
+
 
     /*
     Condenses the player's skill points in a type into a number between 0 and 1 using an exponential

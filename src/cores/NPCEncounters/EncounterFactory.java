@@ -14,7 +14,7 @@ public class EncounterFactory {
     private static final boolean ENCOUNTERSALWAYS = true; //true only for testing
 
     public static NPC generateRandomEncounter(Player player, Difficulty difficulty, Region dest) {
-        double rand = 0.4; //0.1 for bandit, 0.4 for trade, 0.9 for police
+        double rand = Math.random(); //0.1 for bandit, 0.4 for trade, 0.9 for police
         double encounterChance;
         if (ENCOUNTERSALWAYS) {
             encounterChance = 1;

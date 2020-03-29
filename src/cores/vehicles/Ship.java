@@ -17,18 +17,22 @@ public class Ship {
     private IntegerProperty fuel;
     private IntegerProperty fuelCapacity;
     private IntegerProperty health;
+    private IntegerProperty maxHealth;
     private String image = "file:src/images/spaceships/0.png";
-    private static final double MAX_FUEL_EFFICIENCY = 0.4;
+    private static final double MAX_FUEL_EFFICIENCY = 0.6;
+    private static final double FUEL_DISTANCE_FACTOR = 0.2;
+    private static final double REPAIR_FACTOR = 1.8;
 
 
-    public Ship(String name, int cargoCapacity, int fuelCapacity, int health) {
+    public Ship(String name, int cargoCapacity, int fuelCapacity, int maxHealth) {
         this.name = new SimpleStringProperty(name);
         this.totalItems = new SimpleIntegerProperty(0);
         this.itemInventory = new SimpleObjectProperty<>(new HashMap<>());
         this.cargoCapacity = new SimpleIntegerProperty(cargoCapacity);
         this.fuel = new SimpleIntegerProperty(fuelCapacity);
         this.fuelCapacity = new SimpleIntegerProperty(fuelCapacity);
-        this.health = new SimpleIntegerProperty(health);
+        this.maxHealth = new SimpleIntegerProperty(maxHealth);
+        this.health = new SimpleIntegerProperty(maxHealth);
     }
 
     public Ship(Difficulty difficulty) {
@@ -122,7 +126,7 @@ public class Ship {
     }
 
     private int calculateFuelNeeded(Region region1, Region region2, double pilotInfluence) {
-        return (int) (region1.distanceTo(region2) / 10 * (1 + pilotInfluence
+        return (int) (region1.distanceTo(region2) * FUEL_DISTANCE_FACTOR * (1 - pilotInfluence
                 * MAX_FUEL_EFFICIENCY));
     }
 
@@ -143,6 +147,15 @@ public class Ship {
         return (int) Math.round((fuelCapacity.get() - fuel.get()) * 0.4);
     }
 
+    public int getRepairCost(double engineerInfluence) {
+        return (int) ((1 - engineerInfluence / 2) * REPAIR_FACTOR
+                * (maxHealth.get() - health.get()));
+    }
+
+    public void repair() {
+        this.health.set(maxHealth.get());
+    }
+
     public void load(Item item, int price, int quantity) {
         InventoryEntry playerEntry = itemInventory.get().get(item);
         //update ship inventory
@@ -161,6 +174,14 @@ public class Ship {
             this.itemInventory.get().remove(item);
         }
         this.totalItems.set(this.totalItems.get() - quantity);
+    }
+
+    public int getMaxHealth() {
+        return maxHealth.get();
+    }
+
+    public ReadOnlyIntegerProperty maxHealthProperty() {
+        return maxHealth;
     }
 
     public String getImage() {
