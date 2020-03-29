@@ -16,6 +16,7 @@ public class AfterEncounterScreen extends Screen {
     private String message;
     private String whatWillHappenLater;
     private EncounterController controller;
+    private boolean gameOver;
 
 
     /**
@@ -33,9 +34,18 @@ public class AfterEncounterScreen extends Screen {
 
     public void setDestination(String destination) {
         this.destination = destination;
-        whatWillHappenLater = destination == null
-                ? "\nYou will return to your place of departure."
-                : "\nYou will soon arrive at " + destination + ".";
+        if (!gameOver) {
+            whatWillHappenLater = destination == null
+                    ? "You will return to your place of departure."
+                    : "You will soon arrive at " + destination + ".";
+        }
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+        if (gameOver) {
+            whatWillHappenLater = "Your ship is completely destroyed.";
+        }
     }
 
     public void setMessage(String message) {
@@ -47,8 +57,12 @@ public class AfterEncounterScreen extends Screen {
         label = new Label();
         okButton = new Button("OK");
         okButton.setOnAction(event -> {
-            controller.notifyMapController();
-            this.close();
+            if (gameOver) {
+                controller.handleGameOver();
+            } else {
+                controller.notifyMapController();
+                this.close();
+            }
         });
         label.setText((message == null || message.equals("") ? "" : message + "\n")
                 + whatWillHappenLater);

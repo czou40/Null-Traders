@@ -84,6 +84,11 @@ public abstract class Screen {
         doAfterScreenIsShown();
     }
 
+    public static void closeMessageBox() {
+        if (messageStage != null) {
+            messageStage.close();
+        }
+    }
 
     public void close() {
         root.getScene().getWindow().hide();
