@@ -2,6 +2,7 @@ package cores.characters;
 
 import cores.NPCEncounters.EncounterController;
 import cores.Game;
+import cores.objects.Item;
 import cores.vehicles.Ship;
 import cores.objects.Upgrade;
 import cores.places.Region;
@@ -158,6 +159,7 @@ public class Player {
         ship.get().repair();
     }
 
+
     public int calcRepairShipCost() {
         return ship.get().getRepairCost(calcInfluence(SkillType.ENG));
     }
@@ -175,6 +177,10 @@ public class Player {
         SkillType type = upgrade.getUpgradeType();
         upgrades.get(type).set(upgrade);
         skills.get(type).set(upgrade.getUpgradeLvl() + rawSkills.get(type));
+    }
+
+    public boolean hasCompass() {
+        return ship.get().getItemInventory().containsKey(Item.COMPASS);
     }
 
     /**

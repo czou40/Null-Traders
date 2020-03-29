@@ -11,6 +11,7 @@ import java.util.Vector;
 public class Universe {
     private Player player;
     private Vector<Region> regions;
+    private Region ultimateRegion;
     private SimpleObjectProperty<Region> currentRegion;
     public static final int WIDTH = 15000;
     public static final int HEIGHT = 15000;
@@ -56,10 +57,39 @@ public class Universe {
             regions.add(new Region(nameGenerator.getName(),
                     "", (int) (Math.random() * 10) + 1, x, y, player));
         }
+        ultimateRegion = getRandomRegion();
+        ultimateRegion.setAsUltimateRegion();
     }
 
     public Region getRandomRegion() {
         return regions.get((int) (Math.random() * regions.size()));
+    }
+
+    public Region getUltimateRegion() {
+        return ultimateRegion;
+    }
+
+    public double calculateAngleToUltimateRegion() {
+        if (ultimateRegion.equals(currentRegion.get())) {
+            throw new ArithmeticException("You are already at the ultimate region!");
+        }
+        return calculateAngle(currentRegion.get().getX(), currentRegion.get().getY(),
+                ultimateRegion.getX(), ultimateRegion.getY());
+    }
+
+    private static double calculateAngle(double x1, double y1, double x2, double y2) {
+        if (x1 == x2) {
+            if (y2 > y1) {
+                return 180;
+            } else {
+                return 0;
+            }
+        }
+        double result = Math.atan((y2 - y1) / (x2 - x1)) / Math.PI * 180 + 90;
+        if (x1 > x2) {
+            result += 180;
+        }
+        return result;
     }
 
     public Region getCurrentRegion() {

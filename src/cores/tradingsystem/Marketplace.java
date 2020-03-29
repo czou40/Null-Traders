@@ -38,9 +38,12 @@ public class Marketplace {
     private Upgrade upgrade;
     private SimpleBooleanProperty boughtUpgrade;
 
-    public Marketplace(String name, int techLevel, Player player) {
+    private boolean sellsSpecialItems;
+
+    public Marketplace(String name, int techLevel, Player player, boolean sellsSpecialItems) {
         this.name = name;
         this.techLevel = techLevel;
+        this.sellsSpecialItems = sellsSpecialItems;
         this.stock = generateRandomStock();
         this.player = player;
         if (DEBUG) {
@@ -60,7 +63,7 @@ public class Marketplace {
         Map<Item, StockEntry> stockMap = new HashMap<>();
 
         for (Item item : items) {
-            if (techLevel >= item.getTechLevel()) {
+            if (techLevel >= item.getTechLevel() && (item.isOnMarket() || sellsSpecialItems)) {
                 int techDifference = techLevel - item.getTechLevel();
                 /*
                    Quantity Algorithm: item quantity is determined by a random amount
@@ -72,6 +75,9 @@ public class Marketplace {
                 double quantityFactor = Math.min(
                         1, MINQUANTITYFACTOR + INCREMENTALQUANTITYFACTOR * techDifference);
                 int itemQuantity = (int) (rand.nextInt(MAXITEMS) * quantityFactor);
+                if (!item.isOnMarket()) { //If this is a special item, there should only be one such item.
+                    itemQuantity = 1;
+                }
                 if (itemQuantity > 0) {
                     /*
                        Buy Price Algorithm:
