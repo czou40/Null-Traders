@@ -14,6 +14,7 @@ public class Marketplace {
     private int techLevel;
     private Map<Item, StockEntry> stock;
     private Player player;
+    private static boolean winningItemAssigned = false;
 
     //constants used in price generation algorithm
     private static final int MAXITEMS = 100;
@@ -61,6 +62,16 @@ public class Marketplace {
 
         for (Item item : items) {
             if (techLevel >= item.getTechLevel()) {
+
+                //winning item
+                if (item.getName().equals("Null Pointer Exception")) {
+                    if (!winningItemAssigned) {
+                        stockMap.put(item, new StockEntry(1, item.getBasePrice(), 0));
+                        winningItemAssigned = true;
+                    }
+                    continue;
+                }
+
                 int techDifference = techLevel - item.getTechLevel();
                 /*
                    Quantity Algorithm: item quantity is determined by a random amount
@@ -113,9 +124,15 @@ public class Marketplace {
             System.out.println("Player merchant influence: "
                     + player.calcInfluence(Player.SkillType.MER));
         }
-        return (int) (
-                (1 - player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)
-                        * marketEntry.getBuyingPrice());
+
+        if (item.getName().equals("Null Pointer Exception")) {
+            return marketEntry.getBuyingPrice();
+        } else {
+            return (int) (
+                    (1 - player.calcInfluence(Player.SkillType.MER) * MAX_MERCHANT_INFLUENCE)
+                            * marketEntry.getBuyingPrice());
+        }
+
     }
 
     /*
