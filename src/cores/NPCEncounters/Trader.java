@@ -43,13 +43,10 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
 
     @Override
     public boolean handleNegotiate() {
-        final double priceReduction = 0.4;
-        //if this method is used the option should also be greyed out in the UI
-
         double merchantSkillInfluence = player.calcInfluence(Player.SkillType.MER);
         Random random = new Random();
         double succeedNum = random.nextDouble();
-        boolean succeed = succeedNum > 0.5 * (1 - merchantSkillInfluence);
+        boolean succeed = succeedNum > 0.8 * (1 - merchantSkillInfluence);
         if (succeed) {
             price = (int) (PRICE_REDUCTION * price);
             return true;
@@ -68,7 +65,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
         double fightSkillInfluence = player.calcInfluence(Player.SkillType.FIG);
         Random random = new Random();
         double winOrLoseNum = random.nextDouble();
-        boolean win = winOrLoseNum > 0.5 * (1 - fightSkillInfluence);
+        boolean win = winOrLoseNum > 0.8 * (1 - fightSkillInfluence);
         if (alwaysWin) {
             win = true;
         } else if (alwaysLose) {
