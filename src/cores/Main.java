@@ -38,7 +38,6 @@ public class Main extends Application {
         MapScreen.clearCache();
         Game newGame = new Game();
         new WelcomeScreen(primaryStage, newGame).display();
-        newGame.getPlayer().getShip().damage(999);
     }
 
     @Override
