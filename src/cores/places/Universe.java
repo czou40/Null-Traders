@@ -13,9 +13,9 @@ public class Universe {
     private Vector<Region> regions;
     private Region ultimateRegion;
     private SimpleObjectProperty<Region> currentRegion;
-    public static final int WIDTH = 2000;
-    public static final int HEIGHT = 2000;
-    private static final int REGION_NUMBER = 30;
+    public static final int WIDTH = 15000;
+    public static final int HEIGHT = 15000;
+    private static final int REGION_NUMBER = 900;
 
     public Universe(Player player) {
         this.player = player;

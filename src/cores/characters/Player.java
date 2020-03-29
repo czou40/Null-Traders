@@ -158,6 +158,9 @@ public class Player {
         return ship.get().getItemInventory().containsKey(Item.COMPASS);
     }
 
+    public boolean hasNull() {
+        return ship.get().getItemInventory().containsKey(Item.NULL);
+    }
     /**
      * Gets the game.
      *

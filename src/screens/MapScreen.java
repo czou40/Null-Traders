@@ -2,7 +2,6 @@ package screens;
 
 import cores.NPCEncounters.EncounterController;
 import cores.places.Region;
-import cores.places.Universe;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import uicomponents.*;

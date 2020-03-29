@@ -214,6 +214,9 @@ public class MarketScreen extends GameScreen {
                         transactionSystem.buy(entry.getKey(), marketplace, (int) slider.getValue());
                         itemsPane = constructBuyItemBoxesPane();
                         scrollPane.setContent(itemsPane);
+                        if (player.hasNull()) {
+                            new VictoryScreen(getPrimaryStage(), game).display();
+                        }
                     } catch (Exception exception) {
                         messageLabel.setText(exception.getMessage());
                     }

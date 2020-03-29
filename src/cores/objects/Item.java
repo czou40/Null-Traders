@@ -18,7 +18,7 @@ public enum Item {
     ROBOTS("Robots", 9, 4000, true),
     NUKES("Nukes", 9, 10000, true),
     COMPASS("Compass", 8, 2000, false),
-    NULL("NullPointerException", 11, 12000, false, false);
+    NULL("The Null Pointer", 11, 12000, false, false);
 
     private String name;
     private int techLevel;

@@ -3,7 +3,6 @@ package uicomponents;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -41,8 +40,8 @@ public class Compass extends Pane {
     private void startCompassOscillationAnimation() {
         compassOscillation = new Timeline();
         double variation = Math.random() * OSCILLATION_AMPLITUDE
-                - OSCILLATION_AMPLITUDE * 1 /
-                (1 + Math.exp(-(OSCILLATION_FREQUENCY) * (arrow.getRotate() - angle.get())));
+                - OSCILLATION_AMPLITUDE * 1
+                / (1 + Math.exp(-(OSCILLATION_FREQUENCY) * (arrow.getRotate() - angle.get())));
         KeyValue keyValue = new KeyValue(
                 arrow.rotateProperty(), arrow.getRotate() + variation);
         KeyFrame keyFrame = new KeyFrame(new Duration(300), keyValue);
