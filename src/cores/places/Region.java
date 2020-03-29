@@ -32,12 +32,17 @@ public class Region {
         this.isCurrentRegion = new SimpleBooleanProperty(false);
 
         this.player = player;
-        this.marketplace = new Marketplace(name + "'s Market", technologyLevel, player);
+        this.marketplace = new Marketplace(name + "'s Market", technologyLevel, player, false);
         this.npcList = new NPC[5];
     }
 
     public Region(RegionData data, int x, int y, Player player) {
         this(data.getName(), data.getDescription(), data.getTechnologyLevel(), x, y, player);
+    }
+
+    public void setAsUltimateRegion() {
+        this.technologyLevel = 11;
+        this.marketplace = new Marketplace(name + "'s Market", technologyLevel, player, true);
     }
 
 

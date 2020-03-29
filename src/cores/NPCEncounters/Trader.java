@@ -17,7 +17,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
 
     public Trader(Player player) {
         this.player = player;
-        this.item = Item.values()[(int) (Math.random() * Item.values().length)];
+        this.item = Item.getRandomItemOnMarket();
         this.price = item.getBasePrice();
         this.quantity = (int) (Math.random() * MAX_QUANTITY) + 1;
     }

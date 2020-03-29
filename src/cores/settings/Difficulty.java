@@ -6,10 +6,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public enum Difficulty {
-    CADET(500,
+    CADET(50000,
     30,
    75,
-   1000,
+   10000,
          500,
                     0.20
                     ),

@@ -1,6 +1,7 @@
 package screens;
 
 import cores.NPCEncounters.EncounterController;
+import cores.places.Region;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import uicomponents.*;
@@ -80,6 +81,33 @@ public class MapScreen extends Screen {
         addToRoot(back);
         addToRoot(fuelLabel);
         addToRoot(errorLabel);
+
+        if (game.getPlayer().hasCompass()) {
+            Compass compass = new Compass();
+            updateCompass(compass);
+            game.getUniverse().currentRegionProperty()
+                    .addListener((observable, oldValue, newValue) -> {
+                        updateCompass(compass);
+                    });
+            compass.layoutXProperty().bind(
+                    getRootWidth().subtract(compass.widthProperty()).subtract(50));
+            compass.layoutYProperty().bind(
+                    getRootHeight().subtract(compass.heightProperty()).subtract(50));
+            compass.setVisible(!map.isTraveling());
+            map.isTravelingProperty().addListener((observable, oldValue, newValue) -> {
+                compass.setVisible(!newValue);
+            });
+            addToRoot(compass);
+        }
+    }
+
+    private void updateCompass(Compass compass) {
+        Region ultimate = game.getUniverse().getUltimateRegion();
+        if (game.getUniverse().getCurrentRegion().equals(ultimate)) {
+            compass.stopWorking();
+        } else {
+            compass.setAngle(game.getUniverse().calculateAngleToUltimateRegion());
+        }
     }
 
     public static void clearCache() {

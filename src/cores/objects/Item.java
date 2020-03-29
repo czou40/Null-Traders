@@ -1,5 +1,7 @@
 package cores.objects;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -15,19 +17,35 @@ public enum Item {
     NARCOTICS("Narcotics", 7, 1000, true),
     ROBOTS("Robots", 9, 4000, true),
     NUKES("Nukes", 9, 10000, true),
-    NULL("Null Pointer Exception", 10, 15000, false);
-
+    COMPASS("Compass", 8, 2000, false),
+    NULL("The Null Pointer", 11, 12000, false, false);
 
     private String name;
     private int techLevel;
     private int basePrice;
     private boolean illegal;
+    private boolean onMarket;
 
-    Item(String name, int techLevel, int basePrice, boolean illegal) {
+    Item(String name, int techLevel, int basePrice, boolean illegal, boolean onMarket) {
         this.name = name;
         this.techLevel = techLevel;
         this.basePrice = basePrice;
         this.illegal = illegal;
+        this.onMarket = onMarket;
+    }
+
+    Item(String name, int techLevel, int basePrice, boolean illegal) {
+        this(name, techLevel, basePrice, illegal, true);
+    }
+
+    public static Item getRandomItemOnMarket() {
+        ArrayList<Item> onMarketItems = new ArrayList<>(Item.values().length);
+        for (Item i : Item.values()) {
+            if (i.onMarket) {
+                onMarketItems.add(i);
+            }
+        }
+        return onMarketItems.get((int) (Math.random() * onMarketItems.size()));
     }
 
     public String getName() {
@@ -43,5 +61,11 @@ public enum Item {
     }
 
     public boolean isIllegal() {
-        return illegal; }
+        return illegal;
+    }
+
+    public boolean isOnMarket() {
+        return onMarket;
+    }
+
 }

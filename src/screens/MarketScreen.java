@@ -118,7 +118,7 @@ public class MarketScreen extends GameScreen {
 
     private MyGridPane constructHeaderPane() {
         MyGridPane headerPane = new MyGridPane(MyGridPane.getSpan(1),
-                new double[]{15, 15, 20, 40, 10});
+                new double[]{20, 15, 15, 30, 20});
         Label nameHeader = new Label("NAME");
         nameHeader.getStyleClass().add("h2");
         Label priceHeader = new Label("PRICE");
@@ -168,7 +168,7 @@ public class MarketScreen extends GameScreen {
         private Button button;
 
         public ItemBox(Map.Entry<Item, ? extends Entry> entry) {
-            super(MyGridPane.getSpan(1), new double[]{15, 15, 15, 35, 10, 10});
+            super(MyGridPane.getSpan(1), new double[]{20, 15, 15, 30, 10, 10});
             boolean availableAtMarket = stock.containsKey(entry.getKey());
             //this.entry = entry;
             nameLabel = new Label(entry.getKey().getName().toUpperCase());
@@ -214,6 +214,9 @@ public class MarketScreen extends GameScreen {
                         transactionSystem.buy(entry.getKey(), marketplace, (int) slider.getValue());
                         itemsPane = constructBuyItemBoxesPane();
                         scrollPane.setContent(itemsPane);
+                        if (player.hasNull()) {
+                            new VictoryScreen(getPrimaryStage(), game).display();
+                        }
                     } catch (Exception exception) {
                         messageLabel.setText(exception.getMessage());
                     }

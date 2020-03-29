@@ -5,6 +5,7 @@ import cores.objects.Item;
 import cores.objects.StockEntry;
 import cores.objects.Upgrade;
 import javafx.beans.property.SimpleBooleanProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -14,7 +15,7 @@ public class Marketplace {
     private int techLevel;
     private Map<Item, StockEntry> stock;
     private Player player;
-    private static boolean winningItemAssigned = false;
+    //private static boolean winningItemAssigned = false;
 
     //constants used in price generation algorithm
     private static final int MAXITEMS = 100;
@@ -39,9 +40,12 @@ public class Marketplace {
     private Upgrade upgrade;
     private SimpleBooleanProperty boughtUpgrade;
 
-    public Marketplace(String name, int techLevel, Player player) {
+    private boolean sellsSpecialItems;
+
+    public Marketplace(String name, int techLevel, Player player, boolean sellsSpecialItems) {
         this.name = name;
         this.techLevel = techLevel;
+        this.sellsSpecialItems = sellsSpecialItems;
         this.stock = generateRandomStock();
         this.player = player;
         if (DEBUG) {
@@ -61,17 +65,21 @@ public class Marketplace {
         Map<Item, StockEntry> stockMap = new HashMap<>();
 
         for (Item item : items) {
-            if (techLevel >= item.getTechLevel()) {
-
-                //winning item
-                if (item.getName().equals("Null Pointer Exception")) {
-                    if (!winningItemAssigned) {
-                        stockMap.put(item, new StockEntry(1, item.getBasePrice(), 0));
-                        winningItemAssigned = true;
-                    }
-                    continue;
-                }
-
+            //<<<<<<< HEAD
+            if (techLevel >= item.getTechLevel() && (item.isOnMarket() || sellsSpecialItems)) {
+                //=======
+                //            if (techLevel >= item.getTechLevel()) {
+                //
+                //                //winning item
+                //                if (item.getName().equals("Null Pointer Exception")) {
+                //  if (!winningItemAssigned) {
+                //  stockMap.put(item, new StockEntry(1, item.getBasePrice(), 0));
+                //                        winningItemAssigned = true;
+                //                    }
+                //                    continue;
+                //                }
+                //
+                //>>>>>>> bc035955edb497af6f0c324db6885efdd57a8004
                 int techDifference = techLevel - item.getTechLevel();
                 /*
                    Quantity Algorithm: item quantity is determined by a random amount
@@ -83,6 +91,10 @@ public class Marketplace {
                 double quantityFactor = Math.min(
                         1, MINQUANTITYFACTOR + INCREMENTALQUANTITYFACTOR * techDifference);
                 int itemQuantity = (int) (rand.nextInt(MAXITEMS) * quantityFactor);
+                //If this is a special item, there should only be one such item.
+                if (!item.isOnMarket()) {
+                    itemQuantity = 1;
+                }
                 if (itemQuantity > 0) {
                     /*
                        Buy Price Algorithm:
@@ -95,7 +107,8 @@ public class Marketplace {
                             MAXTECHINFLUENCE, INCREMENTALTECHINFLUENCE * techDifference);
                     int buyingPrice =
                             Math.max(1,
-                            (int) (item.getBasePrice() * (1 - techInfluence) * (1 + buyVariance)));
+                                    (int) (item.getBasePrice()
+                                            * (1 - techInfluence) * (1 + buyVariance)));
                     /*
                        Sell Price Algorithm: The selling price is a percantage of the buying price
                        with some linear variance below or above the average selling price
