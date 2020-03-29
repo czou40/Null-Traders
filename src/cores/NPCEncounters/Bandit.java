@@ -14,7 +14,7 @@ public class Bandit implements FightableNPC {
     private IntegerProperty creditsDemanded;
     private Region dest;
 
-    private static final int MAX_CREDITS_DEMANDED = 500;
+    private static final int MAX_CREDITS_DEMANDED = 300;
     private static final int MIN_CREDITS_DEMANDED = 100;
 
     private static final int MAX_BANDIT_STRENGTH = 100; //how much health is lost if you lose

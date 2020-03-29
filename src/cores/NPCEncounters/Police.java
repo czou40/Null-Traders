@@ -104,22 +104,6 @@ public class Police implements FightableNPC {
     @Override
     public String getDescription() {
         return "The Police suspects that you are conducting illegal transactions "
-                + "and wants to search your ship for " + confiscatedItem.getName() + "(s)";
-    }
-
-    public void test() {
-
-    }
-
-    private void testForfeit() {
-
-    }
-
-    private void testFight() {
-
-    }
-
-    private void testFlee() {
-
+                + "and wants to search your ship for " + confiscatedItem.getName();
     }
 }

@@ -13,6 +13,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
     private int quantity;
 
     private static final int MAX_QUANTITY = 5;
+    private static final double PRICE_REDUCTION = 0.4;
 
     public Trader(Player player) {
         this.player = player;
@@ -36,6 +37,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
         if (remain < quantity) {
             throw new Exception("You don't have enough space in your ship!");
         }
+        player.loseCredits(cost);
         player.getShip().load(item,  price, quantity);
     }
 
@@ -78,7 +80,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
             return new Pair<>(true, "You successfully robbed " + quantityRobbed + " "
             + item.getName() + "(s) from the Trader.");
         } else {
-            int damage = (int) Math.round(Math.random() * MAX_STRENGTH);
+            int damage = (int) Math.round(Math.random() * maxStrength);
             player.getShip().damage(damage);
             return new Pair<>(false, "Unfortunately, the Trader fought you off and damaged "
             + "your ship by " + damage + " points.");
