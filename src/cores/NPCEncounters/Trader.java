@@ -37,6 +37,7 @@ public class Trader implements TradableNPC, RobbableNPC, IgnorableNPC {
         if (remain < quantity) {
             throw new Exception("You don't have enough space in your ship!");
         }
+
         player.loseCredits(cost);
         player.getShip().load(item,  price, quantity);
     }

@@ -7,16 +7,16 @@ import java.util.ArrayList;
  */
 public enum Item {
     WATER("Water", 1, 5, false),
-    FURS("Furs", 2, 8, false),
-    FOOD("Food", 1, 8, false),
-    ORE("Ore", 4, 20, false),
-    GAMES("Games", 4, 25, true),
-    FIREARMS("Firearms", 6, 35, true),
-    OPIOIDS("Opioids", 6, 35, false),
-    MACHINES("Machines", 7, 40, false),
-    NARCOTICS("Narcotics", 7, 50, true),
-    ROBOTS("Robots", 9, 100, true),
-    NUKES("Nukes", 10, 200, true),
+    FURS("Furs", 2, 10, false),
+    FOOD("Food", 1, 25, false),
+    ORE("Ore", 4, 50, false),
+    GAMES("Games", 4, 100, true),
+    FIREARMS("Firearms", 6, 500, true),
+    MEDICINE("Opioids", 6, 700, false),
+    MACHINES("Machines", 7, 800, false),
+    NARCOTICS("Narcotics", 7, 1000, true),
+    ROBOTS("Robots", 9, 4000, true),
+    NUKES("Nukes", 9, 10000, true),
     COMPASS("Compass", 8, 2000, false),
     NULL("NullPointerException", 11, 12000, false, false);
 
