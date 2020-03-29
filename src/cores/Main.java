@@ -1,6 +1,5 @@
 package cores;
 
-import cores.characters.Player;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import screens.*;
